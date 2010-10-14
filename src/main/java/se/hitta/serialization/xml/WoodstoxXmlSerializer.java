@@ -4,22 +4,21 @@ import java.io.Writer;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
-
-import org.codehaus.stax2.XMLStreamWriter2;
+import javax.xml.stream.XMLStreamWriter;
 
 import se.hitta.serialization.XmlSerializer;
 import se.hitta.serialization.adapter.AdapterMapper;
 
 public final class WoodstoxXmlSerializer implements XmlSerializer
 {
-    private final XMLStreamWriter2 generator;
+    private final XMLStreamWriter generator;
     private final AdapterMapper mapper;
 
     public WoodstoxXmlSerializer(final Writer writer, final AdapterMapper mapper) throws Exception
     {
         this.mapper = mapper;
         final XMLOutputFactory factory = XMLOutputFactory.newInstance();
-        this.generator = (XMLStreamWriter2)factory.createXMLStreamWriter(writer);
+        this.generator = factory.createXMLStreamWriter(writer);
     }
 
     @Override
