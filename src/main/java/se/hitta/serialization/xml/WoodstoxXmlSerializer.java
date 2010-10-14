@@ -142,4 +142,13 @@ public final class WoodstoxXmlSerializer extends Serializer
         this.generator.writeInt(value);
         return this;
     }
+
+    @Override
+    public Serializer write(String name, Integer value) throws Exception
+    {
+        this.generator.writeStartElement(name);
+        this.generator.writeInt(value);
+        this.generator.writeEndElement();
+       return this;
+    }
 }

@@ -69,5 +69,9 @@ public class AdapterMapperTest
         @Override
         public void write(Object target, Serializer serializer)
         {}
+
+        @Override
+        public void write(String name, Object target, Serializer serializer) throws Exception
+        {}
     };
 }

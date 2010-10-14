@@ -119,4 +119,11 @@ public final class JacksonJsonSerializer extends Serializer
         this.generator.writeNumber(value);
         return this;
     }
+
+    @Override
+    public Serializer write(String name, Integer value) throws Exception
+    {
+        this.generator.writeNumberField(name, value);
+        return this;
+    }
 }

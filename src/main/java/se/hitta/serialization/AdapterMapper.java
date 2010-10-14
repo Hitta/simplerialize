@@ -3,20 +3,25 @@ package se.hitta.serialization;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class AdapterMapper
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class AdapterMapper
 {
+    private static final Logger log = LoggerFactory.getLogger(AdapterMapper.class);
     private final Map<Class<?>, Adapter<?>> adapterMappings = new HashMap<Class<?>, Adapter<?>>();
 
     public AdapterMapper()
     {
-        register(String.class, stringAdapter);
-        register(Integer.class, integerAdapter);
-        register(Object.class, objectAdapter);
+        register(String.class, new StringAdapter());
+        register(Integer.class, new IntegerAdapter());
+        register(Object.class, new ObjectAdapter());
     }
 
-    public void register(final Class<?> clazz, final Adapter<?> adapter)
+    public AdapterMapper register(final Class<?> clazz, final Adapter<?> adapter)
     {
         this.adapterMappings.put(clazz, adapter);
+        return this;
     }
 
     /**
@@ -29,7 +34,16 @@ public final class AdapterMapper
     public final Adapter resolveAdapter(final Class<?> clazz)
     {
         final Adapter adapter = traverseAndFindAdapter(clazz);
-        return (adapter == null) ? objectAdapter : adapter;
+        if(adapter == null)
+        {
+            log.warn("No adapter found for " + clazz);
+            return new ObjectAdapter();
+        }
+        else
+        {
+            log.debug("Found adapter " + adapter + " for " + clazz);
+            return adapter;
+        }
     }
 
     public final Adapter traverseAndFindAdapter(final Class<?>... classes)
@@ -48,31 +62,4 @@ public final class AdapterMapper
         }
         return null;
     }
-
-    private static final Adapter<Object> objectAdapter = new Adapter<Object>()
-    {
-        @Override
-        public void write(final Object target, final Serializer serializer) throws Exception
-        {
-            serializer.write(target == null ? (String)null : target.toString());
-        }
-    };
-
-    private static final Adapter<Integer> integerAdapter = new Adapter<Integer>()
-    {
-        @Override
-        public void write(final Integer target, final Serializer serializer) throws Exception
-        {
-            serializer.write(target);
-        }
-    };
-
-    private static final Adapter<String> stringAdapter = new Adapter<String>()
-    {
-        @Override
-        public void write(final String target, final Serializer serializer) throws Exception
-        {
-            serializer.write(target);
-        }
-    };
 }
