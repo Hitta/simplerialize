@@ -4,126 +4,136 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.codehaus.jackson.JsonFactory;
+import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonGenerator;
 
-import se.hitta.serialization.AdapterMapper;
-import se.hitta.serialization.Serializer;
+import se.hitta.serialization.JsonSerializer;
+import se.hitta.serialization.adapter.AdapterMapper;
 
-public final class JacksonJsonSerializer extends Serializer
+public final class JacksonJsonSerializer implements JsonSerializer
 {
-
     private final JsonGenerator generator;
+    private final AdapterMapper mapper;
 
-    public JacksonJsonSerializer(final AdapterMapper mapper, final Writer writer) throws IOException
+    public JacksonJsonSerializer(final Writer writer, final AdapterMapper mapper) throws Exception
     {
-        super(mapper);
+        this.mapper = mapper;
         final JsonFactory factory = new JsonFactory();
         this.generator = factory.createJsonGenerator(writer);
     }
 
     @Override
-    public Serializer write(final String value) throws Exception
+    public void done() throws Exception
     {
-        this.generator.writeString(value);
-        return this;
+        this.generator.close();
     }
 
     @Override
-    public Serializer write(final String name, final String value) throws IOException
-    {
-        this.generator.writeStringField(name, value);
-        return this;
-    }
-
-    @Override
-    public Serializer write(final String name, final boolean value) throws IOException
-    {
-        this.generator.writeBooleanField(name, value);
-        return this;
-    }
-
-    @Override
-    public Serializer write(final String name, final double value) throws IOException
-    {
-        this.generator.writeNumberField(name, value);
-        return this;
-    }
-
-    @Override
-    public Serializer write(final String name, final int value) throws IOException
-    {
-        this.generator.writeNumberField(name, value);
-        return this;
-    }
-
-    @Override
-    public Serializer writeStructureStart(final String value) throws IOException
-    {
-        this.generator.writeStartObject();
-        this.generator.writeObjectFieldStart(value);
-        return this;
-    }
-
-    @Override
-    public Serializer writeStructureEnd() throws IOException
+    public JsonSerializer endObject() throws JsonGenerationException, IOException
     {
         this.generator.writeEndObject();
         return this;
     }
 
     @Override
-    public Serializer done() throws IOException
+    public JsonSerializer startObject() throws JsonGenerationException, IOException
     {
-        this.generator.close();
+        this.generator.writeStartObject();
         return this;
     }
 
     @Override
-    public Serializer writeArrayStart(final String name) throws Exception
+    public JsonSerializer startObject(final String name) throws JsonGenerationException, IOException
     {
-        this.generator.writeArrayFieldStart(name);
+        this.generator.writeObjectFieldStart(name);
         return this;
     }
 
     @Override
-    public Serializer writeArrayEnd() throws Exception
+    public JsonSerializer writeField(String name, String value) throws JsonGenerationException, IOException
+    {
+        this.generator.writeStringField(name, value);
+        return this;
+    }
+
+    @Override
+    public JsonSerializer writeField(String name, boolean value) throws Exception
+    {
+        this.generator.writeBooleanField(name, value);
+        return this;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public JsonSerializer writeWithAdapter(Object target) throws Exception
+    {
+        this.mapper.resolveAdapter(target.getClass()).writeJson(target, this);
+        return this;
+    }
+
+    @Override
+    public JsonSerializer startArray() throws Exception
+    {
+        this.generator.writeStartArray();
+        return this;
+    }
+
+    @Override
+    public JsonSerializer endArray() throws Exception
     {
         this.generator.writeEndArray();
         return this;
     }
 
     @Override
-    public Serializer write(int value) throws Exception
+    public JsonSerializer writePrimitive(final Object target) throws Exception
     {
-        this.generator.writeNumber(value);
+        this.generator.writeObject(target);
         return this;
     }
 
     @Override
-    public Serializer write(double value) throws Exception
+    public JsonSerializer startArray(String name) throws Exception
     {
-        this.generator.writeNumber(value);
+        this.generator.writeArrayFieldStart(name);
         return this;
     }
 
     @Override
-    public Serializer write(boolean value) throws Exception
+    public JsonSerializer writeRepeating(String elementName, Iterable<?> elements) throws Exception
     {
-        this.generator.writeBoolean(value);
+        for(final Object entry : elements)
+        {
+            this.generator.writeFieldName(elementName);
+            writeWithAdapter(entry);
+        }
         return this;
     }
 
     @Override
-    public Serializer write(final Integer value) throws Exception
+    public JsonSerializer writeArray(Iterable<?> elements) throws Exception
     {
-        this.generator.writeNumber(value);
+        this.generator.writeStartArray();
+        for(final Object entry : elements)
+        {
+            writeWithAdapter(entry);
+        }
+        this.generator.writeEndArray();
         return this;
     }
 
     @Override
-    public Serializer write(String name, Integer value) throws Exception
+    public JsonSerializer writeArrayField(String name, Iterable<?> elements) throws Exception
     {
-        this.generator.writeNumberField(name, value);
+        this.generator.writeFieldName(name);
+        writeArray(elements);
+        return this;
+    }
+
+    @Override
+    public JsonSerializer writeField(String name) throws Exception
+    {
+        this.generator.writeFieldName(name);
         return this;
     }
 }

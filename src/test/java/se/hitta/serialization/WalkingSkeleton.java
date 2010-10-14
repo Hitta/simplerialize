@@ -6,10 +6,10 @@ import java.util.Collection;
 
 import org.junit.Test;
 
+import se.hitta.serialization.adapter.Adapter;
+import se.hitta.serialization.adapter.AdapterMapper;
 import se.hitta.serialization.json.JacksonJsonSerializer;
-import se.hitta.serialization.json.JsonAdapterMapper;
 import se.hitta.serialization.xml.WoodstoxXmlSerializer;
-import se.hitta.serialization.xml.XmlAdapterMapper;
 
 public final class WalkingSkeleton
 {
@@ -17,10 +17,28 @@ public final class WalkingSkeleton
     public void x() throws Exception
     {
         final StringWriter writer = new StringWriter();
-        new WoodstoxXmlSerializer(new XmlAdapterMapper().register(Target.class, new TargetAdapter()), writer).write(new Target()).done();
+        final AdapterMapper mapper = new AdapterMapper();
+        mapper.register(Target.class, new TargetAdapter());
+        mapper.register(NestedTarget.class, new NestedTargetAdapter());
+        serializeJson(writer, mapper);
         writer.write('\n');
-        new JacksonJsonSerializer(new JsonAdapterMapper().register(Target.class, new TargetAdapter()), writer).write(new Target()).done();
+        serializeXml(writer, mapper);
         System.err.println(writer.toString());
+    }
+
+    private void serializeXml(final StringWriter writer, final AdapterMapper mapper) throws Exception
+    {
+        final XmlSerializer serializer = new WoodstoxXmlSerializer(writer, mapper);
+        serializer.startDocument();
+        mapper.resolveAdapter(Target.class).writeXml(new Target(), serializer);
+        serializer.done();
+    }
+
+    private void serializeJson(final StringWriter writer, final AdapterMapper mapper) throws Exception
+    {
+        final JsonSerializer serializer = new JacksonJsonSerializer(writer, mapper);
+        mapper.resolveAdapter(Target.class).writeJson(new Target(), serializer);
+        serializer.done();
     }
 
     public static class Target
@@ -32,26 +50,66 @@ public final class WalkingSkeleton
         boolean bool = false;
         Collection<String> stringList = Arrays.asList("hej", "svejs", "kaka");
         Collection<Integer> integerList = Arrays.asList(1, 2, 3);
+        NestedTarget nested = new NestedTarget();
+        Iterable<NestedTarget> multiple_nested = Arrays.asList(new NestedTarget(), new NestedTarget());
+    }
+
+    public static class NestedTarget
+    {
+        String str = "hepp";
+        Collection<Integer> ints = Arrays.asList(1, 2, 3);
     }
 
     public static final class TargetAdapter implements Adapter<Target>
     {
         @Override
-        public void write(final Target target, final Serializer serializer) throws Exception
+        public void writeJson(final Target target, final JsonSerializer serializer) throws Exception
         {
-            serializer.writeStructureStart("sample");
-            serializer.write("str", target.str);
-            serializer.write("null-string", target.nullStr);
-            serializer.write("int", target.integer);
-            serializer.write("double", target.dbl);
-            serializer.write("bool", target.bool);
-            serializer.write("strings", "value", target.stringList);
-            serializer.write("integers", "value", target.integerList);
-            serializer.writeStructureEnd();
+            serializer.startObject();
+            serializer.writeField("str", target.str);
+            serializer.writeField("bool", target.bool);
+            serializer.writeField("nested");
+            serializer.writeWithAdapter(target.nested);
+            serializer.startObject("mult");
+            serializer.writeRepeating("m", target.multiple_nested);
+            serializer.endObject();
+            serializer.writeArrayField("arr", target.multiple_nested);
+            serializer.endObject();
         }
 
         @Override
-        public void write(String name, Target target, Serializer serializer) throws Exception
-        {}
+        public void writeXml(final Target target, final XmlSerializer serializer) throws Exception
+        {
+            serializer.startElement("target");
+            serializer.writeAttribute("str", target.str);
+            serializer.writeAttribute("bool", target.bool);
+            serializer.writeWithAdapter(target.nested);
+            serializer.startElement("mult").writeRepeating("n", target.multiple_nested).endElement();
+            serializer.endElement();
+        }
+    }
+
+    public static final class NestedTargetAdapter implements Adapter<NestedTarget>
+    {
+        @Override
+        public void writeJson(NestedTarget target, JsonSerializer serializer) throws Exception
+        {
+            serializer.startObject();
+            serializer.writeField("str", target.str);
+            serializer.startArray("ints");
+            serializer.writeWithAdapter(target.ints);
+            serializer.endArray();
+            serializer.endObject();
+        }
+
+        @Override
+        public void writeXml(NestedTarget target, XmlSerializer serializer) throws Exception
+        {
+            serializer.startElement("nested");
+            serializer.writeAttribute("str", target.str);
+            serializer.startElement("ints-adapter").writeWithAdapter(target.ints).endElement();
+            serializer.startElement("ints-repeating").writeRepeating("int", target.ints).endElement();
+            serializer.endElement();
+        }
     }
 }

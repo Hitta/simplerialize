@@ -4,6 +4,9 @@ import static org.junit.Assert.assertSame;
 
 import org.junit.Test;
 
+import se.hitta.serialization.adapter.Adapter;
+import se.hitta.serialization.adapter.AdapterMapper;
+
 public class AdapterMapperTest
 {
     @Test
@@ -67,11 +70,11 @@ public class AdapterMapperTest
     class DummyAdapter implements Adapter<Object>
     {
         @Override
-        public void write(Object target, Serializer serializer)
+        public void writeJson(Object target, JsonSerializer serializer) throws Exception
         {}
 
         @Override
-        public void write(String name, Object target, Serializer serializer) throws Exception
+        public void writeXml(Object target, XmlSerializer serializer) throws Exception
         {}
     };
 }
