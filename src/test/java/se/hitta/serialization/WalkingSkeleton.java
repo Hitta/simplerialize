@@ -6,7 +6,9 @@ import java.util.Collection;
 
 import org.junit.Test;
 
-import se.hitta.serialization.adapter.Adapter;
+import com.natpryce.maybe.Maybe;
+
+import se.hitta.serialization.adapter.SerializationAdapter;
 import se.hitta.serialization.adapter.AdapterMapper;
 import se.hitta.serialization.json.JacksonJsonSerializer;
 import se.hitta.serialization.xml.WoodstoxXmlSerializer;
@@ -60,12 +62,14 @@ public final class WalkingSkeleton
         Collection<Integer> ints = Arrays.asList(1, 2, 3);
     }
 
-    public static final class TargetAdapter implements Adapter<Target>
+    public static final class TargetAdapter implements SerializationAdapter<Target>
     {
         @Override
         public void writeJson(final Target target, final JsonSerializer serializer) throws Exception
         {
             serializer.startObject();
+            serializer.writeField("defin", Maybe.definitely("howdy"));
+            serializer.writeField("unkn", Maybe.unknown());
             serializer.writeField("str", target.str);
             serializer.writeField("bool", target.bool);
             serializer.writeField("nested");
@@ -81,6 +85,8 @@ public final class WalkingSkeleton
         public void writeXml(final Target target, final XmlSerializer serializer) throws Exception
         {
             serializer.startElement("target");
+            serializer.writeAttribute("defin", Maybe.definitely("howdy"));
+            serializer.writeAttribute("unkn", Maybe.unknown());
             serializer.writeAttribute("str", target.str);
             serializer.writeAttribute("bool", target.bool);
             serializer.writeWithAdapter(target.nested);
@@ -89,7 +95,7 @@ public final class WalkingSkeleton
         }
     }
 
-    public static final class NestedTargetAdapter implements Adapter<NestedTarget>
+    public static final class NestedTargetAdapter implements SerializationAdapter<NestedTarget>
     {
         @Override
         public void writeJson(NestedTarget target, JsonSerializer serializer) throws Exception

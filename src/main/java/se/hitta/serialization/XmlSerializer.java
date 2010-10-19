@@ -1,5 +1,6 @@
 package se.hitta.serialization;
 
+import com.natpryce.maybe.Maybe;
 
 public interface XmlSerializer extends Serializer
 {
@@ -10,9 +11,13 @@ public interface XmlSerializer extends Serializer
 
     XmlSerializer startDocument() throws Exception;
 
+    XmlSerializer writeAttribute(String name, Maybe<?> value) throws Exception;
+
     XmlSerializer writeAttribute(String name, Object value) throws Exception;
 
     XmlSerializer writeWithAdapter(Object target) throws Exception;
+
+    XmlSerializer writeWithAdapter(Maybe<?> target) throws Exception;
 
     XmlSerializer writeElement(String name, String content) throws Exception;
 

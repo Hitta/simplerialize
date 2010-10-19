@@ -10,6 +10,8 @@ import org.codehaus.jackson.JsonGenerator;
 import se.hitta.serialization.JsonSerializer;
 import se.hitta.serialization.adapter.AdapterMapper;
 
+import com.natpryce.maybe.Maybe;
+
 public final class JacksonJsonSerializer implements JsonSerializer
 {
     private final JsonGenerator generator;
@@ -60,6 +62,27 @@ public final class JacksonJsonSerializer implements JsonSerializer
     public JsonSerializer writeField(String name, boolean value) throws Exception
     {
         this.generator.writeBooleanField(name, value);
+        return this;
+    }
+    
+    @Override
+    public JsonSerializer writeField(final String name, final int value) throws Exception
+    {
+        this.generator.writeNumberField(name, value);
+        return this;
+    }
+
+    @Override
+    public JsonSerializer writeField(final String name, final double value) throws Exception
+    {
+        this.generator.writeNumberField(name, value);
+        return this;
+    }
+
+    @Override
+    public JsonSerializer writeField(final String name, final float value) throws Exception
+    {
+        this.generator.writeNumberField(name, value);
         return this;
     }
 
@@ -134,6 +157,27 @@ public final class JacksonJsonSerializer implements JsonSerializer
     public JsonSerializer writeField(String name) throws Exception
     {
         this.generator.writeFieldName(name);
+        return this;
+    }
+
+    @Override
+    public JsonSerializer writeField(final String name, final Maybe<?> value) throws Exception
+    {
+        if(value.isKnown())
+        {
+            writeField(name);
+            writeWithAdapter(value.value());
+        }
+        return this;
+    }
+
+    @Override
+    public JsonSerializer writeWithAdapter(Maybe<?> target) throws Exception
+    {
+        if(target.isKnown())
+        {
+            writeWithAdapter(target.value());
+        }
         return this;
     }
 }

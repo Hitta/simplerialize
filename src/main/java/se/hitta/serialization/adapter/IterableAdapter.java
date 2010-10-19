@@ -3,7 +3,7 @@ package se.hitta.serialization.adapter;
 import se.hitta.serialization.JsonSerializer;
 import se.hitta.serialization.XmlSerializer;
 
-final class IterableAdapter implements Adapter<Iterable<?>>
+final class IterableAdapter implements SerializationAdapter<Iterable<?>>
 {
     @Override
     public void writeJson(final Iterable<?> target, final JsonSerializer serializer) throws Exception

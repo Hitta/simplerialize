@@ -9,6 +9,8 @@ import javax.xml.stream.XMLStreamWriter;
 import se.hitta.serialization.XmlSerializer;
 import se.hitta.serialization.adapter.AdapterMapper;
 
+import com.natpryce.maybe.Maybe;
+
 public final class WoodstoxXmlSerializer implements XmlSerializer
 {
     private final XMLStreamWriter generator;
@@ -89,6 +91,26 @@ public final class WoodstoxXmlSerializer implements XmlSerializer
     public XmlSerializer writePrimitive(Object target) throws Exception
     {
         this.generator.writeCharacters(target.toString());
+        return this;
+    }
+
+    @Override
+    public XmlSerializer writeAttribute(String name, Maybe<?> value) throws Exception
+    {
+        if(value.isKnown())
+        {
+            writeAttribute(name, value.value());
+        }
+        return this;
+    }
+
+    @Override
+    public XmlSerializer writeWithAdapter(Maybe<?> target) throws Exception
+    {
+        if(target.isKnown())
+        {
+            writeWithAdapter(target.value());
+        }
         return this;
     }
 
