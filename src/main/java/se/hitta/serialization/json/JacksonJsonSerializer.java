@@ -52,9 +52,30 @@ public final class JacksonJsonSerializer implements JsonSerializer
     }
 
     @Override
-    public JsonSerializer writeField(String name, String value) throws JsonGenerationException, IOException
+    public JsonSerializer writeField(final String name, final Boolean value) throws Exception
+    {
+        this.generator.writeBooleanField(name, value);
+        return this;
+    }
+
+    @Override
+    public JsonSerializer writeField(final String name, final String value) throws JsonGenerationException, IOException
     {
         this.generator.writeStringField(name, value);
+        return this;
+    }
+
+    @Override
+    public JsonSerializer writeField(final String name, final Long value) throws Exception
+    {
+        this.generator.writeNumberField(name, value);
+        return this;
+    }
+
+    @Override
+    public JsonSerializer writeField(final String name, final Double value) throws Exception
+    {
+        this.generator.writeNumberField(name, value);
         return this;
     }
 
@@ -64,7 +85,7 @@ public final class JacksonJsonSerializer implements JsonSerializer
         this.generator.writeBooleanField(name, value);
         return this;
     }
-    
+
     @Override
     public JsonSerializer writeField(final String name, final int value) throws Exception
     {
@@ -87,8 +108,38 @@ public final class JacksonJsonSerializer implements JsonSerializer
     }
 
     @Override
+    public JsonSerializer writeField(final String name, final Short value) throws Exception
+    {
+        if(value != null)
+        {
+            this.generator.writeNumberField(name, value);
+        }
+        return this;
+    }
+
+    @Override
+    public JsonSerializer writeField(final String name, final Integer value) throws Exception
+    {
+        if(value != null)
+        {
+            this.generator.writeNumberField(name, value);
+        }
+        return this;
+    }
+
+    @Override
+    public JsonSerializer writeField(final String name, final Float value) throws Exception
+    {
+        if(value != null)
+        {
+            this.generator.writeNumberField(name, value);
+        }
+        return this;
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
-    public JsonSerializer writeWithAdapter(Object target) throws Exception
+    public JsonSerializer writeWithAdapter(final Object target) throws Exception
     {
         this.mapper.resolveAdapter(target.getClass()).writeJson(target, this);
         return this;
@@ -116,25 +167,26 @@ public final class JacksonJsonSerializer implements JsonSerializer
     }
 
     @Override
-    public JsonSerializer startArray(String name) throws Exception
+    public JsonSerializer startArray(final String name) throws Exception
     {
         this.generator.writeArrayFieldStart(name);
         return this;
     }
 
     @Override
-    public JsonSerializer writeRepeating(String elementName, Iterable<?> elements) throws Exception
+    public JsonSerializer writeRepeating(final String elementName, final Iterable<?> elements) throws Exception
     {
         for(final Object entry : elements)
         {
-            this.generator.writeFieldName(elementName);
+            this.generator.writeObjectFieldStart(elementName);
             writeWithAdapter(entry);
+            this.generator.writeEndObject();
         }
         return this;
     }
 
     @Override
-    public JsonSerializer writeArray(Iterable<?> elements) throws Exception
+    public JsonSerializer writeArray(final Iterable<?> elements) throws Exception
     {
         this.generator.writeStartArray();
         for(final Object entry : elements)
@@ -146,15 +198,18 @@ public final class JacksonJsonSerializer implements JsonSerializer
     }
 
     @Override
-    public JsonSerializer writeArrayField(String name, Iterable<?> elements) throws Exception
+    public JsonSerializer writeArrayField(final String name, final Iterable<?> elements) throws Exception
     {
-        this.generator.writeFieldName(name);
-        writeArray(elements);
+        if(elements != null && elements.iterator().hasNext())
+        {
+            this.generator.writeFieldName(name);
+            writeArray(elements);
+        }
         return this;
     }
 
     @Override
-    public JsonSerializer writeField(String name) throws Exception
+    public JsonSerializer writeField(final String name) throws Exception
     {
         this.generator.writeFieldName(name);
         return this;
@@ -172,7 +227,7 @@ public final class JacksonJsonSerializer implements JsonSerializer
     }
 
     @Override
-    public JsonSerializer writeWithAdapter(Maybe<?> target) throws Exception
+    public JsonSerializer writeWithAdapter(final Maybe<?> target) throws Exception
     {
         if(target.isKnown())
         {

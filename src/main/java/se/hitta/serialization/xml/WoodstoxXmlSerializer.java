@@ -54,7 +54,10 @@ public final class WoodstoxXmlSerializer implements XmlSerializer
     @Override
     public XmlSerializer writeAttribute(String name, Object value) throws Exception
     {
-        this.generator.writeAttribute(name, value == null ? null : value.toString());
+        if(value != null)
+        {
+            this.generator.writeAttribute(name, value.toString());
+        }
         return this;
     }
 

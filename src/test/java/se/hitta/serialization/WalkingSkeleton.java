@@ -8,8 +8,9 @@ import org.junit.Test;
 
 import com.natpryce.maybe.Maybe;
 
-import se.hitta.serialization.adapter.SerializationAdapter;
 import se.hitta.serialization.adapter.AdapterMapper;
+import se.hitta.serialization.adapter.SerializationAdapter;
+import se.hitta.serialization.adapter.DefaultAdapterMapper;
 import se.hitta.serialization.json.JacksonJsonSerializer;
 import se.hitta.serialization.xml.WoodstoxXmlSerializer;
 
@@ -19,7 +20,7 @@ public final class WalkingSkeleton
     public void x() throws Exception
     {
         final StringWriter writer = new StringWriter();
-        final AdapterMapper mapper = new AdapterMapper();
+        final AdapterMapper mapper = new DefaultAdapterMapper();
         mapper.register(Target.class, new TargetAdapter());
         mapper.register(NestedTarget.class, new NestedTargetAdapter());
         serializeJson(writer, mapper);
