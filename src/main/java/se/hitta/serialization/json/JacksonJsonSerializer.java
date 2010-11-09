@@ -141,7 +141,7 @@ public final class JacksonJsonSerializer implements JsonSerializer
     @SuppressWarnings("unchecked")
     public JsonSerializer writeWithAdapter(final Object target) throws Exception
     {
-        this.mapper.resolveAdapter(target.getClass()).writeJson(target, this);
+        this.mapper.resolveAdapter(target.getClass()).write(target, this);
         return this;
     }
 

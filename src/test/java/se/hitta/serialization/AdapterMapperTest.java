@@ -71,11 +71,11 @@ public class AdapterMapperTest
     class DummyAdapter implements SerializationAdapter<Object>
     {
         @Override
-        public void writeJson(Object target, JsonSerializer serializer) throws Exception
+        public void write(Object target, JsonSerializer serializer) throws Exception
         {}
 
         @Override
-        public void writeXml(Object target, XmlSerializer serializer) throws Exception
+        public void write(Object target, XmlSerializer serializer) throws Exception
         {}
     };
 }

@@ -33,14 +33,14 @@ public final class WalkingSkeleton
     {
         final XmlSerializer serializer = new WoodstoxXmlSerializer(writer, mapper);
         serializer.startDocument();
-        mapper.resolveAdapter(Target.class).writeXml(new Target(), serializer);
+        mapper.resolveAdapter(Target.class).write(new Target(), serializer);
         serializer.done();
     }
 
     private void serializeJson(final StringWriter writer, final AdapterMapper mapper) throws Exception
     {
         final JsonSerializer serializer = new JacksonJsonSerializer(writer, mapper);
-        mapper.resolveAdapter(Target.class).writeJson(new Target(), serializer);
+        mapper.resolveAdapter(Target.class).write(new Target(), serializer);
         serializer.done();
     }
 
@@ -66,7 +66,7 @@ public final class WalkingSkeleton
     public static final class TargetAdapter implements SerializationAdapter<Target>
     {
         @Override
-        public void writeJson(final Target target, final JsonSerializer serializer) throws Exception
+        public void write(final Target target, final JsonSerializer serializer) throws Exception
         {
             serializer.startObject();
             serializer.writeField("defin", Maybe.definitely("howdy"));
@@ -75,15 +75,15 @@ public final class WalkingSkeleton
             serializer.writeField("bool", target.bool);
             serializer.writeField("nested");
             serializer.writeWithAdapter(target.nested);
-            serializer.startObject("mult");
+            //serializer.startObject("mult");
             serializer.writeRepeating("m", target.multiple_nested);
-            serializer.endObject();
+            //serializer.endObject();
             serializer.writeArrayField("arr", target.multiple_nested);
             serializer.endObject();
         }
 
         @Override
-        public void writeXml(final Target target, final XmlSerializer serializer) throws Exception
+        public void write(final Target target, final XmlSerializer serializer) throws Exception
         {
             serializer.startElement("target");
             serializer.writeAttribute("defin", Maybe.definitely("howdy"));
@@ -99,7 +99,7 @@ public final class WalkingSkeleton
     public static final class NestedTargetAdapter implements SerializationAdapter<NestedTarget>
     {
         @Override
-        public void writeJson(NestedTarget target, JsonSerializer serializer) throws Exception
+        public void write(NestedTarget target, JsonSerializer serializer) throws Exception
         {
             serializer.startObject();
             serializer.writeField("str", target.str);
@@ -110,7 +110,7 @@ public final class WalkingSkeleton
         }
 
         @Override
-        public void writeXml(NestedTarget target, XmlSerializer serializer) throws Exception
+        public void write(NestedTarget target, XmlSerializer serializer) throws Exception
         {
             serializer.startElement("nested");
             serializer.writeAttribute("str", target.str);

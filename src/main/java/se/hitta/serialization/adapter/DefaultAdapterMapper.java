@@ -135,13 +135,13 @@ public final class DefaultAdapterMapper implements AdapterMapper
         return new SerializationAdapter<SerializationCapable>()
         {
             @Override
-            public void writeJson(final SerializationCapable target, final JsonSerializer serializer) throws Exception
+            public void write(final SerializationCapable target, final JsonSerializer serializer) throws Exception
             {
                 target.write(serializer);
             }
 
             @Override
-            public void writeXml(final SerializationCapable target, final XmlSerializer serializer) throws Exception
+            public void write(final SerializationCapable target, final XmlSerializer serializer) throws Exception
             {
                 target.write(serializer);
             }

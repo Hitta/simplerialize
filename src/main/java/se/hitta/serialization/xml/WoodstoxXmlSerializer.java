@@ -65,7 +65,7 @@ public final class WoodstoxXmlSerializer implements XmlSerializer
     @SuppressWarnings("unchecked")
     public XmlSerializer writeWithAdapter(Object target) throws Exception
     {
-        this.mapper.resolveAdapter(target.getClass()).writeXml(target, this);
+        this.mapper.resolveAdapter(target.getClass()).write(target, this);
         return this;
     }
 

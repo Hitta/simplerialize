@@ -4,5 +4,5 @@ import se.hitta.serialization.JsonSerializer;
 
 public interface JsonSerializationAdapter<T>
 {
-    void writeJson(T target, JsonSerializer serializer) throws Exception;
+    void write(T target, JsonSerializer serializer) throws Exception;
 }
