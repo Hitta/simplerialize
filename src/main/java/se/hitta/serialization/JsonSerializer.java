@@ -34,8 +34,10 @@ public interface JsonSerializer extends Serializer
 
     JsonSerializer writeField(String name, Maybe<?> value) throws Exception;
 
+    @Override
     JsonSerializer writeWithAdapter(Maybe<?> target) throws Exception;
 
+    @Override
     JsonSerializer writeWithAdapter(Object target) throws Exception;
 
     JsonSerializer startArray() throws Exception;

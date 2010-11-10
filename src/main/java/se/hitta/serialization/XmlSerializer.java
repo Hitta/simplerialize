@@ -15,8 +15,10 @@ public interface XmlSerializer extends Serializer
 
     XmlSerializer writeAttribute(String name, Object value) throws Exception;
 
+    @Override
     XmlSerializer writeWithAdapter(Object target) throws Exception;
 
+    @Override
     XmlSerializer writeWithAdapter(Maybe<?> target) throws Exception;
 
     XmlSerializer writeElement(String name, String content) throws Exception;
