@@ -14,7 +14,7 @@ public interface AdapterMapper
     /**
      * This class is responsible for finding an adapter, it usually boils down to:
      * 1. Check for any explicit adapter for this object's class
-     * 2. Check wheyher this class implements {@link SerializationCapable} and thus should be considered its own adapter
+     * 2. Check whether this class implements {@link SerializationCapable} and thus should be considered its own adapter
      * 3. Check for any adapter on any of this obeject's interfaces
      * 4. Repeat on the superclass
      */
