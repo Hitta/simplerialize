@@ -1,0 +1,20 @@
+{
+	"SimpleWithListOfStuff":
+	{
+		"Simple":
+		{
+			"element":
+			{
+				"with":"attribute"
+			}
+		},
+		"container":
+		{
+			"list":
+			[
+				{"item0":"value"},
+				{"item1":"value"}
+			]
+		}
+	}
+}
