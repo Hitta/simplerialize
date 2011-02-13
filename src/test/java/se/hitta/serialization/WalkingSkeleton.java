@@ -6,13 +6,13 @@ import java.util.Collection;
 
 import org.junit.Test;
 
-import com.natpryce.maybe.Maybe;
-
 import se.hitta.serialization.adapter.AdapterMapper;
-import se.hitta.serialization.adapter.SerializationAdapter;
 import se.hitta.serialization.adapter.DefaultAdapterMapper;
+import se.hitta.serialization.adapter.SerializationAdapter;
 import se.hitta.serialization.json.JacksonJsonSerializer;
 import se.hitta.serialization.xml.WoodstoxXmlSerializer;
+
+import com.natpryce.maybe.Maybe;
 
 public final class WalkingSkeleton
 {
@@ -31,17 +31,17 @@ public final class WalkingSkeleton
 
     private void serializeXml(final StringWriter writer, final AdapterMapper mapper) throws Exception
     {
-        final XmlSerializer serializer = new WoodstoxXmlSerializer(writer, mapper);
-        serializer.startDocument();
-        mapper.resolveAdapter(Target.class).write(new Target(), serializer);
-        serializer.done();
+        final Serializer serializer = new WoodstoxXmlSerializer(writer, mapper).start();
+        final SerializationAdapter<Target> adapter = mapper.resolveAdapter(Target.class);
+        adapter.write(new Target(), serializer);
+        serializer.finish();
     }
 
     private void serializeJson(final StringWriter writer, final AdapterMapper mapper) throws Exception
     {
-        final JsonSerializer serializer = new JacksonJsonSerializer(writer, mapper);
+        final Serializer serializer = new JacksonJsonSerializer(writer, mapper).start();
         mapper.resolveAdapter(Target.class).write(new Target(), serializer);
-        serializer.done();
+        serializer.finish();
     }
 
     public static class Target
@@ -66,13 +66,29 @@ public final class WalkingSkeleton
     public static final class TargetAdapter implements SerializationAdapter<Target>
     {
         @Override
+        public void write(final Target target, final Serializer serializer) throws Exception
+        {
+            serializer.startContainer("yeah");
+            serializer.writeNameValue("def", Maybe.definitely("howdy"));
+            serializer.writeNameValue("unk", Maybe.unknown());
+            serializer.writeNameValue("str", target.str);
+            serializer.writeNameValue("bool", target.bool);
+            serializer.startContainer("nested");
+            serializer.writeWithAdapter(target.nested);
+            serializer.endContainer();
+            serializer.writeRepeating("m", target.multiple_nested);
+            serializer.endContainer();
+            //serializer.writeRepeating(target.multiple_nested);
+        }
+        /*
+        @Override
         public void write(final Target target, final JsonSerializer serializer) throws Exception
         {
             serializer.startObject();
-            serializer.writeField("defin", Maybe.definitely("howdy"));
-            serializer.writeField("unkn", Maybe.unknown());
-            serializer.writeField("str", target.str);
-            serializer.writeField("bool", target.bool);
+            serializer.writeNameValue("defin", Maybe.definitely("howdy"));
+            serializer.writeNameValue("unkn", Maybe.unknown());
+            serializer.writeNameValue("str", target.str);
+            serializer.writeNameValue("bool", target.bool);
             serializer.writeField("nested");
             serializer.writeWithAdapter(target.nested);
             //serializer.startObject("mult");
@@ -94,15 +110,24 @@ public final class WalkingSkeleton
             serializer.startElement("mult").writeRepeating("n", target.multiple_nested).endElement();
             serializer.endElement();
         }
+        */
     }
 
     public static final class NestedTargetAdapter implements SerializationAdapter<NestedTarget>
     {
+
+        @Override
+        public void write(final NestedTarget target, final Serializer serializer) throws Exception
+        {
+            serializer.writeNameValue("str", target.str);
+            //serializer.writeWithAdapter(target.ints);
+        }
+        /*
         @Override
         public void write(NestedTarget target, JsonSerializer serializer) throws Exception
         {
             serializer.startObject();
-            serializer.writeField("str", target.str);
+            serializer.writeNameValue("str", target.str);
             serializer.startArray("ints");
             serializer.writeWithAdapter(target.ints);
             serializer.endArray();
@@ -118,5 +143,6 @@ public final class WalkingSkeleton
             serializer.startElement("ints-repeating").writeRepeating("int", target.ints).endElement();
             serializer.endElement();
         }
+        */
     }
 }
