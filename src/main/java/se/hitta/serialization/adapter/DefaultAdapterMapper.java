@@ -1,13 +1,14 @@
 package se.hitta.serialization.adapter;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import se.hitta.serialization.JsonSerializer;
-import se.hitta.serialization.XmlSerializer;
+import se.hitta.serialization.Serializer;
 import se.hitta.serialization.capable.SerializationCapable;
 
 /**
@@ -22,7 +23,7 @@ public final class DefaultAdapterMapper implements AdapterMapper
     /**
      * Creates a new instance with a {@link ConcurrentHashMap} as storage. A {@link ConcurrentHashMap} ought to be a good default to allow non blocking reads
      * while still providing thread safety on write operations to allow the {@link AdapterMapper} instance to be shared by serializers and also re-used over
-     * time which would over time improve the lookup speed as the resolver cache is self tuned and thus limiting expensive {@link Class} graph traversals.
+     * time which ought to improve the lookup speed as the resolver cache is self tuned and thus eliminating repeating expensive {@link Class} graph traversals.
      */
     public DefaultAdapterMapper()
     {
@@ -39,15 +40,20 @@ public final class DefaultAdapterMapper implements AdapterMapper
     public DefaultAdapterMapper(final Map<Class<?>, SerializationAdapter<?>> storage)
     {
         this.adapterMappings = storage;
-        final ObjectAdapter object = new ObjectAdapter();
-        register(Object.class, object);
-        register(String.class, object);
-        register(Boolean.class, object);
-        register(Number.class, object);
-        register(Byte.class, object);
+
+        register(Object.class, new ObjectAdapter());
+        
+        final PrimitiveAdapter primitive = new PrimitiveAdapter();
+        register(String.class, primitive);
+        register(Boolean.class, primitive);
+        register(Number.class, primitive);
+        register(Byte.class, primitive);
 
         final IterableAdapter iterable = new IterableAdapter();
         register(Iterable.class, iterable);
+        register(Collection.class, iterable);
+
+        register(Iterator.class, new IteratorAdapter());
     }
 
     /* (non-Javadoc)
@@ -64,10 +70,10 @@ public final class DefaultAdapterMapper implements AdapterMapper
      * @see se.hitta.serialization.adapter.AM#resolveAdapter(java.lang.Class)
      */
     @Override
-    @SuppressWarnings("rawtypes")
-    public final SerializationAdapter resolveAdapter(final Class<?> clazz)
+    public <T> SerializationAdapter<T> resolveAdapter(final Class<T> clazz)
     {
-        final SerializationAdapter adapter = traverseAndFindAdapter(clazz);
+        @SuppressWarnings("unchecked")
+        final SerializationAdapter<T> adapter = traverseAndFindAdapter(clazz);
         if(adapter == null)
         {
             throw new IllegalStateException("No adapter found for " + clazz);
@@ -101,8 +107,8 @@ public final class DefaultAdapterMapper implements AdapterMapper
                 {
                     /*
                      * The class we're trying to serialize is its own adapter.
-                     * So we create a bridge between the SerializationAdapter
-                     * and SerializationCapable interfaces and store that as the adapter.
+                     * So we create a bridge between the SerializationCapable
+                     * and SerializationAdapter interfaces and store that as the adapter.
                      */
                     final SerializationAdapter<?> bridge = createBridgeFor(clazz);
                     if(log.isDebugEnabled())
@@ -114,16 +120,20 @@ public final class DefaultAdapterMapper implements AdapterMapper
                 }
                 else
                 {
-                    final SerializationAdapter<?> adapter = traverseAndFindAdapter(clazz.getInterfaces());
+                    SerializationAdapter<?> adapter = traverseAndFindAdapter(clazz.getInterfaces());
                     if(adapter == null)
                     {
-                        return traverseAndFindAdapter(clazz.getSuperclass());
+                        adapter = traverseAndFindAdapter(clazz.getSuperclass());
                     }
-                    else
+                    if(adapter != null)
                     {
+                        if(log.isDebugEnabled())
+                        {
+                            log.debug("Registering " + adapter + " for " + clazz);
+                        }
                         this.adapterMappings.put(clazz, adapter);
-                        return adapter;
                     }
+                    return adapter;
                 }
             }
         }
@@ -135,13 +145,7 @@ public final class DefaultAdapterMapper implements AdapterMapper
         return new SerializationAdapter<SerializationCapable>()
         {
             @Override
-            public void write(final SerializationCapable target, final JsonSerializer serializer) throws Exception
-            {
-                target.write(serializer);
-            }
-
-            @Override
-            public void write(final SerializationCapable target, final XmlSerializer serializer) throws Exception
+            public void write(final SerializationCapable target, final Serializer serializer) throws Exception
             {
                 target.write(serializer);
             }
