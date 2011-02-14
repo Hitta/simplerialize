@@ -71,7 +71,7 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
     }
 
     @Override
-    public Serializer writePrimitive(final Object target) throws Exception
+    public Serializer writeObject(final Object target) throws Exception
     {
         this.generator.writeCharacters(target.toString());
         return this;
@@ -120,33 +120,65 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
     }
 
     @Override
-    public Serializer writeNameValue(final String name, final boolean value) throws Exception
-    {
-        return writeAttribute(name, value);
-    }
-
-    @Override
-    public Serializer writeNameValue(final String name, final int value) throws Exception
-    {
-        return writeAttribute(name, value);
-    }
-
-    @Override
-    public Serializer writeNameValue(final String name, final double value) throws Exception
-    {
-        return writeAttribute(name, value);
-    }
-
-    @Override
-    public Serializer writeNameValue(final String name, final float value) throws Exception
-    {
-        return writeAttribute(name, value);
-    }
-
-    @Override
     public Serializer writeNameValue(final String name, final Maybe<?> value) throws Exception
     {
         return writeAttribute(name, value);
+    }
+    
+    @Override
+    public Serializer writePrimitive(final String value) throws Exception
+    {
+        this.generator.writeCharacters(value);
+        return this;
+    }
+
+    @Override
+    public Serializer writePrimitive(final Boolean value) throws Exception
+    {
+        this.generator.writeCharacters(value.toString());
+        return this;
+    }
+
+    @Override
+    public Serializer writePrimitive(final Short value) throws Exception
+    {
+        this.generator.writeCharacters(value.toString());
+        return this;
+    }
+
+    @Override
+    public Serializer writePrimitive(final Integer value) throws Exception
+    {
+        this.generator.writeCharacters(value.toString());
+        return this;
+    }
+
+    @Override
+    public Serializer writePrimitive(final Long value) throws Exception
+    {
+        this.generator.writeCharacters(value.toString());
+        return this;
+    }
+
+    @Override
+    public Serializer writePrimitive(final Float value) throws Exception
+    {
+        this.generator.writeCharacters(value.toString());
+        return this;
+    }
+
+    @Override
+    public Serializer writePrimitive(final Double value) throws Exception
+    {
+        this.generator.writeCharacters(value.toString());
+        return this;
+    }
+
+    @Override
+    public Serializer writePrimitive(final Maybe<?> value) throws Exception
+    {
+        this.generator.writeCharacters(value.toString());
+        return this;
     }
 
     public Serializer writeAttribute(final String name, final Maybe<?> value) throws Exception

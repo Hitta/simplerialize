@@ -37,7 +37,7 @@ public final class JacksonJsonSerializer extends AbstractSerializer
         this.generator.writeStartObject();
         return this;
     }
-
+    
     @Override
     public void finish() throws Exception
     {
@@ -62,18 +62,13 @@ public final class JacksonJsonSerializer extends AbstractSerializer
     public Serializer writeRepeating(final String elementName, final Iterable<?> elements) throws Exception
     {
         this.generator.writeArrayFieldStart(elementName);
-        for(final Object entry : elements)
-        {
-            this.generator.writeStartObject();
-            writeWithAdapter(entry);
-            this.generator.writeEndObject();
-        }
+        writeWithAdapter(elements);
         this.generator.writeEndArray();
         return this;
     }
 
     @Override
-    public Serializer writePrimitive(final Object target) throws Exception
+    public Serializer writeObject(final Object target) throws Exception
     {
         this.generator.writeObject(target);
         return this;
@@ -102,34 +97,6 @@ public final class JacksonJsonSerializer extends AbstractSerializer
 
     @Override
     public Serializer writeNameValue(final String name, final Double value) throws Exception
-    {
-        this.generator.writeNumberField(name, value);
-        return this;
-    }
-
-    @Override
-    public Serializer writeNameValue(String name, boolean value) throws Exception
-    {
-        this.generator.writeBooleanField(name, value);
-        return this;
-    }
-
-    @Override
-    public Serializer writeNameValue(final String name, final int value) throws Exception
-    {
-        this.generator.writeNumberField(name, value);
-        return this;
-    }
-
-    @Override
-    public Serializer writeNameValue(final String name, final double value) throws Exception
-    {
-        this.generator.writeNumberField(name, value);
-        return this;
-    }
-
-    @Override
-    public Serializer writeNameValue(final String name, final float value) throws Exception
     {
         this.generator.writeNumberField(name, value);
         return this;
@@ -172,6 +139,65 @@ public final class JacksonJsonSerializer extends AbstractSerializer
         {
             this.generator.writeFieldName(name);
             writeWithAdapter(value.value());
+        }
+        return this;
+    }
+
+    @Override
+    public Serializer writePrimitive(final String value) throws Exception
+    {
+        this.generator.writeString(value);
+        return this;
+    }
+
+    @Override
+    public Serializer writePrimitive(final Boolean value) throws Exception
+    {
+        this.generator.writeBoolean(value);
+        return this;
+    }
+
+    @Override
+    public Serializer writePrimitive(final Short value) throws Exception
+    {
+        this.generator.writeNumber(value);
+        return this;
+    }
+
+    @Override
+    public Serializer writePrimitive(final Integer value) throws Exception
+    {
+        this.generator.writeNumber(value);
+        return this;
+    }
+
+    @Override
+    public Serializer writePrimitive(final Long value) throws Exception
+    {
+        this.generator.writeNumber(value);
+        return this;
+    }
+
+    @Override
+    public Serializer writePrimitive(final Float value) throws Exception
+    {
+        this.generator.writeNumber(value);
+        return this;
+    }
+
+    @Override
+    public Serializer writePrimitive(final Double value) throws Exception
+    {
+        this.generator.writeNumber(value);
+        return this;
+    }
+
+    @Override
+    public Serializer writePrimitive(final Maybe<?> value) throws Exception
+    {
+        if(value.isKnown())
+        {
+            writeObject(value.value());
         }
         return this;
     }

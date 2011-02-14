@@ -9,7 +9,7 @@ import se.hitta.serialization.capable.SerializationCapable;
  */
 public interface AdapterMapper
 {
-    public abstract AdapterMapper register(final Class<?> clazz, final SerializationAdapter<?> adapter);
+    public abstract AdapterMapper register(final SerializationAdapter<?> adapter, final Class<?>... clazz);
 
     /**
      * This method is responsible for finding an adapter. It usually boils down to:

@@ -41,30 +41,30 @@ public final class DefaultAdapterMapper implements AdapterMapper
     {
         this.adapterMappings = storage;
 
-        register(Object.class, new ObjectAdapter());
+        register(new ObjectAdapter(), Object.class);
         
-        final PrimitiveAdapter primitive = new PrimitiveAdapter();
-        register(String.class, primitive);
-        register(Boolean.class, primitive);
-        register(Number.class, primitive);
-        register(Byte.class, primitive);
+        new PrimitiveAdapters(this);
 
         final IterableAdapter iterable = new IterableAdapter();
-        register(Iterable.class, iterable);
-        register(Collection.class, iterable);
-
-        register(Iterator.class, new IteratorAdapter());
+        register(iterable, Iterable.class);
+        register(iterable, Collection.class);
+        register(new IteratorAdapter(), Iterator.class);
     }
 
-    /* (non-Javadoc)
-     * @see se.hitta.serialization.adapter.AM#register(java.lang.Class, se.hitta.serialization.adapter.SerializationAdapter)
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.adapter.AdapterMapper#register(se.hitta.serialization.adapter.SerializationAdapter, java.lang.Class<?>[])
      */
     @Override
-    public AdapterMapper register(final Class<?> clazz, final SerializationAdapter<?> adapter)
+    public AdapterMapper register(final SerializationAdapter<?> adapter, final Class<?>... classes)
     {
-        this.adapterMappings.put(clazz, adapter);
+        for(final Class<?> clazz : classes)
+        {
+            this.adapterMappings.put(clazz, adapter);
+        }
         return this;
     }
+
 
     /* (non-Javadoc)
      * @see se.hitta.serialization.adapter.AM#resolveAdapter(java.lang.Class)

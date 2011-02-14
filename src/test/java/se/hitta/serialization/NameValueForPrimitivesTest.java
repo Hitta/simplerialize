@@ -60,7 +60,7 @@ public final class NameValueForPrimitivesTest
             @Override
             void writeValue(final Serializer serializer) throws Exception
             {
-                serializer.writePrimitive(value);
+                serializer.writeObject(value);
             }
         };
     }

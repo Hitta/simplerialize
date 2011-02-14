@@ -5,7 +5,7 @@ import java.util.Arrays;
 import se.hitta.serialization.Serializer;
 import se.hitta.serialization.capable.SerializationCapable;
 
-public final class ListOfStuff extends AbstractSerializationTest
+public final class List extends AbstractSerializationTest
 {
     @Override
     public void write(final Serializer serializer) throws Exception
@@ -22,7 +22,7 @@ public final class ListOfStuff extends AbstractSerializationTest
         @Override
         public void write(final Serializer serializer) throws Exception
         {
-            serializer.writeNameValue("item" + (ListOfStuff.this.i++), "value");
+            serializer.writeNameValue("item" + (List.this.i++), "value");
         }
     }
 }

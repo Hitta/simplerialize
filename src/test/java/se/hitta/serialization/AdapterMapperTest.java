@@ -14,7 +14,7 @@ public class AdapterMapperTest
     public void simpleClassToAdapterMapping()
     {
         final AdapterMapper mapper = new DefaultAdapterMapper();
-        mapper.register(A.class, this.dummyAdapterInstance);
+        mapper.register(this.dummyAdapterInstance, A.class);
         assertSame(this.dummyAdapterInstance, mapper.resolveAdapter(A.class));
     }
 
@@ -22,7 +22,7 @@ public class AdapterMapperTest
     public void superClassToAdapterMapping()
     {
         final AdapterMapper mapper = new DefaultAdapterMapper();
-        mapper.register(A.class, this.dummyAdapterInstance);
+        mapper.register(this.dummyAdapterInstance, A.class);
         assertSame(this.dummyAdapterInstance, mapper.resolveAdapter(B.class));
     }
 
@@ -30,7 +30,7 @@ public class AdapterMapperTest
     public void interfaceToAdapterMapping()
     {
         final AdapterMapper mapper = new DefaultAdapterMapper();
-        mapper.register(I.class, this.dummyAdapterInstance);
+        mapper.register(this.dummyAdapterInstance, I.class);
         assertSame(this.dummyAdapterInstance, mapper.resolveAdapter(C.class));
     }
 
@@ -38,7 +38,7 @@ public class AdapterMapperTest
     public void superClassInterfaceToAdapterMapping()
     {
         final AdapterMapper mapper = new DefaultAdapterMapper();
-        mapper.register(I.class, this.dummyAdapterInstance);
+        mapper.register(this.dummyAdapterInstance, I.class);
         assertSame(this.dummyAdapterInstance, mapper.resolveAdapter(D.class));
     }
 
@@ -46,8 +46,8 @@ public class AdapterMapperTest
     public void superClassHasPrecedenceOverSuperClassInterface()
     {
         final AdapterMapper mapper = new DefaultAdapterMapper();
-        mapper.register(I.class, new DummyAdapter());
-        mapper.register(C.class, this.dummyAdapterInstance);
+        mapper.register(new DummyAdapter(), I.class);
+        mapper.register(this.dummyAdapterInstance, C.class);
         assertSame(this.dummyAdapterInstance, mapper.resolveAdapter(D.class));
     }
 

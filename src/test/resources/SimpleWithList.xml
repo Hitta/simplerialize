@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<SimpleWithListOfStuff>
+<SimpleWithList>
     <Simple>
         <element with="attribute" />
     </Simple>
@@ -7,4 +7,4 @@
         <list item0="value" />
         <list item1="value" />
     </container>
-</SimpleWithListOfStuff>
+</SimpleWithList>
