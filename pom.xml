@@ -11,45 +11,24 @@
     </parent>
     <dependencies>
         <dependency>
-            <groupId>org.codehaus.woodstox</groupId>
-            <artifactId>woodstox-core-asl</artifactId>
-            <version>4.1.1</version>
-            <type>jar</type>
+            <groupId>se.hitta</groupId>
+            <artifactId>pom-json</artifactId>
+            <version>3.0.3-SNAPSHOT</version>
+            <type>pom</type>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-core-asl</artifactId>
-            <version>1.7.1</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.natpryce.maybe</groupId>
-            <artifactId>com.natpryce.maybe</artifactId>
-            <version>[1.0.1,)</version>
-            <type>jar</type>
+            <groupId>se.hitta</groupId>
+            <artifactId>pom-xml</artifactId>
+            <version>3.0.3-SNAPSHOT</version>
+            <type>pom</type>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>se.hitta</groupId>
             <artifactId>pom-test</artifactId>
-            <version>3.0.2</version>
+            <version>3.0.3-SNAPSHOT</version>
             <type>pom</type>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>xmlunit</groupId>
-            <artifactId>xmlunit</artifactId>
-            <version>1.3</version>
-            <type>jar</type>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
-            <version>1.7.1</version>
-            <type>jar</type>
             <scope>test</scope>
         </dependency>
     </dependencies>
