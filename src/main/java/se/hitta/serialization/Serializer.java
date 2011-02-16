@@ -1,5 +1,7 @@
 package se.hitta.serialization;
 
+import java.util.Iterator;
+
 import com.natpryce.maybe.Maybe;
 
 public interface Serializer
@@ -14,6 +16,7 @@ public interface Serializer
     public <T> Serializer writeWithAdapter(final T target) throws Exception;
 
     public Serializer writeRepeating(String name, Iterable<?> elements) throws Exception;
+    public Serializer writeRepeating(String name, Iterator<?> elements) throws Exception;
 
     // TODO: Hide from clients?
     public Serializer writeObject(Object target) throws Exception;

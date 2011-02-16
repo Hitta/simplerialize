@@ -2,6 +2,7 @@ package se.hitta.serialization.json;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Iterator;
 
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerationException;
@@ -60,6 +61,13 @@ public final class JacksonJsonSerializer extends AbstractSerializer
 
     @Override
     public Serializer writeRepeating(final String elementName, final Iterable<?> elements) throws Exception
+    {
+        writeRepeating(elementName, elements.iterator());
+        return this;
+    }
+    
+    @Override
+    public Serializer writeRepeating(final String elementName, final Iterator<?> elements) throws Exception
     {
         this.generator.writeArrayFieldStart(elementName);
         writeWithAdapter(elements);

@@ -1,6 +1,7 @@
 package se.hitta.serialization.xml;
 
 import java.io.Writer;
+import java.util.Iterator;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -61,10 +62,17 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
     @Override
     public Serializer writeRepeating(final String elementName, final Iterable<?> elements) throws Exception
     {
-        for(final Object entry : elements)
+        writeRepeating(elementName, elements.iterator());
+        return this;
+    }
+    
+    @Override
+    public Serializer writeRepeating(final String elementName, final Iterator<?> elements) throws Exception
+    {
+        while(elements.hasNext())
         {
             this.generator.writeStartElement(elementName);
-            writeWithAdapter(entry);
+            writeWithAdapter(elements.next());
             this.generator.writeEndElement();
         }
         return this;
