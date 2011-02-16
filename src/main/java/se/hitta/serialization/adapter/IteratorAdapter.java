@@ -28,7 +28,7 @@ final class IteratorAdapter implements SerializationAdapter<Iterator<?>>
             final Object value = target.next();
             if(isPrimitive(value))
             {
-                serializer.writeObject(value);
+                serializer.writeWithAdapter(value);
             }
             else
             {
