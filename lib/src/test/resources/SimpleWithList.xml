@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SimpleWithList>
+    <Simple>
+        <element with="attribute" />
+    </Simple>
+    <container>
+        <list item0="value" />
+        <list item1="value" />
+    </container>
+</SimpleWithList>
