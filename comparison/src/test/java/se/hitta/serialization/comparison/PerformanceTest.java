@@ -1,6 +1,5 @@
 package se.hitta.serialization.comparison;
 
-import java.io.IOException;
 import java.io.Writer;
 
 import org.apache.commons.lang.time.StopWatch;
@@ -9,6 +8,7 @@ import org.junit.Test;
 import se.hitta.serialization.comparison.jaxb.JaxbTest;
 import se.hitta.serialization.comparison.serialization.SerializeWithEmbeddedAdapterTest;
 import se.hitta.serialization.comparison.serialization.SerializeWithStandaloneAdapterTest;
+import se.hitta.serialization.comparison.simple.SimpleTest;
 
 /**
  * Time serialization to a no-op {@link Writer}
@@ -18,15 +18,26 @@ public class PerformanceTest
     static final int iterations = 2000;
 
     @Test
-    public void timings() throws Exception
+    public void timeXml() throws Exception
     {
-        System.err.println("= = = = = = = = = = = = timing report for " + iterations + " repetitions  = = = = = = = = = = = =");
-        time(new Delegate(new JaxbTest()));
-        time(new Delegate(new SerializeWithEmbeddedAdapterTest()));
-        time(new Delegate(new SerializeWithStandaloneAdapterTest()));
+        System.err.println("\n= = = = = = = = = = = = timing XML for " + iterations + " repetitions  = = = = = = = = = = = =");
+        time(new XmlDelegate(new JaxbTest()));
+        time(new XmlDelegate(new SerializeWithEmbeddedAdapterTest()));
+        time(new XmlDelegate(new SerializeWithStandaloneAdapterTest()));
+        time(new XmlDelegate(new SimpleTest()));
         System.err.println("= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =");
     }
 
+    @Test
+    public void timeJson() throws Exception
+    {
+        System.err.println("\n= = = = = = = = = = = = timing JSON for " + iterations + " repetitions  = = = = = = = = = = = =");
+        time(new JsonDelegate(new JaxbTest()));
+        time(new JsonDelegate(new SerializeWithEmbeddedAdapterTest()));
+        time(new JsonDelegate(new SerializeWithStandaloneAdapterTest()));
+        System.err.println("= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =");
+    }
+    
     public void time(final Delegate d) throws Exception
     {
         final StopWatch timer = new StopWatch();
@@ -37,39 +48,5 @@ public class PerformanceTest
         }
         timer.stop();
         System.err.println(timer.getTime() + "ms\t" + d);
-    }
-
-    public static final class Delegate
-    {
-        private final PerformanceTestable target;
-
-        public Delegate(final PerformanceTestable target)
-        {
-            this.target = target;
-        }
-
-        public void execute() throws Exception
-        {
-            this.target.serializeTo(new Writer()
-            {
-                @Override
-                public void write(char[] cbuf, int off, int len) throws IOException
-                {}
-
-                @Override
-                public void flush() throws IOException
-                {}
-
-                @Override
-                public void close() throws IOException
-                {}
-            });
-        }
-
-        @Override
-        public final String toString()
-        {
-            return this.target.getClass().getSimpleName();
-        }
     }
 }

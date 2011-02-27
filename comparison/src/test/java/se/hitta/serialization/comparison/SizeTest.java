@@ -8,6 +8,7 @@ import org.junit.Test;
 import se.hitta.serialization.comparison.jaxb.JaxbTest;
 import se.hitta.serialization.comparison.serialization.SerializeWithEmbeddedAdapterTest;
 import se.hitta.serialization.comparison.serialization.SerializeWithStandaloneAdapterTest;
+import se.hitta.serialization.comparison.simple.SimpleTest;
 
 /**
  * Performs serialization to a {@link Writer} that only counts the amount of bytes written.
@@ -18,10 +19,11 @@ public class SizeTest
     @Test
     public void size() throws Exception
     {
-        System.err.println("= = = = = = = = = = = = = = size report = = = = = = = = = = = = = =");
+        System.err.println("\n= = = = = = = = = = = = = = size report = = = = = = = = = = = = = =");
         measure(new Delegate(new JaxbTest()));
         measure(new Delegate(new SerializeWithEmbeddedAdapterTest()));
         measure(new Delegate(new SerializeWithStandaloneAdapterTest()));
+        measure(new Delegate(new SimpleTest()));
         System.err.println("= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =");
     }
 
@@ -33,22 +35,39 @@ public class SizeTest
 
     public static final class Delegate
     {
-        int bytes = 0;
-        private final PerformanceTestable target;
+        int xmlBytes = 0;
+        int jsonBytes = 0;
+        private final AbstractTest target;
 
-        public Delegate(final PerformanceTestable target)
+        public Delegate(final AbstractTest target)
         {
             this.target = target;
         }
 
         public void execute() throws Exception
         {
-            this.target.serializeTo(new Writer()
+            this.target.serializeXmlTo(new Writer()
             {
                 @Override
                 public void write(char[] cbuf, int off, int len) throws IOException
                 {
-                    Delegate.this.bytes += len;
+                    Delegate.this.xmlBytes += len;
+                }
+
+                @Override
+                public void flush() throws IOException
+                {}
+
+                @Override
+                public void close() throws IOException
+                {}
+            });
+            this.target.serializeJsonTo(new Writer()
+            {
+                @Override
+                public void write(char[] cbuf, int off, int len) throws IOException
+                {
+                    Delegate.this.jsonBytes += len;
                 }
 
                 @Override
@@ -64,7 +83,7 @@ public class SizeTest
         @Override
         public final String toString()
         {
-            return this.bytes + " bytes\t" + this.target.getClass().getSimpleName();
+            return this.target.getClass().getSimpleName() + "\nXML:\t" + this.xmlBytes + "\tbytes\nJSON:\t" + this.jsonBytes + "\tbytes\n";
         }
     }
 }

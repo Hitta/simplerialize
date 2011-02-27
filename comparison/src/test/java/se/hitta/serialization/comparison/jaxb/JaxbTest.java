@@ -1,6 +1,5 @@
 package se.hitta.serialization.comparison.jaxb;
 
-import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,20 +7,17 @@ import java.util.Map;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 
-import org.junit.Test;
+import org.codehaus.jackson.map.AnnotationIntrospector;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.xc.JaxbAnnotationIntrospector;
 
-import se.hitta.serialization.comparison.PerformanceTestable;
+import se.hitta.serialization.comparison.AbstractTest;
 
-public final class JaxbTest implements PerformanceTestable
+public final class JaxbTest extends AbstractTest
 {
-    @Test
-    public void serialize() throws Exception
-    {
-        serializeTo(new OutputStreamWriter(System.err));
-    }
 
     @Override
-    public void serializeTo(final Writer writer) throws Exception
+    public void serializeXmlTo(final Writer writer) throws Exception
     {
         final JAXBContext context = JAXBContext.newInstance(SampleObject.class);
         final Marshaller marshaller = context.createMarshaller();
@@ -39,4 +35,12 @@ public final class JaxbTest implements PerformanceTestable
         return new SampleObject(attributes);
     }
 
+    @Override
+    public void serializeJsonTo(final Writer writer) throws Exception
+    {
+        final ObjectMapper mapper = new ObjectMapper();
+        final AnnotationIntrospector introspector = new JaxbAnnotationIntrospector();
+        mapper.getSerializationConfig().setAnnotationIntrospector(introspector);
+        mapper.writeValue(writer, createRoot());
+    }
 }

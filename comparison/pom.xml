@@ -15,14 +15,28 @@
             <artifactId>serialization-lib</artifactId>
             <version>3.0.1-SNAPSHOT</version>
             <type>jar</type>
-            <scope>compile</scope>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jvnet.jaxb2_commons</groupId>
             <artifactId>jaxb2-basics-runtime</artifactId>
             <version>0.6.0</version>
             <type>jar</type>
-            <scope>compile</scope>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.simpleframework</groupId>
+            <artifactId>simple-xml</artifactId>
+            <version>2.4.1</version>
+            <type>jar</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-xc</artifactId>
+            <version>${jackson.version}</version>
+            <type>jar</type>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

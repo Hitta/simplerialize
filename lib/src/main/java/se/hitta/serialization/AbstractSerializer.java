@@ -19,7 +19,7 @@ public abstract class AbstractSerializer implements Serializer
     @Override
     public final Serializer writeWithAdapter(final Maybe<?> target) throws Exception
     {
-        if(target.isKnown())
+        if(target != null && target.isKnown())
         {
             writeWithAdapter(target.value());
         }

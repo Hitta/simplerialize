@@ -7,7 +7,6 @@ import java.util.Iterator;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonGenerator;
-import org.codehaus.jackson.util.DefaultPrettyPrinter;
 
 import se.hitta.serialization.AbstractSerializer;
 import se.hitta.serialization.Serializer;
@@ -29,7 +28,6 @@ public final class JacksonJsonSerializer extends AbstractSerializer
     {
         super(mapper);
         this.generator = factory.createJsonGenerator(writer);
-        this.generator.setPrettyPrinter(new DefaultPrettyPrinter());
     }
 
     @Override
@@ -38,7 +36,7 @@ public final class JacksonJsonSerializer extends AbstractSerializer
         this.generator.writeStartObject();
         return this;
     }
-    
+
     @Override
     public void finish() throws Exception
     {
@@ -65,7 +63,7 @@ public final class JacksonJsonSerializer extends AbstractSerializer
         writeRepeating(elementName, elements.iterator());
         return this;
     }
-    
+
     @Override
     public Serializer writeRepeating(final String elementName, final Iterator<?> elements) throws Exception
     {
