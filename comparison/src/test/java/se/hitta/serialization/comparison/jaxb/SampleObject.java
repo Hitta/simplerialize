@@ -6,8 +6,8 @@ import java.util.Map;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import se.hitta.serialization.Serializer;
-import se.hitta.serialization.capable.SerializationCapable;
+import se.hitta.serialization.SerializationCapable;
+import se.hitta.serialization.SerializationContext;
 
 @XmlRootElement(name = "root")
 public final class SampleObject implements SerializationCapable
@@ -21,7 +21,7 @@ public final class SampleObject implements SerializationCapable
     }
 
     @Override
-    public void write(final Serializer serializer) throws Exception
+    public void write(final SerializationContext serializer) throws Exception
     {
         serializer.startContainer("root").writeRepeating("attributes", this.attributes).endContainer();
     }

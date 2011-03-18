@@ -4,9 +4,7 @@ import static org.junit.Assert.assertSame;
 
 import org.junit.Test;
 
-import se.hitta.serialization.adapter.AdapterMapper;
-import se.hitta.serialization.adapter.DefaultAdapterMapper;
-import se.hitta.serialization.adapter.SerializationAdapter;
+import se.hitta.serialization.adapters.DefaultAdapterMapper;
 
 public class AdapterMapperTest
 {
@@ -71,7 +69,7 @@ public class AdapterMapperTest
     static class DummyAdapter implements SerializationAdapter<Object>
     {
         @Override
-        public void write(Object target, Serializer serializer) throws Exception
+        public void write(Object target, SerializationContext serializer) throws Exception
         {}
     };
 }

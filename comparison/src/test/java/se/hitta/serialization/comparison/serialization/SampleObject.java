@@ -2,8 +2,8 @@ package se.hitta.serialization.comparison.serialization;
 
 import java.util.Map;
 
-import se.hitta.serialization.Serializer;
-import se.hitta.serialization.capable.SerializationCapable;
+import se.hitta.serialization.SerializationCapable;
+import se.hitta.serialization.SerializationContext;
 
 public final class SampleObject implements SerializationCapable
 {
@@ -15,7 +15,7 @@ public final class SampleObject implements SerializationCapable
     }
 
     @Override
-    public void write(final Serializer serializer) throws Exception
+    public void write(final SerializationContext serializer) throws Exception
     {
         serializer.startContainer("root").writeRepeating("attributes", this.attributes).endContainer();
     }

@@ -17,11 +17,10 @@ package se.hitta.serialization;
 
 import java.io.Writer;
 
-
 /**
  * The interface for all concrete serializer implementations.
  * 
- * The main and most common usage pattern of a {@link Serializer} is
+ * The main and most common usage pattern of a {@link SerializationContext} is
  * <code>
  * // Register your adapters
  * AdapterMapper mapper = ...;
@@ -31,21 +30,18 @@ import java.io.Writer;
  * serializer.start().writeWithAdapter(someObject).finish();
  * </code>
  */
-public interface Serializer
+public interface SerializationContext extends SerializationEachContext, InsideContainer
 {
+    public SerializationEachContext beneath(final String container) throws Exception;
+
     /**
-     * Start output, only call once and <strong>don't ever</strong> call it from within a {@link SerializationAdapter}
+     * Start a container. For XML, usually an element. For JSON, usually an object.
      * 
+     * @param name
      * @return
      * @throws Exception
      */
-    public SerializationContext start() throws Exception;
-
-    /**
-     * Finish and flush any remaining output, <strong>don't ever</strong> call it from within a {@link SerializationAdapter}
-     * @throws Exception
-     */
-    public void finish() throws Exception;
+    public InsideContainer startContainer(final String name) throws Exception;
 
     public Writer getWriter();
 }

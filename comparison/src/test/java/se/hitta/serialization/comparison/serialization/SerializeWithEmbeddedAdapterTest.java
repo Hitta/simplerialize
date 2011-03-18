@@ -1,7 +1,7 @@
 package se.hitta.serialization.comparison.serialization;
 
-import se.hitta.serialization.adapter.AdapterMapper;
-import se.hitta.serialization.adapter.DefaultAdapterMapper;
+import se.hitta.serialization.AdapterMapper;
+import se.hitta.serialization.adapters.DefaultAdapterMapper;
 
 public final class SerializeWithEmbeddedAdapterTest extends AbstractSerializationTest
 {
