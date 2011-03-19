@@ -25,6 +25,7 @@ final class ByteBufferAsBase64Adapter implements SerializationAdapter<ByteBuffer
 {
     private final BASE64Encoder encoder = new BASE64Encoder();
     
+    @SuppressWarnings("deprecation")
     @Override
     public void write(final ByteBuffer target, final SerializationContext serializer) throws Exception
     {

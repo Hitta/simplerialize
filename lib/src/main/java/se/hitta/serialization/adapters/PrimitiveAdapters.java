@@ -25,6 +25,7 @@ final class PrimitiveAdapters
     {
         mapper.register(new SerializationAdapter<CharSequence>()
         {
+            @SuppressWarnings("deprecation")
             @Override
             public void write(final CharSequence target, final SerializationContext serializer) throws Exception
             {
@@ -33,6 +34,7 @@ final class PrimitiveAdapters
         }, String.class, CharSequence.class, StringBuffer.class, StringBuilder.class);
         mapper.register(new SerializationAdapter<Number>()
         {
+            @SuppressWarnings("deprecation")
             @Override
             public void write(final Number target, final SerializationContext serializer) throws Exception
             {
@@ -41,6 +43,7 @@ final class PrimitiveAdapters
         }, Number.class, Float.class, Integer.class, Short.class, Long.class);
         mapper.register(new SerializationAdapter<Boolean>()
         {
+            @SuppressWarnings("deprecation")
             @Override
             public void write(final Boolean target, final SerializationContext serializer) throws Exception
             {

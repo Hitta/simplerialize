@@ -20,6 +20,7 @@ import se.hitta.serialization.SerializationContext;
 
 final class ObjectAdapter implements SerializationAdapter<Object>
 {
+    @SuppressWarnings("deprecation")
     @Override
     public void write(final Object target, final SerializationContext serializer) throws Exception
     {
