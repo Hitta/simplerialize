@@ -2,17 +2,19 @@ package se.hitta.serialization.structures;
 
 import java.util.Arrays;
 
+import se.hitta.serialization.AbstractSerializationTest;
+import se.hitta.serialization.InsideContainer;
 import se.hitta.serialization.SerializationCapable;
 import se.hitta.serialization.SerializationContext;
 
-public final class List extends AbstractSerializationTest
+public final class ListOfObjects extends AbstractSerializationTest
 {
     @Override
     public void write(final SerializationContext serializer) throws Exception
     {
-        serializer.startContainer("container");
-        serializer.writeRepeating("list", Arrays.asList(new Item(), new Item()));
-        serializer.endContainer();
+        final InsideContainer container = serializer.startContainer("container");
+        serializer.beneath("list").writeRepeating(Arrays.asList(new Item(), new Item()));
+        container.end();
     }
 
     int i = 0;
@@ -22,7 +24,7 @@ public final class List extends AbstractSerializationTest
         @Override
         public void write(final SerializationContext serializer) throws Exception
         {
-            serializer.writeNameValue("item" + List.this.i++, "value");
+            serializer.writeNameValue("item" + ListOfObjects.this.i++, "value");
         }
     }
 }

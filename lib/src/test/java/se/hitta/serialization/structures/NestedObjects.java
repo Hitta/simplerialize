@@ -2,6 +2,8 @@ package se.hitta.serialization.structures;
 
 import java.util.Arrays;
 
+import se.hitta.serialization.AbstractSerializationTest;
+import se.hitta.serialization.InsideContainer;
 import se.hitta.serialization.SerializationCapable;
 import se.hitta.serialization.SerializationContext;
 
@@ -10,7 +12,9 @@ public final class NestedObjects extends AbstractSerializationTest
     @Override
     public void write(final SerializationContext serializer) throws Exception
     {
-        serializer.startContainer("container").writeWithAdapter(new First()).endContainer();
+        final InsideContainer container = serializer.startContainer("container");
+        serializer.writeWithAdapter(new First());
+        container.end();
     }
 
     static final class First implements SerializationCapable
@@ -20,7 +24,9 @@ public final class NestedObjects extends AbstractSerializationTest
         @Override
         public void write(final SerializationContext serializer) throws Exception
         {
-            serializer.startContainer("first").writeWithAdapter(this.second).endContainer();
+            final InsideContainer container = serializer.startContainer("first");
+            serializer.writeWithAdapter(this.second);
+            container.end();
         }
     }
 
@@ -29,9 +35,9 @@ public final class NestedObjects extends AbstractSerializationTest
         @Override
         public void write(final SerializationContext serializer) throws Exception
         {
-            serializer.startContainer("second");
-            serializer.writeRepeating("third", Arrays.asList(new Third(), new Third()));
-            serializer.endContainer();
+            final InsideContainer container = serializer.startContainer("second");
+            serializer.beneath("third").writeRepeating(Arrays.asList(new Third(), new Third()));
+            container.end();
         }
     }
 
@@ -40,7 +46,7 @@ public final class NestedObjects extends AbstractSerializationTest
         private static int i = 0;
 
         @Override
-        public void write(SerializationContext serializer) throws Exception
+        public void write(final SerializationContext serializer) throws Exception
         {
             serializer.writeNameValue("item" + (i++), "value");
         }

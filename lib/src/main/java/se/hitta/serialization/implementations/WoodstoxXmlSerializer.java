@@ -22,10 +22,10 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-import se.hitta.serialization.AbstractSerializer;
 import se.hitta.serialization.AdapterMapper;
-import se.hitta.serialization.SerializationEachContext;
+import se.hitta.serialization.InsideContainer;
 import se.hitta.serialization.SerializationContext;
+import se.hitta.serialization.SerializationEachContext;
 
 import com.ctc.wstx.api.WstxOutputProperties;
 import com.natpryce.maybe.Maybe;
@@ -62,38 +62,34 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
     }
 
     @Override
-    public SerializationContext startContainer(final String name) throws XMLStreamException
+    public InsideContainer startContainer(final String name) throws XMLStreamException
     {
         this.generator.writeStartElement(name);
         return this;
     }
 
     @Override
-    public SerializationContext endContainer() throws XMLStreamException
+    public SerializationContext end() throws XMLStreamException
     {
         this.generator.writeEndElement();
         return this;
     }
 
     @Override
-    public SerializationContext writeRepeating(final String elementName, final Iterable<?> elements) throws Exception
+    public SerializationContext writeRepeating(final Iterable<?> elements) throws Exception
     {
-        writeRepeating(elementName, elements.iterator());
+        writeRepeating(elements.iterator());
         return this;
     }
 
     @Override
-    public SerializationContext writeRepeating(final String elementName, final Iterator<?> elements) throws Exception
+    public SerializationContext writeRepeating(final Iterator<?> elements) throws Exception
     {
-        if(elements.hasNext())
+        while(elements.hasNext())
         {
-            this.generator.writeStartElement(elementName);
-            while(elements.hasNext())
-            {
-                writeWithAdapter(elements.next());
-            }
-            this.generator.writeEndElement();
+            writeWithAdapter(elements.next());
         }
+        this.generator.writeEndElement();
         return this;
     }
 
@@ -105,14 +101,14 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
     }
 
     @Override
-    public SerializationContext writeEach(final String name, final Iterable<?> elements) throws Exception
+    public SerializationContext writePrimitives(final String name, final Iterable<?> elements) throws Exception
     {
-        writeEach(name, elements.iterator());
+        writePrimitives(name, elements.iterator());
         return this;
     }
 
     @Override
-    public SerializationContext writeEach(final String name, final Iterator<?> elements) throws Exception
+    public SerializationContext writePrimitives(final String name, final Iterator<?> elements) throws Exception
     {
         while(elements.hasNext())
         {
@@ -132,54 +128,54 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
     }
 
     @Override
-    public SerializationContext writeNameValue(final String name, final String value) throws Exception
+    public InsideContainer writeNameValue(final String name, final String value) throws Exception
     {
         return writeAttribute(name, value);
     }
 
     @Override
-    public SerializationContext writeNameValue(final String name, final Boolean value) throws Exception
+    public InsideContainer writeNameValue(final String name, final Boolean value) throws Exception
     {
         return writeAttribute(name, value);
     }
 
     @Override
-    public SerializationContext writeNameValue(final String name, final Short value) throws Exception
+    public InsideContainer writeNameValue(final String name, final Short value) throws Exception
     {
         return writeAttribute(name, value);
     }
 
     @Override
-    public SerializationContext writeNameValue(final String name, final Integer value) throws Exception
+    public InsideContainer writeNameValue(final String name, final Integer value) throws Exception
     {
         return writeAttribute(name, value);
     }
 
     @Override
-    public SerializationContext writeNameValue(final String name, final Long value) throws Exception
+    public InsideContainer writeNameValue(final String name, final Long value) throws Exception
     {
         return writeAttribute(name, value);
     }
 
     @Override
-    public SerializationContext writeNameValue(final String name, final Float value) throws Exception
+    public InsideContainer writeNameValue(final String name, final Float value) throws Exception
     {
         return writeAttribute(name, value);
     }
 
     @Override
-    public SerializationContext writeNameValue(final String name, final Double value) throws Exception
+    public InsideContainer writeNameValue(final String name, final Double value) throws Exception
     {
         return writeAttribute(name, value);
     }
 
     @Override
-    public SerializationContext writeNameValue(final String name, final Maybe<?> value) throws Exception
+    public InsideContainer writeNameValue(final String name, final Maybe<?> value) throws Exception
     {
         return writeAttribute(name, value);
     }
 
-    public SerializationContext writeAttribute(final String name, final Maybe<?> value) throws Exception
+    public InsideContainer writeAttribute(final String name, final Maybe<?> value) throws Exception
     {
         if(value.isKnown())
         {
@@ -188,7 +184,7 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
         return this;
     }
 
-    public SerializationContext writeAttribute(final String name, final Object value) throws Exception
+    public InsideContainer writeAttribute(final String name, final Object value) throws Exception
     {
         if(value != null)
         {

@@ -1,4 +1,4 @@
-package se.hitta.serialization.structures;
+package se.hitta.serialization;
 
 import static org.junit.Assert.fail;
 
@@ -40,24 +40,6 @@ public abstract class AbstractSerializationTest implements SerializationCapable
         assertXmlEquals(readExpectedXml(), actual.toString());
     }
 
-    public static void assertXmlEquals(final String expected, final String actual) throws SAXException, IOException
-    {
-        final Diff diff = new Diff(expected, actual);
-        if(!diff.identical() && diff.similar())
-        {
-            System.err.println("Similar:\n" + diff.toString());
-        }
-        else if(!diff.identical())
-        {
-            fail("expected:\n" + expected + "\nactual:\n" + actual + "\ndiff failure was:\n" + diff.toString());
-        }
-    }
-
-    public String readExpectedXml() throws IOException
-    {
-        return readExpected(".xml");
-    }
-
     @Test
     public final void asJson() throws Exception
     {
@@ -85,6 +67,24 @@ public abstract class AbstractSerializationTest implements SerializationCapable
     public String readExpectedJson() throws IOException
     {
         return readExpected(".json");
+    }
+
+    public static void assertXmlEquals(final String expected, final String actual) throws SAXException, IOException
+    {
+        final Diff diff = new Diff(expected, actual);
+        if(!diff.identical() && diff.similar())
+        {
+            System.err.println("Similar:\n" + diff.toString());
+        }
+        else if(!diff.identical())
+        {
+            fail("expected:\n" + expected + "\nactual:\n" + actual + "\ndiff failure was:\n" + diff.toString());
+        }
+    }
+
+    public String readExpectedXml() throws IOException
+    {
+        return readExpected(".xml");
     }
 
     private String readExpected(final String extension) throws IOException

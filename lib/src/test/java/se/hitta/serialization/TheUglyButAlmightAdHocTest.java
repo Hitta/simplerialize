@@ -68,14 +68,14 @@ public final class TheUglyButAlmightAdHocTest
         @Override
         public void write(final Target target, final SerializationContext serializer) throws Exception
         {
-            serializer.startContainer("yeah");
+            final InsideContainer root = serializer.startContainer("yeah");
             serializer.writeNameValue("def", Maybe.definitely("howdy"));
             serializer.writeNameValue("unk", Maybe.unknown());
             serializer.writeNameValue("str", target.str);
             serializer.writeNameValue("bool", target.bool);
-            serializer.startContainer("nested").writeWithAdapter(target.nested).endContainer();
-            serializer.writeRepeating("repeating", target.multiple_nested);
-            serializer.endContainer();
+            serializer.startContainer("nested").writeWithAdapter(target.nested).end();
+            serializer.beneath("repeating").writeRepeating(target.multiple_nested);
+            root.end();
         }
     }
 
@@ -84,7 +84,9 @@ public final class TheUglyButAlmightAdHocTest
         @Override
         public void write(final NestedTarget target, final SerializationContext serializer) throws Exception
         {
-            serializer.startContainer("nested").writeNameValue("nestedTarget", "foo").endContainer();
+            final InsideContainer root = serializer.startContainer("nested");
+            root.writeNameValue("nestedTarget", "foo");
+            root.end();
         }
     }
 }

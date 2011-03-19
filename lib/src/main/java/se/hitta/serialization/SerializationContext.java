@@ -30,7 +30,7 @@ import java.io.Writer;
  * serializer.start().writeWithAdapter(someObject).finish();
  * </code>
  */
-public interface SerializationContext extends SerializationEachContext, InsideContainer
+public interface SerializationContext extends SerializerGlobalContext
 {
     public SerializationEachContext beneath(final String container) throws Exception;
 
@@ -43,5 +43,17 @@ public interface SerializationContext extends SerializationEachContext, InsideCo
      */
     public InsideContainer startContainer(final String name) throws Exception;
 
+    /**
+     * You may use this, but we really think you shouldn't.
+     *  
+     * @param target
+     * @return
+     * @throws Exception
+     */
+    @Deprecated
+    SerializationContext writeObject(Object target) throws Exception;
+
     public Writer getWriter();
+    
+    
 }

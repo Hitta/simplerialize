@@ -13,16 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.hitta.serialization;
+package se.hitta.serialization.implementations;
 
 import java.io.Writer;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import se.hitta.serialization.AdapterMapper;
+import se.hitta.serialization.InsideContainer;
+import se.hitta.serialization.SerializationContext;
+import se.hitta.serialization.SerializationEachContext;
+import se.hitta.serialization.Serializer;
+
 
 import com.natpryce.maybe.Maybe;
 
-public abstract class AbstractSerializer implements SerializationContext, Serializer
+public abstract class AbstractSerializer implements Serializer, SerializationEachContext, InsideContainer
 {
     final AdapterMapper mapper;
     private final Writer writer;
@@ -34,7 +40,7 @@ public abstract class AbstractSerializer implements SerializationContext, Serial
     }
 
     @Override
-    public final SerializationContext writeWithAdapter(final Maybe<?> target) throws Exception
+    public final InsideContainer writeWithAdapter(final Maybe<?> target) throws Exception
     {
         if(target != null && target.isKnown())
         {
@@ -45,14 +51,14 @@ public abstract class AbstractSerializer implements SerializationContext, Serial
 
     @Override
     @SuppressWarnings("unchecked")
-    public final <T> SerializationContext writeWithAdapter(final T target) throws Exception
+    public final <T> InsideContainer writeWithAdapter(final T target) throws Exception
     {
         writeWithAdapter((Class<T>)target.getClass(), target);
         return this;
     }
 
     @Override
-    public final <T> SerializationContext writeWithAdapter(final Class<T> adapterClass, final T target) throws Exception
+    public final <T> InsideContainer writeWithAdapter(final Class<T> adapterClass, final T target) throws Exception
     {
         this.mapper.resolveAdapter(adapterClass).write(target, this);
         return this;
@@ -61,12 +67,12 @@ public abstract class AbstractSerializer implements SerializationContext, Serial
     @Override
     public final SerializationContext writeRepeating(final String name, final Map<?, ?> elements) throws Exception
     {
-        startContainer(name).writeRepeating(elements).endContainer();
+        startContainer(name).writeRepeating(elements).end();
         return this;
     }
 
     @Override
-    public final SerializationContext writeRepeating(final Map<?, ?> elements) throws Exception
+    public final InsideContainer writeRepeating(final Map<?, ?> elements) throws Exception
     {
         for(final Entry<?, ?> element : elements.entrySet())
         {

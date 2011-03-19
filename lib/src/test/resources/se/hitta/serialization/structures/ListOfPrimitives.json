@@ -1,0 +1,10 @@
+{
+	"container":
+	{
+		"items":
+		[
+			{"item":"foo"},
+			{"item":"bar"}
+		]
+	}
+}

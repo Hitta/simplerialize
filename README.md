@@ -14,6 +14,9 @@
 * A fairly compact output regardless of format
 * Good performant streaming serialization (thanks to [Jackson](http://jackson.codehaus.org/) and [Woodstox](http://woodstox.codehaus.org/))
 
+#### Dependencies
+* Maybe: Internally we make heavy use of [Nat Pryce](http://www.natpryce.com/)'s [Maybe type](https://github.com/npryce/maybe-java) this is reflected in it being a dependency in this project for now. We might consider removing it.
+
 ### Rationale
 
 #### Our scenario
