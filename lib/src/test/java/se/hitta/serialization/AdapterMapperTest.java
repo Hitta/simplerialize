@@ -9,59 +9,53 @@ import se.hitta.serialization.adapters.DefaultAdapterMapper;
 public class AdapterMapperTest
 {
     @Test
-    public void simpleClassToAdapterMapping()
+    public void findsAdaperRegisteredOnClass()
     {
         final AdapterMapper mapper = new DefaultAdapterMapper();
-        mapper.register(this.dummyAdapterInstance, A.class);
-        assertSame(this.dummyAdapterInstance, mapper.resolveAdapter(A.class));
+        mapper.register(this.dummyAdapterInstance, ClassWithInterface.class);
+        assertSame(this.dummyAdapterInstance, mapper.resolveAdapter(ClassWithInterface.class));
     }
 
     @Test
-    public void superClassToAdapterMapping()
+    public void findsAdapterRegisteredOnSuperclass()
     {
         final AdapterMapper mapper = new DefaultAdapterMapper();
-        mapper.register(this.dummyAdapterInstance, A.class);
-        assertSame(this.dummyAdapterInstance, mapper.resolveAdapter(B.class));
+        mapper.register(this.dummyAdapterInstance, ClassWithInterface.class);
+        assertSame(this.dummyAdapterInstance, mapper.resolveAdapter(Subclass.class));
     }
 
     @Test
-    public void interfaceToAdapterMapping()
+    public void findsAdapterRegisteredOnClassInterface()
     {
         final AdapterMapper mapper = new DefaultAdapterMapper();
-        mapper.register(this.dummyAdapterInstance, I.class);
-        assertSame(this.dummyAdapterInstance, mapper.resolveAdapter(C.class));
+        mapper.register(this.dummyAdapterInstance, Interface.class);
+        assertSame(this.dummyAdapterInstance, mapper.resolveAdapter(ClassWithInterface.class));
     }
 
     @Test
-    public void superClassInterfaceToAdapterMapping()
+    public void findsAdapterRegisteredOnSuperclassInterface()
     {
         final AdapterMapper mapper = new DefaultAdapterMapper();
-        mapper.register(this.dummyAdapterInstance, I.class);
-        assertSame(this.dummyAdapterInstance, mapper.resolveAdapter(D.class));
+        mapper.register(this.dummyAdapterInstance, Interface.class);
+        assertSame(this.dummyAdapterInstance, mapper.resolveAdapter(Subclass.class));
     }
 
     @Test
-    public void superClassHasPrecedenceOverSuperClassInterface()
+    public void findsSuperclassAdapterBeforeInterfaceAdapter()
     {
         final AdapterMapper mapper = new DefaultAdapterMapper();
-        mapper.register(new DummyAdapter(), I.class);
-        mapper.register(this.dummyAdapterInstance, C.class);
-        assertSame(this.dummyAdapterInstance, mapper.resolveAdapter(D.class));
+        mapper.register(new DummyAdapter(), Interface.class);
+        mapper.register(this.dummyAdapterInstance, ClassWithInterface.class);
+        assertSame(this.dummyAdapterInstance, mapper.resolveAdapter(Subclass.class));
     }
 
-    public class A
+    public class ClassWithInterface implements Interface
     {};
 
-    public class B extends A
+    public class Subclass extends ClassWithInterface
     {};
-
-    public interface I
-    {};
-
-    public class C implements I
-    {};
-
-    public class D extends C
+    
+    public interface Interface
     {};
 
     private final SerializationAdapter<Object> dummyAdapterInstance = new DummyAdapter();

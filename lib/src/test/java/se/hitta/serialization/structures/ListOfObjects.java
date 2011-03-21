@@ -13,7 +13,7 @@ public final class ListOfObjects extends AbstractSerializationTest
     public void write(final SerializationContext serializer) throws Exception
     {
         final InsideContainer container = serializer.startContainer("container");
-        serializer.beneath("list").writeRepeating(Arrays.asList(new Item(), new Item()));
+        container.beneath("list").writeRepeating(Arrays.asList(new Item(), new Item()));
         container.end();
     }
 
