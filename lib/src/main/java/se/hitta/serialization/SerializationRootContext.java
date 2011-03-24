@@ -20,7 +20,7 @@ import java.io.Writer;
 /**
  * The interface for all concrete serializer implementations.
  * 
- * The main and most common usage pattern of a {@link SerializationContext} is
+ * The main and most common usage pattern of a {@link SerializationRootContext} is
  * <code>
  * // Register your adapters
  * AdapterMapper mapper = ...;
@@ -30,9 +30,16 @@ import java.io.Writer;
  * serializer.start().writeWithAdapter(someObject).finish();
  * </code>
  */
-public interface SerializationContext extends SerializerGlobalContext
+public interface SerializationRootContext extends SerializerGlobalContext
 {
-    public SerializationEachContext beneath(final String container) throws Exception;
+    /**
+     * Create a container for a collection of entries.
+     * 
+     * @param container
+     * @return
+     * @throws Exception
+     */
+    SerializationCollectionContext beneath(final String container) throws Exception;
 
     /**
      * Start a container. For XML, usually an element. For JSON, usually an object.
@@ -41,7 +48,7 @@ public interface SerializationContext extends SerializerGlobalContext
      * @return
      * @throws Exception
      */
-    public InsideContainer startContainer(final String name) throws Exception;
+    SerializationContainerContext startContainer(final String name) throws Exception;
 
     /**
      * You may use this, but we really think you shouldn't.
@@ -51,9 +58,11 @@ public interface SerializationContext extends SerializerGlobalContext
      * @throws Exception
      */
     @Deprecated
-    SerializationContext writeObject(Object target) throws Exception;
+    SerializationRootContext writeObject(Object target) throws Exception;
 
+    /**
+     * 
+     * @return
+     */
     public Writer getWriter();
-    
-    
 }

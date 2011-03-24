@@ -6,9 +6,9 @@ import java.util.Map;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import se.hitta.serialization.InsideContainer;
 import se.hitta.serialization.SerializationCapable;
-import se.hitta.serialization.SerializationContext;
+import se.hitta.serialization.SerializationContainerContext;
+import se.hitta.serialization.SerializationRootContext;
 
 @XmlRootElement(name = "root")
 public final class SampleObject implements SerializationCapable
@@ -22,9 +22,9 @@ public final class SampleObject implements SerializationCapable
     }
 
     @Override
-    public void write(final SerializationContext serializer) throws Exception
+    public void write(final SerializationRootContext serializer) throws Exception
     {
-        final InsideContainer container = serializer.startContainer("root");
+        final SerializationContainerContext container = serializer.startContainer("root");
         container.writeRepeating("attributes", this.attributes);
         container.end();
     }

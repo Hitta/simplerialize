@@ -1,10 +1,6 @@
 {
 	"container":
 	{
-		"items":
-		[
-			{"item":"foo"},
-			{"item":"bar"}
-		]
+		"items": [ "foo", "bar" ]
 	}
 }

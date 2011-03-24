@@ -30,7 +30,7 @@ public final class TheUglyButAlmightAdHocTest
     private void serializeXml(final StringWriter writer, final AdapterMapper mapper) throws Exception
     {
         final Serializer serializer = new WoodstoxXmlSerializer(writer, mapper);
-        final SerializationContext context = serializer.start();
+        final SerializationRootContext context = serializer.start();
         final SerializationAdapter<Target> adapter = mapper.resolveAdapter(Target.class);
         adapter.write(new Target(), context);
         serializer.finish();
@@ -39,7 +39,7 @@ public final class TheUglyButAlmightAdHocTest
     private void serializeJson(final StringWriter writer, final AdapterMapper mapper) throws Exception
     {
         final Serializer serializer = new JacksonJsonSerializer(writer, mapper);
-        final SerializationContext context = serializer.start();
+        final SerializationRootContext context = serializer.start();
         mapper.resolveAdapter(Target.class).write(new Target(), context);
         serializer.finish();
     }
@@ -66,15 +66,15 @@ public final class TheUglyButAlmightAdHocTest
     public static final class TargetAdapter implements SerializationAdapter<Target>
     {
         @Override
-        public void write(final Target target, final SerializationContext serializer) throws Exception
+        public void write(final Target target, final SerializationRootContext serializer) throws Exception
         {
-            final InsideContainer root = serializer.startContainer("yeah");
+            final SerializationContainerContext root = serializer.startContainer("yeah");
             serializer.writeNameValue("def", Maybe.definitely("howdy"));
             serializer.writeNameValue("unk", Maybe.unknown());
             serializer.writeNameValue("str", target.str);
             serializer.writeNameValue("bool", target.bool);
             serializer.startContainer("nested").writeWithAdapter(target.nested).end();
-            serializer.beneath("repeating").writeRepeating(target.multiple_nested);
+            serializer.beneath("repeating").eachComplex(target.multiple_nested);
             root.end();
         }
     }
@@ -82,9 +82,9 @@ public final class TheUglyButAlmightAdHocTest
     public static final class NestedTargetAdapter implements SerializationAdapter<NestedTarget>
     {
         @Override
-        public void write(final NestedTarget target, final SerializationContext serializer) throws Exception
+        public void write(final NestedTarget target, final SerializationRootContext serializer) throws Exception
         {
-            final InsideContainer root = serializer.startContainer("nested");
+            final SerializationContainerContext root = serializer.startContainer("nested");
             root.writeNameValue("nestedTarget", "foo");
             root.end();
         }

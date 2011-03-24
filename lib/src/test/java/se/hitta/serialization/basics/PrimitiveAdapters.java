@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import se.hitta.serialization.AbstractSerializationTest;
-import se.hitta.serialization.SerializationContext;
+import se.hitta.serialization.SerializationRootContext;
 
 public final class PrimitiveAdapters
 {
@@ -59,9 +59,9 @@ public final class PrimitiveAdapters
         }
 
         @Override
-        public void write(final SerializationContext serializer) throws Exception
+        public void write(final SerializationRootContext serializer) throws Exception
         {
-            serializer.beneath("root").writePrimitives("value", this.values);
+            serializer.beneath("root").eachPrimitive(this.values);
         }
 
     }

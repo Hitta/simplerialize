@@ -25,10 +25,10 @@ import se.hitta.serialization.adapters.DefaultAdapterMapper;
 public interface SerializationCapable
 {
     /**
-     * Write thyself using the provided {@link SerializationContext}.
+     * Write thyself using the provided {@link SerializationRootContext}.
      * 
      * @param serializer
      * @throws Exception
      */
-    public void write(SerializationContext context) throws Exception;
+    public void write(SerializationRootContext context) throws Exception;
 }

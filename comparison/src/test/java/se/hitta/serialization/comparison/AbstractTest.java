@@ -10,7 +10,7 @@ public abstract class AbstractTest
 {
 
     @Test
-    public final void serialize() throws Exception
+    public final void asXml() throws Exception
     {
         System.err.println("\nSerializing XML - " + getClass().getSimpleName() + ":");
         serializeXmlTo(new OutputStreamWriter(System.err));

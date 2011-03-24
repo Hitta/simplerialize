@@ -30,7 +30,7 @@ public interface SerializerGlobalContext
      * @return
      * @throws Exception
      */
-    public SerializationContext writeWithAdapter(Maybe<?> target) throws Exception;
+    SerializationRootContext writeWithAdapter(Maybe<?> target) throws Exception;
 
     /**
      * Write the supplied target object using the adapter found by this {@link Serializer}'s underlying {@link AdapterMapper}.
@@ -39,7 +39,7 @@ public interface SerializerGlobalContext
      * @return
      * @throws Exception
      */
-    public <T> SerializationContext writeWithAdapter(final T target) throws Exception;
+    <T> SerializationRootContext writeWithAdapter(final T target) throws Exception;
 
     /**
      * Write the supplied target object using the adapter found for the supplied {@link Class}.
@@ -50,7 +50,7 @@ public interface SerializerGlobalContext
      * @return
      * @throws Exception
      */
-    public <T> SerializationContext writeWithAdapter(final Class<T> adapterClass, final T target) throws Exception;
+    <T> SerializationRootContext writeWithAdapter(final Class<T> adapterClass, final T target) throws Exception;
     
 
     /**
@@ -60,7 +60,7 @@ public interface SerializerGlobalContext
      * @return
      * @throws Exception
      */
-    public SerializationContext writeNameValue(String name, String value) throws Exception;
+    SerializationRootContext writeNameValue(String name, String value) throws Exception;
 
     /**
      * Write a name value pair with a {@link Boolean} value.
@@ -69,7 +69,7 @@ public interface SerializerGlobalContext
      * @return
      * @throws Exception
      */
-    public SerializationContext writeNameValue(String name, Boolean value) throws Exception;
+    SerializationRootContext writeNameValue(String name, Boolean value) throws Exception;
 
     /**
      * Write a name value pair with a {@link Short} value.
@@ -78,7 +78,7 @@ public interface SerializerGlobalContext
      * @return
      * @throws Exception
      */
-    public SerializationContext writeNameValue(String name, Short value) throws Exception;
+    SerializationRootContext writeNameValue(String name, Short value) throws Exception;
 
     /**
      * Write a name value pair with a {@link Integer} value.
@@ -87,7 +87,7 @@ public interface SerializerGlobalContext
      * @return
      * @throws Exception
      */
-    public SerializationContext writeNameValue(String name, Integer value) throws Exception;
+    SerializationRootContext writeNameValue(String name, Integer value) throws Exception;
 
     /**
      * Write a name value pair with a {@link Long} value.
@@ -96,7 +96,7 @@ public interface SerializerGlobalContext
      * @return
      * @throws Exception
      */
-    public SerializationContext writeNameValue(String name, Long value) throws Exception;
+    SerializationRootContext writeNameValue(String name, Long value) throws Exception;
 
     /**
      * Write a name value pair with a {@link Float} value.
@@ -105,7 +105,7 @@ public interface SerializerGlobalContext
      * @return
      * @throws Exception
      */
-    public SerializationContext writeNameValue(String name, Float value) throws Exception;
+    SerializationRootContext writeNameValue(String name, Float value) throws Exception;
 
     /**
      * Write a name value pair with a {@link Double} value.
@@ -114,7 +114,7 @@ public interface SerializerGlobalContext
      * @return
      * @throws Exception
      */
-    public SerializationContext writeNameValue(String name, Double value) throws Exception;
+    SerializationRootContext writeNameValue(String name, Double value) throws Exception;
 
     /**
      * Write a name value pair with a {@link Maybe} value.
@@ -123,5 +123,5 @@ public interface SerializerGlobalContext
      * @return
      * @throws Exception
      */
-    public SerializationContext writeNameValue(String name, Maybe<?> value) throws Exception;
+    SerializationRootContext writeNameValue(String name, Maybe<?> value) throws Exception;
 }

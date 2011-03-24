@@ -18,5 +18,5 @@ package se.hitta.serialization;
 
 public interface SerializationAdapter<T>
 {
-    public void write(T target, SerializationContext context) throws Exception;
+    public void write(T target, SerializationRootContext context) throws Exception;
 }

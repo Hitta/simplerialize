@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 import se.hitta.serialization.AdapterMapper;
 import se.hitta.serialization.SerializationAdapter;
 import se.hitta.serialization.SerializationCapable;
-import se.hitta.serialization.SerializationContext;
+import se.hitta.serialization.SerializationRootContext;
 
 /**
  * The default {@link AdapterMapper} implementation. The client may provide the actual {@link Map} instance to be used as the backing storage thus allowing
@@ -180,7 +180,7 @@ public final class DefaultAdapterMapper implements AdapterMapper
         return new SerializationAdapter<SerializationCapable>()
         {
             @Override
-            public void write(final SerializationCapable target, final SerializationContext serializer) throws Exception
+            public void write(final SerializationCapable target, final SerializationRootContext serializer) throws Exception
             {
                 target.write(serializer);
             }

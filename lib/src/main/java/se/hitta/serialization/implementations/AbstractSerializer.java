@@ -20,17 +20,15 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import se.hitta.serialization.AdapterMapper;
-import se.hitta.serialization.InsideContainer;
-import se.hitta.serialization.SerializationContext;
-import se.hitta.serialization.SerializationEachContext;
+import se.hitta.serialization.SerializationContainerContext;
+import se.hitta.serialization.SerializationRootContext;
 import se.hitta.serialization.Serializer;
-
 
 import com.natpryce.maybe.Maybe;
 
-public abstract class AbstractSerializer implements Serializer, SerializationEachContext, InsideContainer
+public abstract class AbstractSerializer implements Serializer, SerializationContainerContext
 {
-    final AdapterMapper mapper;
+    private final AdapterMapper mapper;
     private final Writer writer;
 
     public AbstractSerializer(final Writer writer, final AdapterMapper mapper) throws Exception
@@ -40,7 +38,7 @@ public abstract class AbstractSerializer implements Serializer, SerializationEac
     }
 
     @Override
-    public final InsideContainer writeWithAdapter(final Maybe<?> target) throws Exception
+    public final SerializationContainerContext writeWithAdapter(final Maybe<?> target) throws Exception
     {
         if(target != null && target.isKnown())
         {
@@ -51,28 +49,28 @@ public abstract class AbstractSerializer implements Serializer, SerializationEac
 
     @Override
     @SuppressWarnings("unchecked")
-    public final <T> InsideContainer writeWithAdapter(final T target) throws Exception
+    public final <T> SerializationContainerContext writeWithAdapter(final T target) throws Exception
     {
         writeWithAdapter((Class<T>)target.getClass(), target);
         return this;
     }
 
     @Override
-    public final <T> InsideContainer writeWithAdapter(final Class<T> adapterClass, final T target) throws Exception
+    public final <T> SerializationContainerContext writeWithAdapter(final Class<T> adapterClass, final T target) throws Exception
     {
         this.mapper.resolveAdapter(adapterClass).write(target, this);
         return this;
     }
 
     @Override
-    public final SerializationContext writeRepeating(final String name, final Map<?, ?> elements) throws Exception
+    public final SerializationRootContext writeRepeating(final String name, final Map<?, ?> elements) throws Exception
     {
         startContainer(name).writeRepeating(elements).end();
         return this;
     }
 
     @Override
-    public final InsideContainer writeRepeating(final Map<?, ?> elements) throws Exception
+    public final SerializationContainerContext writeRepeating(final Map<?, ?> elements) throws Exception
     {
         for(final Entry<?, ?> element : elements.entrySet())
         {

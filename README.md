@@ -1,13 +1,24 @@
 ### About
 
+#### FAQ (or: API and feature design powered by kthxbye)
+* Q: <insert-any-differing-opinion-about-this-library-here>
+* A: Fork and fix, kthxbye
+* Q: This library is crap because <insert-any-relevant-or-non-relevant-religious-stance-here>
+* A: kthxbye
+* Q: Why haven't you implemented <insert-whatever-thing-you-think-this-sort-of-library-should-support-here>
+* A: Because your need isn't ours, kthxbye (or simply: fork and fix, kthxbye)
+
 #### Use case:
 * API neutral streaming serialization of POJOs to XML and JSON
-* Only serialization - _no deserialization_ - this is ONE WAY only
+* Only serialization - _no deserialization_
 * Serialization specification in code (_no schemas_ - neither compilation nor generation)
 
-#### This library DOES NOT:
-* Allow customization of output formats
-* Claim to be consistent for each and all use cases. It may _fail horribly_ for your particular case. It may provide you with an inconsistent model depending on context and usage. In other words, don't trust it untill you've made it prove itself for _your specific_ use case. Write tests.
+#### This library DOES NOT...
+* ...allow customization of output formats
+* ...claim to be consistent for each and all use cases
+** It may _fail horribly_ for your particular case
+** It may provide you with an inconsistent model depending on context and usage
+** In other words, don't trust it untill you've made it prove itself for _your specific_ use case - write tests
 
 #### This library offers:
 * A naive implementation of a transparent API for serialization to JSON or XML

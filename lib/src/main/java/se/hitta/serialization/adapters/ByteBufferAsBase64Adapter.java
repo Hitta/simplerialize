@@ -18,7 +18,7 @@ package se.hitta.serialization.adapters;
 import java.nio.ByteBuffer;
 
 import se.hitta.serialization.SerializationAdapter;
-import se.hitta.serialization.SerializationContext;
+import se.hitta.serialization.SerializationRootContext;
 import sun.misc.BASE64Encoder;
 
 final class ByteBufferAsBase64Adapter implements SerializationAdapter<ByteBuffer>
@@ -27,7 +27,7 @@ final class ByteBufferAsBase64Adapter implements SerializationAdapter<ByteBuffer
     
     @SuppressWarnings("deprecation")
     @Override
-    public void write(final ByteBuffer target, final SerializationContext serializer) throws Exception
+    public void write(final ByteBuffer target, final SerializationRootContext serializer) throws Exception
     {
         serializer.writeObject(this.encoder.encode(target));
     }

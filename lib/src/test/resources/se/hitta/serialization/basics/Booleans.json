@@ -1,7 +1,3 @@
 {
-	"root":
-	[
-		{"value":true},
-		{"value":false}
-	]
+	"root": [ true, false ]
 }

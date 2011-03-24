@@ -19,7 +19,7 @@ import java.util.Map;
 
 import com.natpryce.maybe.Maybe;
 
-public interface InsideContainer extends SerializationContext
+public interface SerializationContainerContext extends SerializationRootContext
 {
     /**
      * End (close) a container.
@@ -27,7 +27,7 @@ public interface InsideContainer extends SerializationContext
      * @return
      * @throws Exception
      */
-    public SerializationContext end() throws Exception;
+    public SerializationRootContext end() throws Exception;
 
     /**
      * Write the supplied target object using an adapter.
@@ -37,7 +37,7 @@ public interface InsideContainer extends SerializationContext
      * @throws Exception
      */
     @Override
-    public InsideContainer writeWithAdapter(Maybe<?> target) throws Exception;
+    public SerializationContainerContext writeWithAdapter(Maybe<?> target) throws Exception;
 
     /**
      * Write the supplied target object using the adapter found by this {@link Serializer}'s underlying {@link AdapterMapper}.
@@ -47,7 +47,7 @@ public interface InsideContainer extends SerializationContext
      * @throws Exception
      */
     @Override
-    public <T> InsideContainer writeWithAdapter(final T target) throws Exception;
+    public <T> SerializationContainerContext writeWithAdapter(final T target) throws Exception;
 
     /**
      * Write the supplied target object using the adapter found for the supplied {@link Class}.
@@ -59,7 +59,7 @@ public interface InsideContainer extends SerializationContext
      * @throws Exception
      */
     @Override
-    public <T> InsideContainer writeWithAdapter(final Class<T> adapterClass, final T target) throws Exception;
+    public <T> SerializationContainerContext writeWithAdapter(final Class<T> adapterClass, final T target) throws Exception;
 
     /**
      * Write each element of the supplied {@link Map} as using 
@@ -68,7 +68,7 @@ public interface InsideContainer extends SerializationContext
      * @return
      * @throws Exception
      */
-    public SerializationContext writeRepeating(String container, Map<?, ?> elements) throws Exception;
+    public SerializationRootContext writeRepeating(String container, Map<?, ?> elements) throws Exception;
 
     /**
      * Write the elements of the supplied {@link Map}. 
@@ -77,5 +77,5 @@ public interface InsideContainer extends SerializationContext
      * @return
      * @throws Exception
      */
-    public InsideContainer writeRepeating(Map<?, ?> elements) throws Exception;
+    public SerializationContainerContext writeRepeating(Map<?, ?> elements) throws Exception;
 }

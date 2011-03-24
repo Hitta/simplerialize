@@ -24,15 +24,15 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonGenerator;
 
 import se.hitta.serialization.AdapterMapper;
-import se.hitta.serialization.InsideContainer;
-import se.hitta.serialization.SerializationContext;
-import se.hitta.serialization.SerializationEachContext;
+import se.hitta.serialization.SerializationContainerContext;
+import se.hitta.serialization.SerializationRootContext;
+import se.hitta.serialization.SerializationCollectionContext;
 
 import com.natpryce.maybe.Maybe;
 
 public final class JacksonJsonSerializer extends AbstractSerializer
 {
-    private final JsonGenerator generator;
+    final JsonGenerator generator;
     private static final JsonFactory factory;
 
     static
@@ -47,7 +47,7 @@ public final class JacksonJsonSerializer extends AbstractSerializer
     }
 
     @Override
-    public SerializationContext start() throws Exception
+    public SerializationRootContext start() throws Exception
     {
         this.generator.writeStartObject();
         return this;
@@ -60,125 +60,126 @@ public final class JacksonJsonSerializer extends AbstractSerializer
     }
 
     @Override
-    public InsideContainer startContainer(final String name) throws JsonGenerationException, IOException
+    public SerializationContainerContext startContainer(final String name) throws JsonGenerationException, IOException
     {
         this.generator.writeObjectFieldStart(name);
         return this;
     }
 
     @Override
-    public SerializationContext end() throws JsonGenerationException, IOException
+    public SerializationRootContext end() throws JsonGenerationException, IOException
     {
         this.generator.writeEndObject();
         return this;
     }
 
-    @Override
-    public SerializationContext writeRepeating(final Iterable<?> elements) throws Exception
-    {
-        writeRepeating(elements.iterator());
-        return this;
-    }
 
     @Override
-    public SerializationContext writeRepeating(final Iterator<?> elements) throws Exception
-    {
-        while(elements.hasNext())
-        {
-            this.generator.writeStartObject();
-            writeWithAdapter(elements.next());
-            this.generator.writeEndObject();
-        }
-        this.generator.writeEndArray();
-        return this;
-    }
-
-    @Override
-    public SerializationEachContext beneath(final String container) throws Exception
+    public SerializationCollectionContext beneath(final String container) throws Exception
     {
         this.generator.writeArrayFieldStart(container);
-        return this;
-    }
-
-    @Override
-    public SerializationContext writePrimitives(final String name, final Iterable<?> elements) throws Exception
-    {
-        writePrimitives(name, elements.iterator());
-        return this;
-    }
-
-    @Override
-    public SerializationContext writePrimitives(final String name, final Iterator<?> elements) throws Exception
-    {
-        while(elements.hasNext())
+        return new SerializationCollectionContext()
         {
-            this.generator.writeStartObject();
-            this.generator.writeFieldName(name);
-            writeWithAdapter(elements.next());
-            this.generator.writeEndObject();
-        }
-        this.generator.writeEndArray();
-        return this;
+
+            @Override
+            public SerializationRootContext eachComplex(final Iterable<?> elements) throws Exception
+            {
+                eachComplex(elements.iterator());
+                return JacksonJsonSerializer.this;
+            }
+
+            @Override
+            public SerializationRootContext eachComplex(final Iterator<?> elements) throws Exception
+            {
+                while(elements.hasNext())
+                {
+                    JacksonJsonSerializer.this.generator.writeStartObject();
+                    writeWithAdapter(elements.next());
+                    JacksonJsonSerializer.this.generator.writeEndObject();
+                }
+                JacksonJsonSerializer.this.generator.writeEndArray();
+                return JacksonJsonSerializer.this;
+            }
+
+            @Override
+            public SerializationRootContext eachPrimitive(final Iterable<?> elements) throws Exception
+            {
+                eachPrimitives(elements.iterator());
+                return JacksonJsonSerializer.this;
+            }
+
+            @Override
+            public SerializationRootContext eachPrimitives(final Iterator<?> elements) throws Exception
+            {
+                while(elements.hasNext())
+                {
+                    writeWithAdapter(elements.next());
+                }
+                JacksonJsonSerializer.this.generator.writeEndArray();
+                return JacksonJsonSerializer.this;
+            }
+
+        };
     }
 
     @Override
-    public SerializationContext writeObject(final Object target) throws Exception
+    public SerializationRootContext writeObject(final Object target) throws Exception
     {
         this.generator.writeObject(target);
         return this;
     }
 
     @Override
-    public InsideContainer writeNameValue(final String name, final Boolean value) throws Exception
+    public SerializationContainerContext writeNameValue(final String name, final Boolean value) throws Exception
     {
         this.generator.writeBooleanField(name, value);
         return this;
     }
 
     @Override
-    public InsideContainer writeNameValue(final String name, final String value) throws JsonGenerationException, IOException
+    public SerializationContainerContext writeNameValue(final String name, final String value) throws JsonGenerationException, IOException
     {
         this.generator.writeStringField(name, value);
         return this;
     }
 
     @Override
-    public InsideContainer writeNameValue(final String name, final Long value) throws Exception
+    public SerializationContainerContext writeNameValue(final String name, final Long value) throws Exception
     {
         this.generator.writeNumberField(name, value);
         return this;
     }
 
     @Override
-    public InsideContainer writeNameValue(final String name, final Double value) throws Exception
+    public SerializationContainerContext writeNameValue(final String name, final Double value) throws Exception
     {
         this.generator.writeNumberField(name, value);
         return this;
     }
 
     @Override
-    public InsideContainer writeNameValue(final String name, final Short value) throws Exception
+    public SerializationContainerContext writeNameValue(final String name, final Short value) throws Exception
     {
         this.generator.writeNumberField(name, value);
         return this;
     }
 
     @Override
-    public InsideContainer writeNameValue(final String name, final Integer value) throws Exception
+    public SerializationContainerContext writeNameValue(final String name, final Integer value) throws Exception
     {
         this.generator.writeNumberField(name, value);
         return this;
     }
 
     @Override
-    public InsideContainer writeNameValue(final String name, final Float value) throws Exception
+    public SerializationContainerContext writeNameValue(final String name, final Float value) throws Exception
     {
         this.generator.writeNumberField(name, value);
         return this;
     }
 
     @Override
-    public InsideContainer writeNameValue(final String name, final Maybe<?> value) throws Exception
+    public SerializationContainerContext writeNameValue(final String name, final Maybe<?> value) throws Exception
     {
         if(value.isKnown())
         {

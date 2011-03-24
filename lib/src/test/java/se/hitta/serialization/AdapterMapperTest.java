@@ -63,7 +63,7 @@ public class AdapterMapperTest
     static class DummyAdapter implements SerializationAdapter<Object>
     {
         @Override
-        public void write(Object target, SerializationContext serializer) throws Exception
+        public void write(Object target, SerializationRootContext serializer) throws Exception
         {}
     };
 }
