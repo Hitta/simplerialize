@@ -1,10 +1,11 @@
 package se.hitta.serialization.comparison.serialization;
 
+import java.io.IOException;
 import java.util.Map;
 
 import se.hitta.serialization.SerializationCapable;
-import se.hitta.serialization.SerializationContainerContext;
-import se.hitta.serialization.SerializationRootContext;
+import se.hitta.serialization.context.ContainerContext;
+import se.hitta.serialization.context.RootContext;
 
 public final class SampleObject implements SerializationCapable
 {
@@ -16,10 +17,10 @@ public final class SampleObject implements SerializationCapable
     }
 
     @Override
-    public void write(final SerializationRootContext serializer) throws Exception
+    public void write(final RootContext serializer) throws IOException
     {
-        SerializationContainerContext container = serializer.startContainer("root");
-        container.writeRepeating("attributes", this.attributes);
-        container.end();
+        ContainerContext container = serializer.startContainer("root");
+        container.beneath("attributes").eachComplex(this.attributes.entrySet());
+        container.endContainer();
     }
 }

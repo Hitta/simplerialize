@@ -1,12 +1,12 @@
 ### About
 
-#### FAQ (or: API and feature design powered by kthxbye)
-* Q: <insert-any-differing-opinion-about-this-library-here>
-* A: Fork and fix, kthxbye
-* Q: This library is crap because <insert-any-relevant-or-non-relevant-religious-stance-here>
+#### FAQ
+* Q: Why haven't you implemented [insert-whatever-thing-you-think-this-sort-of-library-should-support-here]
+* A: Because your need isn't ours, thus: fork + fix + pull request
+* Q: [insert-any-differing-opinion-about-this-library-here]
+* A: Fork + fix + pull request
+* Q: This library is crap because [insert-any-relevant-or-non-relevant-religious-stance-here]
 * A: kthxbye
-* Q: Why haven't you implemented <insert-whatever-thing-you-think-this-sort-of-library-should-support-here>
-* A: Because your need isn't ours, kthxbye (or simply: fork and fix, kthxbye)
 
 #### Use case:
 * API neutral streaming serialization of POJOs to XML and JSON
@@ -18,12 +18,15 @@
 * ...claim to be consistent for each and all use cases
 ** It may _fail horribly_ for your particular case
 ** It may provide you with an inconsistent model depending on context and usage
-** In other words, don't trust it untill you've made it prove itself for _your specific_ use case - write tests
+** In other words, don't trust it until you've made it prove itself for _your specific_ use case - write tests
 
 #### This library offers:
 * A naive implementation of a transparent API for serialization to JSON or XML
 * A fairly compact output regardless of format
 * Good performant streaming serialization (thanks to [Jackson](http://jackson.codehaus.org/) and [Woodstox](http://woodstox.codehaus.org/))
+
+#### Exeptions:
+Everything throws IOException which either means you screwed up your serialization causing invalid XML or JSON or the underlying serialization library encountered an error when writing to the underlying writer.
 
 #### Dependencies
 * Maybe: Internally at [Hitta.se](http://www.hitta.se/) we make heavy use of [Nat Pryce](http://www.natpryce.com/)'s [Maybe type](https://github.com/npryce/maybe-java). This is reflected in it being a dependency in this project for now. We might consider removing it.

@@ -15,6 +15,7 @@
  */
 package se.hitta.serialization.implementations;
 
+import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
 
@@ -23,9 +24,9 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import se.hitta.serialization.AdapterMapper;
-import se.hitta.serialization.SerializationContainerContext;
-import se.hitta.serialization.SerializationRootContext;
-import se.hitta.serialization.SerializationCollectionContext;
+import se.hitta.serialization.context.CollectionContext;
+import se.hitta.serialization.context.ContainerContext;
+import se.hitta.serialization.context.RootContext;
 
 import com.ctc.wstx.api.WstxOutputProperties;
 import com.natpryce.maybe.Maybe;
@@ -41,143 +42,206 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
         factory.setProperty(WstxOutputProperties.P_OUTPUT_ESCAPE_CR, true);
     }
 
-    public WoodstoxXmlSerializer(final Writer writer, final AdapterMapper mapper) throws Exception
+    public WoodstoxXmlSerializer(final Writer writer, final AdapterMapper mapper) throws IOException
     {
         super(writer, mapper);
-        this.generator = factory.createXMLStreamWriter(writer);
+        try
+        {
+            this.generator = factory.createXMLStreamWriter(writer);
+        }
+        catch(final XMLStreamException e)
+        {
+            throw new IOException(e.getMessage(), e);
+        }
     }
 
     @Override
-    public SerializationRootContext start() throws Exception
+    public RootContext start() throws IOException
     {
-        this.generator.writeStartDocument();
+        try
+        {
+            this.generator.writeStartDocument();
+        }
+        catch(final XMLStreamException e)
+        {
+            throw new IOException(e.getMessage(), e);
+        }
+
         return this;
     }
 
     @Override
-    public void finish() throws Exception
+    public void finish() throws IOException
     {
-        this.generator.writeEndDocument();
-        this.generator.close();
+        try
+        {
+            this.generator.writeEndDocument();
+            this.generator.close();
+        }
+        catch(final XMLStreamException e)
+        {
+            throw new IOException(e.getMessage(), e);
+        }
+
     }
 
     @Override
-    public SerializationContainerContext startContainer(final String name) throws XMLStreamException
+    public ContainerContext startContainer(final String name) throws IOException
     {
-        this.generator.writeStartElement(name);
+        try
+        {
+            this.generator.writeStartElement(name);
+        }
+        catch(final XMLStreamException e)
+        {
+            throw new IOException(e.getMessage(), e);
+        }
         return this;
     }
 
     @Override
-    public SerializationRootContext end() throws XMLStreamException
+    public RootContext endContainer() throws IOException
     {
-        this.generator.writeEndElement();
+        try
+        {
+            this.generator.writeEndElement();
+        }
+        catch(final XMLStreamException e)
+        {
+            throw new IOException(e.getMessage(), e);
+        }
         return this;
     }
 
     @Override
-    public SerializationCollectionContext beneath(final String container) throws Exception
+    public CollectionContext beneath(final String container) throws IOException
     {
-        this.generator.writeStartElement(container);
-        return new SerializationCollectionContext()
+        try
+        {
+            this.generator.writeStartElement(container);
+        }
+        catch(final XMLStreamException e)
+        {
+            throw new IOException(e.getMessage(), e);
+        }
+        return new CollectionContext()
         {
 
             @Override
-            public SerializationRootContext eachPrimitive(final Iterable<?> elements) throws Exception
+            public RootContext eachPrimitive(final Iterable<?> elements) throws IOException
             {
-                eachPrimitives(elements.iterator());
-                return WoodstoxXmlSerializer.this;
+                return eachPrimitives(elements.iterator());
             }
 
             @Override
-            public SerializationRootContext eachPrimitives(final Iterator<?> elements) throws Exception
+            public RootContext eachPrimitives(final Iterator<?> elements) throws IOException
             {
-                while(elements.hasNext())
+                try
                 {
-                    WoodstoxXmlSerializer.this.generator.writeStartElement("value");
-                    writeWithAdapter(elements.next());
+                    while(elements.hasNext())
+                    {
+                        WoodstoxXmlSerializer.this.generator.writeStartElement("value");
+                        writeWithAdapter(elements.next());
+                        WoodstoxXmlSerializer.this.generator.writeEndElement();
+                    }
                     WoodstoxXmlSerializer.this.generator.writeEndElement();
                 }
-                WoodstoxXmlSerializer.this.generator.writeEndElement();
+                catch(final XMLStreamException e)
+                {
+                    throw new IOException(e.getMessage(), e);
+                }
                 return WoodstoxXmlSerializer.this;
             }
 
             @Override
-            public SerializationRootContext eachComplex(final Iterable<?> elements) throws Exception
+            public RootContext eachComplex(final Iterable<?> elements) throws IOException
             {
-                eachComplex(elements.iterator());
-                return WoodstoxXmlSerializer.this;
+                return eachComplex(elements.iterator());
             }
 
             @Override
-            public SerializationRootContext eachComplex(final Iterator<?> elements) throws Exception
+            public RootContext eachComplex(final Iterator<?> elements) throws IOException
             {
                 while(elements.hasNext())
                 {
                     writeWithAdapter(elements.next());
                 }
-                WoodstoxXmlSerializer.this.generator.writeEndElement();
+                try
+                {
+                    WoodstoxXmlSerializer.this.generator.writeEndElement();
+                }
+                catch(final XMLStreamException e)
+                {
+                    throw new IOException(e.getMessage(), e);
+                }
                 return WoodstoxXmlSerializer.this;
             }
         };
     }
 
     @Override
-    public SerializationRootContext writeObject(final Object target) throws Exception
+    public RootContext writeObject(final Object target) throws IOException
     {
-        this.generator.writeCharacters(target.toString());
+        try
+        {
+            this.generator.writeCharacters(target.toString());
+        }
+        catch(final XMLStreamException e)
+        {
+            throw new IOException(e.getMessage(), e);
+        }
         return this;
     }
 
     @Override
-    public SerializationContainerContext writeNameValue(final String name, final String value) throws Exception
+    public ContainerContext writeNameValue(final String name, final String value) throws IOException
     {
         return writeAttribute(name, value);
     }
 
     @Override
-    public SerializationContainerContext writeNameValue(final String name, final Boolean value) throws Exception
+    public ContainerContext writeNameValue(final String name, final Boolean value) throws IOException
     {
         return writeAttribute(name, value);
     }
 
     @Override
-    public SerializationContainerContext writeNameValue(final String name, final Short value) throws Exception
+    public ContainerContext writeNameValue(final String name, final Short value) throws IOException
     {
         return writeAttribute(name, value);
     }
 
     @Override
-    public SerializationContainerContext writeNameValue(final String name, final Integer value) throws Exception
+    public ContainerContext writeNameValue(final String name, final Integer value) throws IOException
     {
         return writeAttribute(name, value);
     }
 
     @Override
-    public SerializationContainerContext writeNameValue(final String name, final Long value) throws Exception
+    public ContainerContext writeNameValue(final String name, final Long value) throws IOException
     {
         return writeAttribute(name, value);
     }
 
     @Override
-    public SerializationContainerContext writeNameValue(final String name, final Float value) throws Exception
+    public ContainerContext writeNameValue(final String name, final Float value) throws IOException
     {
         return writeAttribute(name, value);
     }
 
     @Override
-    public SerializationContainerContext writeNameValue(final String name, final Double value) throws Exception
+    public ContainerContext writeNameValue(final String name, final Double value) throws IOException
     {
         return writeAttribute(name, value);
     }
 
     @Override
-    public SerializationContainerContext writeNameValue(final String name, final Maybe<?> value) throws Exception
+    public ContainerContext writeNameValue(final String name, final Maybe<?> value) throws IOException
     {
         return writeAttribute(name, value);
     }
 
-    public SerializationContainerContext writeAttribute(final String name, final Maybe<?> value) throws Exception
+    public ContainerContext writeAttribute(final String name, final Maybe<?> value) throws IOException
     {
         if(value.isKnown())
         {
@@ -186,11 +250,18 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
         return this;
     }
 
-    public SerializationContainerContext writeAttribute(final String name, final Object value) throws Exception
+    public ContainerContext writeAttribute(final String name, final Object value) throws IOException
     {
         if(value != null)
         {
-            this.generator.writeAttribute(name, value.toString());
+            try
+            {
+                this.generator.writeAttribute(name, value.toString());
+            }
+            catch(final XMLStreamException e)
+            {
+                throw new IOException(e.getMessage(), e);
+            }
         }
         return this;
     }

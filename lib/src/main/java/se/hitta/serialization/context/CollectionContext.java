@@ -13,45 +13,46 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.hitta.serialization;
+package se.hitta.serialization.context;
 
+import java.io.IOException;
 import java.util.Iterator;
 
+import se.hitta.serialization.SerializationAdapter;
+
 /**
- * This represents the serialization context after invoking {@link SerializationRootContext#beneath(String)}.
+ * This represents the serialization context after invoking {@link RootContext#beneath(String)}.
  *   
  */
-public interface SerializationCollectionContext
+public interface CollectionContext
 {
     /**
-     * Write each of the elements returned from the supplied {@link Iterable}.
+     * Write each primitive returned from the supplied {@link Iterable}.
      * 
-     * @param container Name of the container of each element
      * @param elements The {@link Iterable} whose elements to write
-     * @return The outer {@link SerializationRootContext}
+     * @return The outer {@link RootContext}
      * @throws Exception
      */
-    SerializationRootContext eachPrimitive(Iterable<?> elements) throws Exception;
-    
+    RootContext eachPrimitive(Iterable<?> elements) throws IOException;
+
     /**
-     * Write each of the elements returned from the supplied {@link Iterator}.
+     * Write each primitive returned from the supplied {@link Iterator}.
      * 
-     * @param container Name of the container for each element
      * @param elements The {@link Iterator} who's elements to write
-     * @return The outer {@link SerializationRootContext}
+     * @return The outer {@link RootContext}
      * @throws Exception
      */
-    SerializationRootContext eachPrimitives(Iterator<?> elements) throws Exception;
-    
+    RootContext eachPrimitives(Iterator<?> elements) throws IOException;
+
     /**
-     * Write each element of the supplied {@link Iterable}.
+     * Write each object of the supplied {@link Iterable} with their respective {@link SerializationAdapter}.
      * 
      * @param target
      * @return
      * @throws Exception
      */
-    SerializationRootContext eachComplex(Iterable<?> elements) throws Exception;
-    
+    RootContext eachComplex(Iterable<?> elements) throws IOException;
+
     /**
      * Write each element of the supplied {@link Iterator}.
      * 
@@ -59,5 +60,5 @@ public interface SerializationCollectionContext
      * @return
      * @throws Exception
      */
-    SerializationRootContext eachComplex(Iterator<?> elements) throws Exception;
+    RootContext eachComplex(Iterator<?> elements) throws IOException;
 }

@@ -1,16 +1,18 @@
 package se.hitta.serialization.comparison.serialization;
 
+import java.io.IOException;
+
 import se.hitta.serialization.SerializationAdapter;
-import se.hitta.serialization.SerializationContainerContext;
-import se.hitta.serialization.SerializationRootContext;
+import se.hitta.serialization.context.ContainerContext;
+import se.hitta.serialization.context.RootContext;
 
 public final class RootAdapter implements SerializationAdapter<SampleObject>
 {
     @Override
-    public void write(final SampleObject root, final SerializationRootContext serializer) throws Exception
+    public void write(final SampleObject root, final RootContext serializer) throws IOException
     {
-        final SerializationContainerContext container = serializer.startContainer("root");
-        container.writeRepeating("attributes", root.attributes);
-        container.end();
+        final ContainerContext container = serializer.startContainer("root");
+        container.beneath("attributes").eachComplex(root.attributes.entrySet());
+        container.endContainer();
     }
 }

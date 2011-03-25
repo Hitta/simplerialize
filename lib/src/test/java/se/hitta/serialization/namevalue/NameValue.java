@@ -1,15 +1,17 @@
 package se.hitta.serialization.namevalue;
 
+import java.io.IOException;
+
 import se.hitta.serialization.AbstractSerializationTest;
-import se.hitta.serialization.SerializationContainerContext;
-import se.hitta.serialization.SerializationRootContext;
+import se.hitta.serialization.context.ContainerContext;
+import se.hitta.serialization.context.RootContext;
 
 public final class NameValue
 {
     public static final class StringString extends NameValueCase
     {
         @Override
-        public void writeNameValue(final SerializationContainerContext context) throws Exception
+        public void writeNameValue(final ContainerContext context) throws IOException
         {
             context.writeNameValue("foo", "bar");
         }
@@ -18,7 +20,7 @@ public final class NameValue
     public static final class StringInteger extends NameValueCase
     {
         @Override
-        public void writeNameValue(final SerializationContainerContext context) throws Exception
+        public void writeNameValue(final ContainerContext context) throws IOException
         {
             context.writeNameValue("foo", 1);
         }
@@ -27,7 +29,7 @@ public final class NameValue
     public static final class StringBoolean extends NameValueCase
     {
         @Override
-        public void writeNameValue(final SerializationContainerContext context) throws Exception
+        public void writeNameValue(final ContainerContext context) throws IOException
         {
             context.writeNameValue("foo", true);
         }
@@ -36,7 +38,7 @@ public final class NameValue
     public static final class StringFloat extends NameValueCase
     {
         @Override
-        public void writeNameValue(final SerializationContainerContext context) throws Exception
+        public void writeNameValue(final ContainerContext context) throws IOException
         {
             context.writeNameValue("foo", 156.3f);
         }
@@ -45,7 +47,7 @@ public final class NameValue
     public static final class StringDouble extends NameValueCase
     {
         @Override
-        public void writeNameValue(final SerializationContainerContext context) throws Exception
+        public void writeNameValue(final ContainerContext context) throws IOException
         {
             context.writeNameValue("foo", 12.34d);
         }
@@ -54,13 +56,13 @@ public final class NameValue
     static abstract class NameValueCase extends AbstractSerializationTest
     {
         @Override
-        public final void write(final SerializationRootContext context) throws Exception
+        public final void write(final RootContext context) throws IOException
         {
-            final SerializationContainerContext container = context.startContainer("root");
+            final ContainerContext container = context.startContainer("root");
             writeNameValue(container);
-            container.end();
+            container.endContainer();
         }
 
-        abstract void writeNameValue(SerializationContainerContext context) throws Exception;
+        abstract void writeNameValue(ContainerContext context) throws IOException;
     }
 }

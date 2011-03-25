@@ -16,20 +16,16 @@
 package se.hitta.serialization.adapters;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
+import java.util.Map.Entry;
 
 import se.hitta.serialization.SerializationAdapter;
 import se.hitta.serialization.context.RootContext;
-import sun.misc.BASE64Encoder;
 
-final class ByteBufferAsBase64Adapter implements SerializationAdapter<ByteBuffer>
+final class MapEntryAdapter implements SerializationAdapter<Entry<?, ?>>
 {
-    private final BASE64Encoder encoder = new BASE64Encoder();
-
-    @SuppressWarnings("deprecation")
     @Override
-    public void write(final ByteBuffer target, final RootContext serializer) throws IOException
+    public void write(final Entry<?, ?> target, final RootContext serializer) throws IOException
     {
-        serializer.writeObject(this.encoder.encode(target));
+        serializer.writeNameValue(target.getKey().toString(), target.getValue().toString());
     }
 }

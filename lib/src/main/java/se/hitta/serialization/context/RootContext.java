@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.hitta.serialization;
+package se.hitta.serialization.context;
 
+import java.io.IOException;
 import java.io.Writer;
 
 /**
  * The interface for all concrete serializer implementations.
  * 
- * The main and most common usage pattern of a {@link SerializationRootContext} is
+ * The main and most common usage pattern of a {@link RootContext} is
  * <code>
  * // Register your adapters
  * AdapterMapper mapper = ...;
@@ -30,7 +31,7 @@ import java.io.Writer;
  * serializer.start().writeWithAdapter(someObject).finish();
  * </code>
  */
-public interface SerializationRootContext extends SerializerGlobalContext
+public interface RootContext extends GlobalContext
 {
     /**
      * Create a container for a collection of entries.
@@ -39,7 +40,7 @@ public interface SerializationRootContext extends SerializerGlobalContext
      * @return
      * @throws Exception
      */
-    SerializationCollectionContext beneath(final String container) throws Exception;
+    CollectionContext beneath(final String container) throws IOException;
 
     /**
      * Start a container. For XML, usually an element. For JSON, usually an object.
@@ -48,7 +49,7 @@ public interface SerializationRootContext extends SerializerGlobalContext
      * @return
      * @throws Exception
      */
-    SerializationContainerContext startContainer(final String name) throws Exception;
+    ContainerContext startContainer(final String name) throws IOException;
 
     /**
      * You may use this, but we really think you shouldn't.
@@ -58,7 +59,7 @@ public interface SerializationRootContext extends SerializerGlobalContext
      * @throws Exception
      */
     @Deprecated
-    SerializationRootContext writeObject(Object target) throws Exception;
+    RootContext writeObject(Object target) throws IOException;
 
     /**
      * 

@@ -15,13 +15,15 @@
  */
 package se.hitta.serialization.adapters;
 
+import java.io.IOException;
+
 import se.hitta.serialization.SerializationAdapter;
-import se.hitta.serialization.SerializationRootContext;
+import se.hitta.serialization.context.RootContext;
 
 final class ObjectAdapter implements SerializationAdapter<Object>
 {
     @Override
-    public void write(final Object target, final SerializationRootContext serializer) throws Exception
+    public void write(final Object target, final RootContext serializer) throws IOException
     {
         if(target != null)
         {

@@ -1,11 +1,12 @@
 package se.hitta.serialization.basics;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.List;
 
 import se.hitta.serialization.AbstractSerializationTest;
-import se.hitta.serialization.SerializationRootContext;
+import se.hitta.serialization.context.RootContext;
 
 public final class PrimitiveAdapters
 {
@@ -32,7 +33,7 @@ public final class PrimitiveAdapters
             super(Arrays.asList(1.23f, -12.3f, 0f));
         }
     }
-    
+
     public static class Doubles extends PrimitivesTest
     {
         public Doubles()
@@ -40,7 +41,7 @@ public final class PrimitiveAdapters
             super(Arrays.asList(1.23d, -12.3d, 0d));
         }
     }
-    
+
     public static class ByteBuffers extends PrimitivesTest
     {
         public ByteBuffers()
@@ -59,7 +60,7 @@ public final class PrimitiveAdapters
         }
 
         @Override
-        public void write(final SerializationRootContext serializer) throws Exception
+        public void write(final RootContext serializer) throws IOException
         {
             serializer.beneath("root").eachPrimitive(this.values);
         }

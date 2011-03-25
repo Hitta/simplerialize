@@ -13,13 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.hitta.serialization;
+package se.hitta.serialization.context;
 
-import java.util.Map;
+import java.io.IOException;
+
+import se.hitta.serialization.AdapterMapper;
+import se.hitta.serialization.Serializer;
 
 import com.natpryce.maybe.Maybe;
 
-public interface SerializationContainerContext extends SerializationRootContext
+public interface ContainerContext extends RootContext
 {
     /**
      * End (close) a container.
@@ -27,7 +30,7 @@ public interface SerializationContainerContext extends SerializationRootContext
      * @return
      * @throws Exception
      */
-    public SerializationRootContext end() throws Exception;
+    public RootContext endContainer() throws IOException;
 
     /**
      * Write the supplied target object using an adapter.
@@ -37,7 +40,7 @@ public interface SerializationContainerContext extends SerializationRootContext
      * @throws Exception
      */
     @Override
-    public SerializationContainerContext writeWithAdapter(Maybe<?> target) throws Exception;
+    public ContainerContext writeWithAdapter(Maybe<?> target) throws IOException;
 
     /**
      * Write the supplied target object using the adapter found by this {@link Serializer}'s underlying {@link AdapterMapper}.
@@ -47,7 +50,7 @@ public interface SerializationContainerContext extends SerializationRootContext
      * @throws Exception
      */
     @Override
-    public <T> SerializationContainerContext writeWithAdapter(final T target) throws Exception;
+    public <T> ContainerContext writeWithAdapter(final T target) throws IOException;
 
     /**
      * Write the supplied target object using the adapter found for the supplied {@link Class}.
@@ -59,23 +62,5 @@ public interface SerializationContainerContext extends SerializationRootContext
      * @throws Exception
      */
     @Override
-    public <T> SerializationContainerContext writeWithAdapter(final Class<T> adapterClass, final T target) throws Exception;
-
-    /**
-     * Write each element of the supplied {@link Map} as using 
-     * 
-     * @param target
-     * @return
-     * @throws Exception
-     */
-    public SerializationRootContext writeRepeating(String container, Map<?, ?> elements) throws Exception;
-
-    /**
-     * Write the elements of the supplied {@link Map}. 
-     * 
-     * @param target
-     * @return
-     * @throws Exception
-     */
-    public SerializationContainerContext writeRepeating(Map<?, ?> elements) throws Exception;
+    public <T> ContainerContext writeWithAdapter(final Class<T> adapterClass, final T target) throws IOException;
 }

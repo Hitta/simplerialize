@@ -15,11 +15,13 @@
  */
 package se.hitta.serialization.adapters;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
@@ -28,7 +30,7 @@ import org.slf4j.LoggerFactory;
 import se.hitta.serialization.AdapterMapper;
 import se.hitta.serialization.SerializationAdapter;
 import se.hitta.serialization.SerializationCapable;
-import se.hitta.serialization.SerializationRootContext;
+import se.hitta.serialization.context.RootContext;
 
 /**
  * The default {@link AdapterMapper} implementation. The client may provide the actual {@link Map} instance to be used as the backing storage thus allowing
@@ -60,13 +62,10 @@ public final class DefaultAdapterMapper implements AdapterMapper
     {
         this.adapterMappings = storage;
 
-        register(new ObjectAdapter(), Object.class);
-
         new PrimitiveAdapters(this);
-
-        final IterableAdapter iterable = new IterableAdapter();
-        register(iterable, Iterable.class);
-        register(iterable, Collection.class);
+        register(new ObjectAdapter(), Object.class);
+        register(new MapEntryAdapter(), Entry.class);
+        register(new IterableAdapter(), Iterable.class, Collection.class);
         register(new IteratorAdapter(), Iterator.class);
         register(new ByteBufferAsBase64Adapter(), ByteBuffer.class, MappedByteBuffer.class);
     }
@@ -180,7 +179,7 @@ public final class DefaultAdapterMapper implements AdapterMapper
         return new SerializationAdapter<SerializationCapable>()
         {
             @Override
-            public void write(final SerializationCapable target, final SerializationRootContext serializer) throws Exception
+            public void write(final SerializationCapable target, final RootContext serializer) throws IOException
             {
                 target.write(serializer);
             }

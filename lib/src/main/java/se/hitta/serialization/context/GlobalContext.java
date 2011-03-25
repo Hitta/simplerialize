@@ -13,7 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.hitta.serialization;
+package se.hitta.serialization.context;
+
+import java.io.IOException;
+
+import se.hitta.serialization.AdapterMapper;
+import se.hitta.serialization.Serializer;
 
 import com.natpryce.maybe.Maybe;
 
@@ -21,7 +26,7 @@ import com.natpryce.maybe.Maybe;
  * Interface for serialization methods that are available in all contexts.
  *
  */
-public interface SerializerGlobalContext
+public interface GlobalContext
 {
     /**
      * Write the supplied target object using an adapter.
@@ -30,7 +35,7 @@ public interface SerializerGlobalContext
      * @return
      * @throws Exception
      */
-    SerializationRootContext writeWithAdapter(Maybe<?> target) throws Exception;
+    RootContext writeWithAdapter(Maybe<?> target) throws IOException;
 
     /**
      * Write the supplied target object using the adapter found by this {@link Serializer}'s underlying {@link AdapterMapper}.
@@ -39,7 +44,7 @@ public interface SerializerGlobalContext
      * @return
      * @throws Exception
      */
-    <T> SerializationRootContext writeWithAdapter(final T target) throws Exception;
+    <T> RootContext writeWithAdapter(final T target) throws IOException;
 
     /**
      * Write the supplied target object using the adapter found for the supplied {@link Class}.
@@ -50,8 +55,7 @@ public interface SerializerGlobalContext
      * @return
      * @throws Exception
      */
-    <T> SerializationRootContext writeWithAdapter(final Class<T> adapterClass, final T target) throws Exception;
-    
+    <T> RootContext writeWithAdapter(final Class<T> adapterClass, final T target) throws IOException;
 
     /**
      * Write a name value pair with a {@link String} value.
@@ -60,7 +64,7 @@ public interface SerializerGlobalContext
      * @return
      * @throws Exception
      */
-    SerializationRootContext writeNameValue(String name, String value) throws Exception;
+    RootContext writeNameValue(String name, String value) throws IOException;
 
     /**
      * Write a name value pair with a {@link Boolean} value.
@@ -69,7 +73,7 @@ public interface SerializerGlobalContext
      * @return
      * @throws Exception
      */
-    SerializationRootContext writeNameValue(String name, Boolean value) throws Exception;
+    RootContext writeNameValue(String name, Boolean value) throws IOException;
 
     /**
      * Write a name value pair with a {@link Short} value.
@@ -78,7 +82,7 @@ public interface SerializerGlobalContext
      * @return
      * @throws Exception
      */
-    SerializationRootContext writeNameValue(String name, Short value) throws Exception;
+    RootContext writeNameValue(String name, Short value) throws IOException;
 
     /**
      * Write a name value pair with a {@link Integer} value.
@@ -87,7 +91,7 @@ public interface SerializerGlobalContext
      * @return
      * @throws Exception
      */
-    SerializationRootContext writeNameValue(String name, Integer value) throws Exception;
+    RootContext writeNameValue(String name, Integer value) throws IOException;
 
     /**
      * Write a name value pair with a {@link Long} value.
@@ -96,7 +100,7 @@ public interface SerializerGlobalContext
      * @return
      * @throws Exception
      */
-    SerializationRootContext writeNameValue(String name, Long value) throws Exception;
+    RootContext writeNameValue(String name, Long value) throws IOException;
 
     /**
      * Write a name value pair with a {@link Float} value.
@@ -105,7 +109,7 @@ public interface SerializerGlobalContext
      * @return
      * @throws Exception
      */
-    SerializationRootContext writeNameValue(String name, Float value) throws Exception;
+    RootContext writeNameValue(String name, Float value) throws IOException;
 
     /**
      * Write a name value pair with a {@link Double} value.
@@ -114,7 +118,7 @@ public interface SerializerGlobalContext
      * @return
      * @throws Exception
      */
-    SerializationRootContext writeNameValue(String name, Double value) throws Exception;
+    RootContext writeNameValue(String name, Double value) throws IOException;
 
     /**
      * Write a name value pair with a {@link Maybe} value.
@@ -123,5 +127,5 @@ public interface SerializerGlobalContext
      * @return
      * @throws Exception
      */
-    SerializationRootContext writeNameValue(String name, Maybe<?> value) throws Exception;
+    RootContext writeNameValue(String name, Maybe<?> value) throws IOException;
 }

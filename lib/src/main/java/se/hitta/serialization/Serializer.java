@@ -17,6 +17,8 @@ package se.hitta.serialization;
 
 import java.io.Writer;
 
+import se.hitta.serialization.context.RootContext;
+
 /**
  * The interface for all concrete serializer implementations.
  * 
@@ -38,7 +40,7 @@ public interface Serializer
      * @return
      * @throws Exception
      */
-    SerializationRootContext start() throws Exception;
+    RootContext start() throws Exception;
 
     /**
      * Finish and flush any remaining output, <strong>don't ever</strong> call it from within a {@link SerializationAdapter}

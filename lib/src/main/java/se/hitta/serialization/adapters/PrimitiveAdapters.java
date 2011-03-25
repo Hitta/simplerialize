@@ -15,9 +15,11 @@
  */
 package se.hitta.serialization.adapters;
 
+import java.io.IOException;
+
 import se.hitta.serialization.AdapterMapper;
 import se.hitta.serialization.SerializationAdapter;
-import se.hitta.serialization.SerializationRootContext;
+import se.hitta.serialization.context.RootContext;
 
 final class PrimitiveAdapters
 {
@@ -27,7 +29,7 @@ final class PrimitiveAdapters
         {
             @SuppressWarnings("deprecation")
             @Override
-            public void write(final CharSequence target, final SerializationRootContext serializer) throws Exception
+            public void write(final CharSequence target, final RootContext serializer) throws IOException
             {
                 serializer.writeObject(target);
             }
@@ -36,7 +38,7 @@ final class PrimitiveAdapters
         {
             @SuppressWarnings("deprecation")
             @Override
-            public void write(final Number target, final SerializationRootContext serializer) throws Exception
+            public void write(final Number target, final RootContext serializer) throws IOException
             {
                 serializer.writeObject(target);
             }
@@ -45,7 +47,7 @@ final class PrimitiveAdapters
         {
             @SuppressWarnings("deprecation")
             @Override
-            public void write(final Boolean target, final SerializationRootContext serializer) throws Exception
+            public void write(final Boolean target, final RootContext serializer) throws IOException
             {
                 serializer.writeObject(target);
             }

@@ -15,15 +15,16 @@
  */
 package se.hitta.serialization.adapters;
 
+import java.io.IOException;
 import java.util.Iterator;
 
 import se.hitta.serialization.SerializationAdapter;
-import se.hitta.serialization.SerializationRootContext;
+import se.hitta.serialization.context.RootContext;
 
 final class IteratorAdapter implements SerializationAdapter<Iterator<?>>
 {
     @Override
-    public void write(final Iterator<?> target, final SerializationRootContext serializer) throws Exception
+    public void write(final Iterator<?> target, final RootContext serializer) throws IOException
     {
         while(target.hasNext())
         {

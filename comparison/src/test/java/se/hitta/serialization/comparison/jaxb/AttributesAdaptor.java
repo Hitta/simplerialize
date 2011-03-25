@@ -8,7 +8,6 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 public class AttributesAdaptor extends XmlAdapter<Attribute[], Map<String, String>>
 {
-
     @Override
     public Attribute[] marshal(final Map<String, String> v) throws Exception
     {
