@@ -26,7 +26,7 @@ public abstract class AbstractSerializationTest implements SerializationCapable
     public final void asXml() throws Exception
     {
         final StringWriter actual = new StringWriter();
-        final AdapterMapper mapper = new DefaultAdapterMapper();
+        final AdapterMapper mapper = createMapper();
         final Serializer serializer = new WoodstoxXmlSerializer(actual, mapper);
         final SerializationAdapter<AbstractSerializationTest> adapter = mapper.resolveAdapter(AbstractSerializationTest.class);
         final RootContext context = serializer.start();
@@ -40,7 +40,7 @@ public abstract class AbstractSerializationTest implements SerializationCapable
     public final void asJson() throws Exception
     {
         final StringWriter actual = new StringWriter();
-        final AdapterMapper mapper = new DefaultAdapterMapper();
+        final AdapterMapper mapper = createMapper();
         final Serializer serializer = new JacksonJsonSerializer(actual, mapper);
         SerializationAdapter<AbstractSerializationTest> adapter = mapper.resolveAdapter(AbstractSerializationTest.class);
         RootContext context = serializer.start();
@@ -49,7 +49,7 @@ public abstract class AbstractSerializationTest implements SerializationCapable
         assertJsonEquals(readExpectedJson(), actual.toString());
     }
 
-    public static void assertJsonEquals(final String expected, final String actual) throws IOException, JsonProcessingException
+    public static final void assertJsonEquals(final String expected, final String actual) throws IOException, JsonProcessingException
     {
         final ObjectMapper mapper = new ObjectMapper();
         final JsonNode actualJson = mapper.readTree(actual);
@@ -59,13 +59,18 @@ public abstract class AbstractSerializationTest implements SerializationCapable
             fail("expected:\n" + expected + "\nactual:\n" + actual);
         }
     }
+    
+    public AdapterMapper createMapper()
+    {
+        return new DefaultAdapterMapper();
+    }
 
-    public String readExpectedJson() throws IOException
+    public final String readExpectedJson() throws IOException
     {
         return readExpected(".json");
     }
 
-    public static void assertXmlEquals(final String expected, final String actual) throws SAXException, IOException
+    public static final void assertXmlEquals(final String expected, final String actual) throws SAXException, IOException
     {
         final Diff diff = new Diff(expected, actual);
         if(!diff.identical() && diff.similar())
@@ -78,12 +83,12 @@ public abstract class AbstractSerializationTest implements SerializationCapable
         }
     }
 
-    public String readExpectedXml() throws IOException
+    public final String readExpectedXml() throws IOException
     {
         return readExpected(".xml");
     }
 
-    private String readExpected(final String extension) throws IOException
+    private final String readExpected(final String extension) throws IOException
     {
         final Class<?> clazz = getClass();
         final String folder = clazz.getPackage().getName().replace('.', '/');

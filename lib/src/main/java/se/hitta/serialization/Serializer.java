@@ -15,6 +15,7 @@
  */
 package se.hitta.serialization;
 
+import java.io.IOException;
 import java.io.Writer;
 
 import se.hitta.serialization.context.RootContext;
@@ -40,13 +41,13 @@ public interface Serializer
      * @return
      * @throws Exception
      */
-    RootContext start() throws Exception;
+    RootContext start() throws IOException;
 
     /**
      * Finish and flush any remaining output, <strong>don't ever</strong> call it from within a {@link SerializationAdapter}
      * @throws Exception
      */
-    void finish() throws Exception;
+    void finish() throws IOException;
 
     /**
      * 

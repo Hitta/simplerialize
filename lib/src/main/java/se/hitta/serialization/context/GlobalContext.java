@@ -64,7 +64,7 @@ public interface GlobalContext
      * @return
      * @throws Exception
      */
-    RootContext writeNameValue(String name, String value) throws IOException;
+    RootContext writeNameValue(String name, CharSequence value) throws IOException;
 
     /**
      * Write a name value pair with a {@link Boolean} value.

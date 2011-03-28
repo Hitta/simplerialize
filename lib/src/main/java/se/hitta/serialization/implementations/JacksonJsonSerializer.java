@@ -53,7 +53,7 @@ public final class JacksonJsonSerializer extends AbstractSerializer
     }
 
     @Override
-    public void finish() throws Exception
+    public void finish() throws IOException
     {
         this.generator.close();
     }
@@ -134,9 +134,9 @@ public final class JacksonJsonSerializer extends AbstractSerializer
     }
 
     @Override
-    public ContainerContext writeNameValue(final String name, final String value) throws IOException
+    public ContainerContext writeNameValue(final String name, final CharSequence value) throws IOException
     {
-        this.generator.writeStringField(name, value);
+        this.generator.writeStringField(name, value.toString());
         return this;
     }
 

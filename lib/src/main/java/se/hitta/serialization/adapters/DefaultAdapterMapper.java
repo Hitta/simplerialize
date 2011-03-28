@@ -86,6 +86,16 @@ public final class DefaultAdapterMapper implements AdapterMapper
 
     /*
      * (non-Javadoc)
+     * @see se.hitta.serialization.AdapterMapper#skip(java.lang.Class)
+     */
+    @Override
+    public <T> AdapterMapper skip(final Class<T> clazz)
+    {
+        return register(NullAdapter.instance, clazz);
+    }
+
+    /*
+     * (non-Javadoc)
      * @see se.hitta.serialization.adapter.AdapterMapper#resolveAdapter(java.lang.Class)
      */
     @Override

@@ -194,7 +194,7 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
     }
 
     @Override
-    public ContainerContext writeNameValue(final String name, final String value) throws IOException
+    public ContainerContext writeNameValue(final String name, final CharSequence value) throws IOException
     {
         return writeAttribute(name, value);
     }
