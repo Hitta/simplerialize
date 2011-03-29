@@ -116,16 +116,25 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
     @Override
     public CollectionContext beneath(final String container) throws IOException
     {
-        try
-        {
-            this.generator.writeStartElement(container);
-        }
-        catch(final XMLStreamException e)
-        {
-            throw new IOException(e.getMessage(), e);
-        }
         return new CollectionContext()
         {
+            private boolean initialize = true;
+
+            void init() throws IOException
+            {
+                if(this.initialize)
+                {
+                    try
+                    {
+                        WoodstoxXmlSerializer.this.generator.writeStartElement(container);
+                    }
+                    catch(final XMLStreamException e)
+                    {
+                        throw new IOException(e.getMessage(), e);
+                    }
+                    this.initialize = false;
+                }
+            }
 
             @Override
             public RootContext eachPrimitive(final Iterable<?> elements) throws IOException
@@ -136,19 +145,23 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
             @Override
             public RootContext eachPrimitives(final Iterator<?> elements) throws IOException
             {
-                try
+                if(elements.hasNext())
                 {
-                    while(elements.hasNext())
+                    init();
+                    try
                     {
-                        WoodstoxXmlSerializer.this.generator.writeStartElement("value");
-                        writeWithAdapter(elements.next());
+                        while(elements.hasNext())
+                        {
+                            WoodstoxXmlSerializer.this.generator.writeStartElement("value");
+                            writeWithAdapter(elements.next());
+                            WoodstoxXmlSerializer.this.generator.writeEndElement();
+                        }
                         WoodstoxXmlSerializer.this.generator.writeEndElement();
                     }
-                    WoodstoxXmlSerializer.this.generator.writeEndElement();
-                }
-                catch(final XMLStreamException e)
-                {
-                    throw new IOException(e.getMessage(), e);
+                    catch(final XMLStreamException e)
+                    {
+                        throw new IOException(e.getMessage(), e);
+                    }
                 }
                 return WoodstoxXmlSerializer.this;
             }
@@ -162,17 +175,21 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
             @Override
             public RootContext eachComplex(final Iterator<?> elements) throws IOException
             {
-                while(elements.hasNext())
+                if(elements.hasNext())
                 {
-                    writeWithAdapter(elements.next());
-                }
-                try
-                {
-                    WoodstoxXmlSerializer.this.generator.writeEndElement();
-                }
-                catch(final XMLStreamException e)
-                {
-                    throw new IOException(e.getMessage(), e);
+                    init();
+                    while(elements.hasNext())
+                    {
+                        writeWithAdapter(elements.next());
+                    }
+                    try
+                    {
+                        WoodstoxXmlSerializer.this.generator.writeEndElement();
+                    }
+                    catch(final XMLStreamException e)
+                    {
+                        throw new IOException(e.getMessage(), e);
+                    }
                 }
                 return WoodstoxXmlSerializer.this;
             }

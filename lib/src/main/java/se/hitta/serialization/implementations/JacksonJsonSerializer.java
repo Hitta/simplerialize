@@ -72,13 +72,21 @@ public final class JacksonJsonSerializer extends AbstractSerializer
         return this;
     }
 
-
     @Override
     public CollectionContext beneath(final String container) throws IOException
     {
-        this.generator.writeArrayFieldStart(container);
         return new CollectionContext()
         {
+            private boolean initialize = true;
+
+            void init() throws IOException
+            {
+                if(this.initialize)
+                {
+                    JacksonJsonSerializer.this.generator.writeArrayFieldStart(container);
+                    this.initialize = false;
+                }
+            }
 
             @Override
             public RootContext eachComplex(final Iterable<?> elements) throws IOException
@@ -89,13 +97,17 @@ public final class JacksonJsonSerializer extends AbstractSerializer
             @Override
             public RootContext eachComplex(final Iterator<?> elements) throws IOException
             {
-                while(elements.hasNext())
+                if(elements.hasNext())
                 {
-                    JacksonJsonSerializer.this.generator.writeStartObject();
-                    writeWithAdapter(elements.next());
-                    JacksonJsonSerializer.this.generator.writeEndObject();
+                    init();
+                    while(elements.hasNext())
+                    {
+                        JacksonJsonSerializer.this.generator.writeStartObject();
+                        writeWithAdapter(elements.next());
+                        JacksonJsonSerializer.this.generator.writeEndObject();
+                    }
+                    JacksonJsonSerializer.this.generator.writeEndArray();
                 }
-                JacksonJsonSerializer.this.generator.writeEndArray();
                 return JacksonJsonSerializer.this;
             }
 
@@ -108,11 +120,15 @@ public final class JacksonJsonSerializer extends AbstractSerializer
             @Override
             public RootContext eachPrimitives(final Iterator<?> elements) throws IOException
             {
-                while(elements.hasNext())
+                if(elements.hasNext())
                 {
-                    writeWithAdapter(elements.next());
+                    init();
+                    while(elements.hasNext())
+                    {
+                        writeWithAdapter(elements.next());
+                    }
+                    JacksonJsonSerializer.this.generator.writeEndArray();
                 }
-                JacksonJsonSerializer.this.generator.writeEndArray();
                 return JacksonJsonSerializer.this;
             }
 
