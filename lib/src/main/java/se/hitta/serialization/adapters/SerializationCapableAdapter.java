@@ -16,28 +16,32 @@
 package se.hitta.serialization.adapters;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 
 import se.hitta.serialization.SerializationAdapter;
+import se.hitta.serialization.SerializationCapable;
 import se.hitta.serialization.Serializer;
-import sun.misc.BASE64Encoder;
 
 /**
- * {@link SerializationAdapter} that serializes a {@link ByteBuffer} as a Base64
- * encoded {@link String}.
+ * {@link SerializationAdapter} singleton for classes that implement
+ * {@link SerializationCapable} and thus provide their own serialization logic.
  */
-public final class ByteBufferAsBase64Adapter implements SerializationAdapter<ByteBuffer>
+public final class SerializationCapableAdapter implements SerializationAdapter<SerializationCapable>
 {
-    private final BASE64Encoder encoder = new BASE64Encoder();
+    /**
+     * The {@link SerializationAdapter} instance.
+     */
+    public static final SerializationAdapter<?> instance = new SerializationCapableAdapter();
+
+    private SerializationCapableAdapter()
+    {}
 
     /*
      * (non-Javadoc)
      * @see se.hitta.serialization.SerializationAdapter#write(java.lang.Object, se.hitta.serialization.Serializer)
      */
-    @SuppressWarnings("deprecation")
     @Override
-    public void write(final ByteBuffer target, final Serializer serializer) throws IOException
+    public void write(final SerializationCapable target, final Serializer serializer) throws IOException
     {
-        serializer.writeObject(this.encoder.encode(target));
+        target.write(serializer);
     }
 }

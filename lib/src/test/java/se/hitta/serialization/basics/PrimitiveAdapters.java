@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import se.hitta.serialization.AbstractSerializationTest;
-import se.hitta.serialization.context.RootContext;
+import se.hitta.serialization.Serializer;
 
 public final class PrimitiveAdapters
 {
@@ -60,9 +60,9 @@ public final class PrimitiveAdapters
         }
 
         @Override
-        public void write(final RootContext serializer) throws IOException
+        public void write(final Serializer serializer) throws IOException
         {
-            serializer.beneath("root").eachPrimitive(this.values);
+            serializer.eachPrimitive("root", this.values);
         }
 
     }

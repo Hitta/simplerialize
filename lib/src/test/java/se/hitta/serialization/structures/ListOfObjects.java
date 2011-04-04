@@ -5,17 +5,16 @@ import java.util.Arrays;
 
 import se.hitta.serialization.AbstractSerializationTest;
 import se.hitta.serialization.SerializationCapable;
-import se.hitta.serialization.context.ContainerContext;
-import se.hitta.serialization.context.RootContext;
+import se.hitta.serialization.Serializer;
 
 public final class ListOfObjects extends AbstractSerializationTest
 {
     @Override
-    public void write(final RootContext serializer) throws IOException
+    public void write(final Serializer serializer) throws IOException
     {
-        final ContainerContext container = serializer.startContainer("container");
-        container.beneath("list").eachComplex(Arrays.asList(new Item(), new Item()));
-        container.endContainer();
+        serializer.startContainer("container");
+        serializer.eachComplex("list", Arrays.asList(new Item(), new Item()));
+        serializer.endContainer();
     }
 
     int i = 0;
@@ -23,7 +22,7 @@ public final class ListOfObjects extends AbstractSerializationTest
     final class Item implements SerializationCapable
     {
         @Override
-        public void write(final RootContext serializer) throws IOException
+        public void write(final Serializer serializer) throws IOException
         {
             serializer.writeNameValue("item" + ListOfObjects.this.i++, "value");
         }

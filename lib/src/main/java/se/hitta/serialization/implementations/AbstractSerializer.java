@@ -20,23 +20,26 @@ import java.io.Writer;
 
 import se.hitta.serialization.AdapterMapper;
 import se.hitta.serialization.Serializer;
-import se.hitta.serialization.context.ContainerContext;
 
 import com.natpryce.maybe.Maybe;
 
-public abstract class AbstractSerializer implements Serializer, ContainerContext
+abstract class AbstractSerializer implements Serializer
 {
     private final AdapterMapper mapper;
     private final Writer writer;
 
-    public AbstractSerializer(final Writer writer, final AdapterMapper mapper)
+    AbstractSerializer(final Writer writer, final AdapterMapper mapper)
     {
         this.writer = writer;
         this.mapper = mapper;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#writeWithAdapter(com.natpryce.maybe.Maybe)
+     */
     @Override
-    public final ContainerContext writeWithAdapter(final Maybe<?> target) throws IOException
+    public final Serializer writeWithAdapter(final Maybe<?> target) throws IOException
     {
         if(target != null && target.isKnown())
         {
@@ -45,24 +48,46 @@ public abstract class AbstractSerializer implements Serializer, ContainerContext
         return this;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#writeWithAdapter(java.lang.Object)
+     */
     @Override
     @SuppressWarnings("unchecked")
-    public final <T> ContainerContext writeWithAdapter(final T target) throws IOException
+    public final <T> Serializer writeWithAdapter(final T target) throws IOException
     {
         writeWithAdapter((Class<T>)target.getClass(), target);
         return this;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#writeWithAdapter(java.lang.Class, java.lang.Object)
+     */
     @Override
-    public final <T> ContainerContext writeWithAdapter(final Class<T> adapterClass, final T target) throws IOException
+    public final <T> Serializer writeWithAdapter(final Class<T> adapterClass, final T target) throws IOException
     {
         this.mapper.resolveAdapter(adapterClass).write(target, this);
         return this;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#printTo(java.lang.Appendable)
+     */
     @Override
-    public final Writer getWriter()
+    public final void printTo(final Appendable target) throws IOException
     {
-        return this.writer;
+        target.append(this.writer.toString());
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#getMapper()
+     */
+    @Override
+    public final AdapterMapper getMapper()
+    {
+        return this.mapper;
     }
 }

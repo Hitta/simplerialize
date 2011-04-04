@@ -1,13 +1,13 @@
 package se.hitta.serialization;
 
-import static org.junit.Assert.assertSame;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
 
 import org.junit.Test;
 
 import se.hitta.serialization.adapters.DefaultAdapterMapper;
-import se.hitta.serialization.context.RootContext;
+import se.hitta.serialization.adapters.NullAdapter;
 
 public class AdapterMapperTest
 {
@@ -52,6 +52,11 @@ public class AdapterMapperTest
         assertSame(this.dummyAdapterInstance, mapper.resolveAdapter(Subclass.class));
     }
 
+    public void skippedClassReturnesNullAdapter()
+    {
+        assertSame(NullAdapter.instance, new DefaultAdapterMapper().skip(Subclass.class).resolveAdapter(Subclass.class));
+    }
+
     public class ClassWithInterface implements Interface
     {};
 
@@ -66,7 +71,7 @@ public class AdapterMapperTest
     static class DummyAdapter implements SerializationAdapter<Object>
     {
         @Override
-        public void write(Object target, RootContext serializer) throws IOException
+        public void write(Object target, Serializer serializer) throws IOException
         {}
     };
 }

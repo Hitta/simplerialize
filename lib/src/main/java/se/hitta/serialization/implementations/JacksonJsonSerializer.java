@@ -16,6 +16,8 @@
 package se.hitta.serialization.implementations;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.Iterator;
 
@@ -23,176 +25,238 @@ import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerator;
 
 import se.hitta.serialization.AdapterMapper;
-import se.hitta.serialization.context.CollectionContext;
-import se.hitta.serialization.context.ContainerContext;
-import se.hitta.serialization.context.RootContext;
+import se.hitta.serialization.Serializer;
 
 import com.natpryce.maybe.Maybe;
 
+/**
+ *
+ */
 public final class JacksonJsonSerializer extends AbstractSerializer
 {
-    final JsonGenerator generator;
-    private static final JsonFactory factory;
+    private static final JsonFactory factory = new JsonFactory();
+    private final JsonGenerator generator;
 
-    static
+    /**
+     * 
+     * @param stream
+     * @param mapper
+     * @throws IOException
+     */
+    public JacksonJsonSerializer(final OutputStream stream, final AdapterMapper mapper) throws IOException
     {
-        factory = new JsonFactory();
+        this(new OutputStreamWriter(stream), mapper);
     }
 
+    /**
+     * 
+     * @param writer
+     * @param mapper
+     * @throws IOException
+     */
     public JacksonJsonSerializer(final Writer writer, final AdapterMapper mapper) throws IOException
     {
         super(writer, mapper);
         this.generator = factory.createJsonGenerator(writer);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#start()
+     */
     @Override
-    public RootContext start() throws IOException
+    public Serializer start() throws IOException
     {
         this.generator.writeStartObject();
         return this;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#finish()
+     */
     @Override
     public void finish() throws IOException
     {
         this.generator.close();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#startContainer(java.lang.String)
+     */
     @Override
-    public ContainerContext startContainer(final String name) throws IOException
+    public Serializer startContainer(final String name) throws IOException
     {
         this.generator.writeObjectFieldStart(name);
         return this;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#endContainer()
+     */
     @Override
-    public RootContext endContainer() throws IOException
+    public Serializer endContainer() throws IOException
     {
         this.generator.writeEndObject();
         return this;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#eachComplex(java.lang.String, java.lang.Iterable)
+     */
     @Override
-    public CollectionContext beneath(final String container) throws IOException
+    public Serializer eachComplex(final String container, final Iterable<?> elements) throws IOException
     {
-        return new CollectionContext()
-        {
-            private boolean initialize = true;
-
-            void init() throws IOException
-            {
-                if(this.initialize)
-                {
-                    JacksonJsonSerializer.this.generator.writeArrayFieldStart(container);
-                    this.initialize = false;
-                }
-            }
-
-            @Override
-            public RootContext eachComplex(final Iterable<?> elements) throws IOException
-            {
-                return eachComplex(elements.iterator());
-            }
-
-            @Override
-            public RootContext eachComplex(final Iterator<?> elements) throws IOException
-            {
-                if(elements.hasNext())
-                {
-                    init();
-                    while(elements.hasNext())
-                    {
-                        JacksonJsonSerializer.this.generator.writeStartObject();
-                        writeWithAdapter(elements.next());
-                        JacksonJsonSerializer.this.generator.writeEndObject();
-                    }
-                    JacksonJsonSerializer.this.generator.writeEndArray();
-                }
-                return JacksonJsonSerializer.this;
-            }
-
-            @Override
-            public RootContext eachPrimitive(final Iterable<?> elements) throws IOException
-            {
-                return eachPrimitives(elements.iterator());
-            }
-
-            @Override
-            public RootContext eachPrimitives(final Iterator<?> elements) throws IOException
-            {
-                if(elements.hasNext())
-                {
-                    init();
-                    while(elements.hasNext())
-                    {
-                        writeWithAdapter(elements.next());
-                    }
-                    JacksonJsonSerializer.this.generator.writeEndArray();
-                }
-                return JacksonJsonSerializer.this;
-            }
-
-        };
+        return eachComplex(container, elements.iterator());
     }
 
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#eachComplex(java.lang.String, java.util.Iterator)
+     */
     @Override
-    public RootContext writeObject(final Object target) throws IOException
+    public Serializer eachComplex(final String container, final Iterator<?> elements) throws IOException
+    {
+        if(elements.hasNext())
+        {
+            this.generator.writeArrayFieldStart(container);
+            while(elements.hasNext())
+            {
+                this.generator.writeStartObject();
+                writeWithAdapter(elements.next());
+                this.generator.writeEndObject();
+            }
+            this.generator.writeEndArray();
+        }
+        return this;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#eachPrimitive(java.lang.String, java.lang.Iterable)
+     */
+    @Override
+    public Serializer eachPrimitive(final String container, final Iterable<?> elements) throws IOException
+    {
+        return eachPrimitives(container, elements.iterator());
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#eachPrimitives(java.lang.String, java.util.Iterator)
+     */
+    @Override
+    public Serializer eachPrimitives(final String container, final Iterator<?> elements) throws IOException
+    {
+        if(elements.hasNext())
+        {
+            this.generator.writeArrayFieldStart(container);
+            while(elements.hasNext())
+            {
+                writeWithAdapter(elements.next());
+            }
+            this.generator.writeEndArray();
+        }
+        return this;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#writeObject(java.lang.Object)
+     */
+    @Override
+    public Serializer writeObject(final Object target) throws IOException
     {
         this.generator.writeObject(target);
         return this;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#writeNameValue(java.lang.String, java.lang.Boolean)
+     */
     @Override
-    public ContainerContext writeNameValue(final String name, final Boolean value) throws IOException
+    public Serializer writeNameValue(final String name, final Boolean value) throws IOException
     {
         this.generator.writeBooleanField(name, value);
         return this;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#writeNameValue(java.lang.String, java.lang.CharSequence)
+     */
     @Override
-    public ContainerContext writeNameValue(final String name, final CharSequence value) throws IOException
+    public Serializer writeNameValue(final String name, final CharSequence value) throws IOException
     {
         this.generator.writeStringField(name, value.toString());
         return this;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#writeNameValue(java.lang.String, java.lang.Long)
+     */
     @Override
-    public ContainerContext writeNameValue(final String name, final Long value) throws IOException
+    public Serializer writeNameValue(final String name, final Long value) throws IOException
     {
         this.generator.writeNumberField(name, value);
         return this;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#writeNameValue(java.lang.String, java.lang.Double)
+     */
     @Override
-    public ContainerContext writeNameValue(final String name, final Double value) throws IOException
+    public Serializer writeNameValue(final String name, final Double value) throws IOException
     {
         this.generator.writeNumberField(name, value);
         return this;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#writeNameValue(java.lang.String, java.lang.Short)
+     */
     @Override
-    public ContainerContext writeNameValue(final String name, final Short value) throws IOException
+    public Serializer writeNameValue(final String name, final Short value) throws IOException
     {
         this.generator.writeNumberField(name, value);
         return this;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#writeNameValue(java.lang.String, java.lang.Integer)
+     */
     @Override
-    public ContainerContext writeNameValue(final String name, final Integer value) throws IOException
+    public Serializer writeNameValue(final String name, final Integer value) throws IOException
     {
         this.generator.writeNumberField(name, value);
         return this;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#writeNameValue(java.lang.String, java.lang.Float)
+     */
     @Override
-    public ContainerContext writeNameValue(final String name, final Float value) throws IOException
+    public Serializer writeNameValue(final String name, final Float value) throws IOException
     {
         this.generator.writeNumberField(name, value);
         return this;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#writeNameValue(java.lang.String, com.natpryce.maybe.Maybe)
+     */
     @Override
-    public ContainerContext writeNameValue(final String name, final Maybe<?> value) throws IOException
+    public Serializer writeNameValue(final String name, final Maybe<?> value) throws IOException
     {
         if(value.isKnown())
         {

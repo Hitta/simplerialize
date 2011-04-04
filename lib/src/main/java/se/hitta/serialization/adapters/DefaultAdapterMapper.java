@@ -15,7 +15,6 @@
  */
 package se.hitta.serialization.adapters;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.util.Collection;
@@ -30,21 +29,30 @@ import org.slf4j.LoggerFactory;
 import se.hitta.serialization.AdapterMapper;
 import se.hitta.serialization.SerializationAdapter;
 import se.hitta.serialization.SerializationCapable;
-import se.hitta.serialization.context.RootContext;
 
 /**
- * The default {@link AdapterMapper} implementation. The client may provide the actual {@link Map} instance to be used as the backing storage thus allowing
- * customization on thread safety, load factors etc. 
+ * The default {@link AdapterMapper} implementation. The client may provide the
+ * actual {@link Map} instance to be used as the backing storage thus allowing
+ * customization on thread safety, load factors etc. This class registering
+ * default adapters for {@link Object}, {@link String}, {@link Boolean},
+ * {@link Number}, {@link Byte}, and {@link Iterable}. Use
+ * {@link AdapterMapper#register(SerializationAdapter, Class...)} to override
+ * these defaults or use {@link AdapterMapper#skip(Class)} to skip serialization
+ * for a given type. 
  */
 public final class DefaultAdapterMapper implements AdapterMapper
 {
     private static final Logger log = LoggerFactory.getLogger(DefaultAdapterMapper.class);
-    private final Map<Class<?>, SerializationAdapter<?>> adapterMappings;
+    private final Map<Class<?>, SerializationAdapter<?>> mappings;
 
     /**
-     * Creates a new instance with a {@link ConcurrentHashMap} as storage. A {@link ConcurrentHashMap} ought to be a good default to allow non blocking reads
-     * while still providing thread safety on write operations to allow the {@link AdapterMapper} instance to be shared by serializers and also re-used over
-     * time which ought to improve the lookup speed as the resolver cache is self tuned and thus eliminating repeating expensive {@link Class} graph traversals.
+     * Creates a new instance with a {@link ConcurrentHashMap} as storage. A
+     * {@link ConcurrentHashMap} ought to be a good default to allow non
+     * blocking reads while still providing thread safety on write operations to
+     * allow the {@link AdapterMapper} instance to be shared by serializers and
+     * also re-used over time which ought to improve the lookup speed as the
+     * resolver cache is self tuned and thus eliminating repeating expensive
+     * {@link Class} graph traversals.
      */
     public DefaultAdapterMapper()
     {
@@ -52,17 +60,21 @@ public final class DefaultAdapterMapper implements AdapterMapper
     }
 
     /**
-     * Creates a new instance and uses the supplied {@link Map} as the backing store / cache for Class -> Adapter mappings. Instansiation also includes
-     * registering default adapters for {@link Object}, {@link String}, {@link Boolean}, {@link Number}, {@link Byte}, and {@link Iterable}. Use
-     * {@link AdapterMapper#register(Class, SerializationAdapter)} to override.
-     *
-     * @param storage
+     * Creates a new instance and uses the supplied {@link Map} as the backing
+     * store / cache for the mappings of {@link Class} to
+     * {@link SerializationAdapter}s.
+     * 
+     * @param storage the {@link Map} instance to use as the backing storage of
+     * this instance
+     * @see AdapterMapper#register(SerializationAdapter, Class...)
+     * @see AdapterMapper#skip(Class)
      */
     public DefaultAdapterMapper(final Map<Class<?>, SerializationAdapter<?>> storage)
     {
-        this.adapterMappings = storage;
-
-        new PrimitiveAdapters(this);
+        this.mappings = storage;
+        register(new CharSequenceAdapter(), String.class, CharSequence.class, StringBuffer.class, StringBuilder.class);
+        register(new NumberAdapter(), Number.class, Float.class, Integer.class, Short.class, Long.class);
+        register(new BooleanAdapter(), Boolean.class);
         register(new ObjectAdapter(), Object.class);
         register(new MapEntryAdapter(), Entry.class);
         register(new IterableAdapter(), Iterable.class, Collection.class);
@@ -79,7 +91,7 @@ public final class DefaultAdapterMapper implements AdapterMapper
     {
         for(final Class<?> clazz : classes)
         {
-            this.adapterMappings.put(clazz, adapter);
+            this.mappings.put(clazz, adapter);
         }
         return this;
     }
@@ -102,7 +114,7 @@ public final class DefaultAdapterMapper implements AdapterMapper
     public <T> SerializationAdapter<T> resolveAdapter(final Class<T> clazz)
     {
         @SuppressWarnings("unchecked")
-        final SerializationAdapter<T> adapter = traverseAndFindAdapter(clazz);
+        final SerializationAdapter<T> adapter = search(clazz);
         if(adapter == null)
         {
             throw new IllegalStateException("No adapter found for " + clazz);
@@ -117,17 +129,16 @@ public final class DefaultAdapterMapper implements AdapterMapper
         }
     }
 
-    /**
-     * Recursively traverse upwards the class hierarchy for the given classes and try to find either an {@link SerializationAdapter}
-     * that's registered for a {@link Class} or find a {@link Class} that implements {@link SerializationCapable} whereby
-     * {@link DefaultAdapterMapper#createBridgeFor(Class)} will be used to create and adapter for that {@link Class} and register it
-     * with this {@link AdapterMapper}.
-     * 
-     * @param classes The classes to traverse
-     * @return An {@link SerializationAdapter} or <code>null</code> if no adapter was found.
+    /*
+     * Recursively traverse upwards the class hierarchy for the given classes
+     * and try to find either an registered {@link SerializationAdapter} or find
+     * an implementation of {@link SerializationCapable} whereby
+     * {@link DefaultAdapterMapper#createAdapterFor(Class)} will be used to
+     * create and adapter for that{@link Class} and register it with this
+     * instance.
      */
     @SuppressWarnings("rawtypes")
-    public final SerializationAdapter traverseAndFindAdapter(final Class<?>... classes)
+    private final SerializationAdapter search(final Class<?>... classes)
     {
         for(final Class<?> clazz : classes)
         {
@@ -137,62 +148,51 @@ public final class DefaultAdapterMapper implements AdapterMapper
             }
             if(clazz != null)
             {
-                if(this.adapterMappings.containsKey(clazz))
-                {
-                    return this.adapterMappings.get(clazz);
-                }
-                else if(SerializationCapable.class.isAssignableFrom(clazz))
-                {
-                    /*
-                     * The class we're trying to serialize is its own adapter.
-                     * So we create a bridge between the SerializationCapable
-                     * and SerializationAdapter interfaces and store that as the adapter.
-                     */
-                    final SerializationAdapter<?> bridge = createBridgeFor(clazz);
-                    if(log.isDebugEnabled())
-                    {
-                        log.debug("Created adapter bridge for " + clazz);
-                    }
-                    this.adapterMappings.put(clazz, bridge);
-                    return bridge;
-                }
-                else
-                {
-                    SerializationAdapter<?> adapter = traverseAndFindAdapter(clazz.getInterfaces());
-                    if(adapter == null)
-                    {
-                        adapter = traverseAndFindAdapter(clazz.getSuperclass());
-                    }
-                    if(adapter != null)
-                    {
-                        if(log.isDebugEnabled())
-                        {
-                            log.debug("Registering " + adapter + " for " + clazz);
-                        }
-                        this.adapterMappings.put(clazz, adapter);
-                    }
-                    return adapter;
-                }
+                return lookup(clazz);
             }
         }
         return null;
     }
 
-    /**
-     * Create a {@link SerializationAdapter} for a {@link Class} that implements {@link SerializationCapable}.
-     * 
-     * @param clazz
-     * @return
-     */
-    public SerializationAdapter<?> createBridgeFor(final Class<?> clazz)
+    @SuppressWarnings("rawtypes")
+    private SerializationAdapter lookup(final Class<?> clazz)
     {
-        return new SerializationAdapter<SerializationCapable>()
+        if(this.mappings.containsKey(clazz))
         {
-            @Override
-            public void write(final SerializationCapable target, final RootContext serializer) throws IOException
+            return this.mappings.get(clazz);
+        }
+        else if(SerializationCapable.class.isAssignableFrom(clazz))
+        {
+            /*
+             * The class we're trying to serialize is its own adapter.
+             * So we register a bridge adapter to map between the
+             * SerializationCapable and SerializationAdapter interfaces.
+             */
+            if(log.isDebugEnabled())
             {
-                target.write(serializer);
+                log.debug("Registering adapter bridge for " + clazz);
             }
-        };
+            this.mappings.put(clazz, SerializationCapableAdapter.instance);
+            return SerializationCapableAdapter.instance;
+        }
+        else
+        {
+            // Recurse upwards for interfaces
+            SerializationAdapter<?> adapter = search(clazz.getInterfaces());
+            if(adapter == null)
+            {
+                // Recurse upwards for superclasses
+                adapter = search(clazz.getSuperclass());
+            }
+            if(adapter != null)
+            {
+                if(log.isDebugEnabled())
+                {
+                    log.debug("Registering " + adapter + " for " + clazz);
+                }
+                this.mappings.put(clazz, adapter);
+            }
+            return adapter;
+        }
     }
 }

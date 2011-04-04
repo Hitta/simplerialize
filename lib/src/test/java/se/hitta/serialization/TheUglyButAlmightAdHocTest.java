@@ -8,8 +8,6 @@ import java.util.Collection;
 import org.junit.Test;
 
 import se.hitta.serialization.adapters.DefaultAdapterMapper;
-import se.hitta.serialization.context.ContainerContext;
-import se.hitta.serialization.context.RootContext;
 import se.hitta.serialization.implementations.JacksonJsonSerializer;
 import se.hitta.serialization.implementations.WoodstoxXmlSerializer;
 
@@ -33,17 +31,17 @@ public final class TheUglyButAlmightAdHocTest
     private void serializeXml(final StringWriter writer, final AdapterMapper mapper) throws Exception
     {
         final Serializer serializer = new WoodstoxXmlSerializer(writer, mapper);
-        final RootContext context = serializer.start();
+        serializer.start();
         final SerializationAdapter<Target> adapter = mapper.resolveAdapter(Target.class);
-        adapter.write(new Target(), context);
+        adapter.write(new Target(), serializer);
         serializer.finish();
     }
 
     private void serializeJson(final StringWriter writer, final AdapterMapper mapper) throws Exception
     {
         final Serializer serializer = new JacksonJsonSerializer(writer, mapper);
-        final RootContext context = serializer.start();
-        mapper.resolveAdapter(Target.class).write(new Target(), context);
+        serializer.start();
+        mapper.resolveAdapter(Target.class).write(new Target(), serializer);
         serializer.finish();
     }
 
@@ -69,27 +67,27 @@ public final class TheUglyButAlmightAdHocTest
     public static final class TargetAdapter implements SerializationAdapter<Target>
     {
         @Override
-        public void write(final Target target, final RootContext serializer) throws IOException
+        public void write(final Target target, final Serializer serializer) throws IOException
         {
-            final ContainerContext root = serializer.startContainer("yeah");
+            serializer.startContainer("yeah");
             serializer.writeNameValue("def", Maybe.definitely("howdy"));
             serializer.writeNameValue("unk", Maybe.unknown());
             serializer.writeNameValue("str", target.str);
             serializer.writeNameValue("bool", target.bool);
             serializer.startContainer("nested").writeWithAdapter(target.nested).endContainer();
-            serializer.beneath("repeating").eachComplex(target.multiple_nested);
-            root.endContainer();
+            serializer.eachComplex("repeating", target.multiple_nested);
+            serializer.endContainer();
         }
     }
 
     public static final class NestedTargetAdapter implements SerializationAdapter<NestedTarget>
     {
         @Override
-        public void write(final NestedTarget target, final RootContext serializer) throws IOException
+        public void write(final NestedTarget target, final Serializer serializer) throws IOException
         {
-            final ContainerContext root = serializer.startContainer("nested");
-            root.writeNameValue("nestedTarget", "foo");
-            root.endContainer();
+            serializer.startContainer("nested");
+            serializer.writeNameValue("nestedTarget", "foo");
+            serializer.endContainer();
         }
     }
 }

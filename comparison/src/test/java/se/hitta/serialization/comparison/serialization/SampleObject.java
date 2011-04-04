@@ -4,8 +4,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import se.hitta.serialization.SerializationCapable;
-import se.hitta.serialization.context.ContainerContext;
-import se.hitta.serialization.context.RootContext;
+import se.hitta.serialization.Serializer;
 
 public final class SampleObject implements SerializationCapable
 {
@@ -17,10 +16,10 @@ public final class SampleObject implements SerializationCapable
     }
 
     @Override
-    public void write(final RootContext serializer) throws IOException
+    public void write(final Serializer serializer) throws IOException
     {
-        ContainerContext container = serializer.startContainer("root");
-        container.beneath("attributes").eachComplex(this.attributes.entrySet());
-        container.endContainer();
+        serializer.startContainer("root");
+        serializer.eachComplex("attributes", this.attributes.entrySet());
+        serializer.endContainer();
     }
 }

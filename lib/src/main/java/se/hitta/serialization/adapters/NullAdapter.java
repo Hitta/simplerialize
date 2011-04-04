@@ -18,19 +18,27 @@ package se.hitta.serialization.adapters;
 import java.io.IOException;
 
 import se.hitta.serialization.SerializationAdapter;
-import se.hitta.serialization.context.RootContext;
+import se.hitta.serialization.Serializer;
 
 /**
- * Null implementation of {@link SerializationAdapter}, ie don't write anything
+ * {@link SerializationAdapter} singleton for skipped classes. It's a
+ * {@code null} implementation in the sense that is won't generate any output.
  */
 public final class NullAdapter implements SerializationAdapter<Object>
 {
+    /**
+     * The {@link NullAdapter} instance.
+     */
     public static final SerializationAdapter<?> instance = new NullAdapter();
 
     private NullAdapter()
     {}
 
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.SerializationAdapter#write(java.lang.Object, se.hitta.serialization.Serializer)
+     */
     @Override
-    public void write(final Object target, final RootContext serializer) throws IOException
+    public void write(final Object target, final Serializer serializer) throws IOException
     {}
 }

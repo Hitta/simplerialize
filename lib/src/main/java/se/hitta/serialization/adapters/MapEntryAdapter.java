@@ -16,15 +16,27 @@
 package se.hitta.serialization.adapters;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import se.hitta.serialization.SerializationAdapter;
-import se.hitta.serialization.context.RootContext;
+import se.hitta.serialization.Serializer;
 
-final class MapEntryAdapter implements SerializationAdapter<Entry<?, ?>>
+/**
+ * {@link SerializationAdapter} that writes all {@link Entry}s of the supplied
+ * {@link Map} using {@link Serializer#writeNameValue(String, CharSequence)}.
+ * Hence {@link Object#toString()} is called on both key and value of each
+ * {@link Entry}. This is obviously insufficient if your map contains complex
+ * objects in which case you should write a custom {@link SerializationAdapter}
+ */
+public final class MapEntryAdapter implements SerializationAdapter<Entry<?, ?>>
 {
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.SerializationAdapter#write(java.lang.Object, se.hitta.serialization.Serializer)
+     */
     @Override
-    public void write(final Entry<?, ?> target, final RootContext serializer) throws IOException
+    public void write(final Entry<?, ?> target, final Serializer serializer) throws IOException
     {
         serializer.writeNameValue(target.getKey().toString(), target.getValue().toString());
     }

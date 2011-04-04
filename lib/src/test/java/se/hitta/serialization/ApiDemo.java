@@ -9,58 +9,71 @@ import java.util.Map;
 import org.junit.Test;
 
 import se.hitta.serialization.adapters.DefaultAdapterMapper;
-import se.hitta.serialization.context.RootContext;
+import se.hitta.serialization.implementations.CompositeSerializer;
 import se.hitta.serialization.implementations.JacksonJsonSerializer;
+import se.hitta.serialization.implementations.WoodstoxXmlSerializer;
 
 public final class ApiDemo
 {
-
     @Test
-    public void x() throws Exception
-    {
-        Map<String, Object> m = new HashMap<String, Object>();
-        m.put("a", 1);
-        m.put("x", false);
-        final Serializer json = configure();
-
-        RootContext root = json.start();
-        root.beneath("apa").eachComplex(m.entrySet());
-        json.finish();
-        System.err.println(json.getWriter().toString());
-    }
-
-    @Test
-    public void api() throws Exception
-    {
-        final Serializer json = configure();
-        serializeSomeData(json);
-        System.err.println(json.getWriter().toString());
-    }
-
     @SuppressWarnings("unchecked")
-    private void serializeSomeData(final Serializer json) throws Exception
+    public void apiDemo() throws Exception
     {
-        RootContext context = json.start();
+        final Serializer serializer = configure();
+        serializer.start();
+        serializer.startContainer("root");
         {
-            context.beneath("objects").eachComplex(Arrays.asList(new AnObject(), new AnObject()));
-            context.beneath("primitives").eachPrimitive(Arrays.asList("1", 1, true));
-            context.startContainer("a").startContainer("b").writeNameValue("name", "value");
+            serializer.eachComplex("objects", Arrays.asList(new Stuff(), new Stuff()));
+            serializer.eachPrimitive("primitives", Arrays.asList("1", 1, true));
+            serializer.startContainer("a");
+            {
+                serializer.startContainer("b");
+                {
+                    serializer.writeNameValue("name", "value");
+                }
+                serializer.endContainer();
+            }
+            serializer.endContainer();
         }
-        json.finish();
+        serializer.endContainer();
+        serializer.finish();
+        serializer.printTo(System.err);
     }
 
     private Serializer configure() throws Exception
     {
         final AdapterMapper mapper = new DefaultAdapterMapper();
-        return new JacksonJsonSerializer(new StringWriter(), mapper);
+        final JacksonJsonSerializer json = new JacksonJsonSerializer(new NewlineAtEndWriter(), mapper);
+        final WoodstoxXmlSerializer xml = new WoodstoxXmlSerializer(new NewlineAtEndWriter(), mapper);
+        return CompositeSerializer.wrap(json, xml);
     }
 
-    final class AnObject implements SerializationCapable
+    @Test
+    public void mapDemo() throws Exception
+    {
+        final Map<String, Object> m = new HashMap<String, Object>();
+        m.put("a", 1);
+        m.put("x", false);
+        final Serializer serializer = configure();
+        serializer.start().eachComplex("entry", m.entrySet()).finish();
+        serializer.printTo(System.err);
+    }
+
+    final class Stuff implements SerializationCapable
     {
         @Override
-        public void write(final RootContext context) throws IOException
+        public void write(final Serializer context) throws IOException
         {
             context.writeNameValue(getClass().getSimpleName(), "hello");
+        }
+    }
+
+    static final class NewlineAtEndWriter extends StringWriter
+    {
+        @Override
+        public String toString()
+        {
+            return super.toString() + '\n';
         }
     }
 }

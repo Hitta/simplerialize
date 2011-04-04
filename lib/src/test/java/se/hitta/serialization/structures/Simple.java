@@ -3,18 +3,17 @@ package se.hitta.serialization.structures;
 import java.io.IOException;
 
 import se.hitta.serialization.AbstractSerializationTest;
-import se.hitta.serialization.context.ContainerContext;
-import se.hitta.serialization.context.RootContext;
+import se.hitta.serialization.Serializer;
 
 public final class Simple extends AbstractSerializationTest
 {
     @Override
-    public void write(final RootContext serializer) throws IOException
+    public void write(final Serializer serializer) throws IOException
     {
-        final ContainerContext root = serializer.startContainer(getClass().getSimpleName());
-        final ContainerContext element = serializer.startContainer("element");
-        element.writeNameValue("with", "attribute");
-        element.endContainer();
-        root.endContainer();
+        serializer.startContainer(getClass().getSimpleName());
+        serializer.startContainer("element");
+        serializer.writeNameValue("with", "attribute");
+        serializer.endContainer();
+        serializer.endContainer();
     }
 }

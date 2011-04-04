@@ -16,7 +16,6 @@ import org.junit.Test;
 import org.xml.sax.SAXException;
 
 import se.hitta.serialization.adapters.DefaultAdapterMapper;
-import se.hitta.serialization.context.RootContext;
 import se.hitta.serialization.implementations.JacksonJsonSerializer;
 import se.hitta.serialization.implementations.WoodstoxXmlSerializer;
 
@@ -29,8 +28,8 @@ public abstract class AbstractSerializationTest implements SerializationCapable
         final AdapterMapper mapper = createMapper();
         final Serializer serializer = new WoodstoxXmlSerializer(actual, mapper);
         final SerializationAdapter<AbstractSerializationTest> adapter = mapper.resolveAdapter(AbstractSerializationTest.class);
-        final RootContext context = serializer.start();
-        adapter.write(this, context);
+        serializer.start();
+        adapter.write(this, serializer);
         serializer.finish();
         XMLUnit.setIgnoreWhitespace(true);
         assertXmlEquals(readExpectedXml(), actual.toString());
@@ -43,8 +42,8 @@ public abstract class AbstractSerializationTest implements SerializationCapable
         final AdapterMapper mapper = createMapper();
         final Serializer serializer = new JacksonJsonSerializer(actual, mapper);
         SerializationAdapter<AbstractSerializationTest> adapter = mapper.resolveAdapter(AbstractSerializationTest.class);
-        RootContext context = serializer.start();
-        adapter.write(this, context);
+        serializer.start();
+        adapter.write(this, serializer);
         serializer.finish();
         assertJsonEquals(readExpectedJson(), actual.toString());
     }

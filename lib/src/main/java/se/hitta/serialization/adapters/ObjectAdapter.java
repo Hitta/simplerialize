@@ -18,12 +18,22 @@ package se.hitta.serialization.adapters;
 import java.io.IOException;
 
 import se.hitta.serialization.SerializationAdapter;
-import se.hitta.serialization.context.RootContext;
+import se.hitta.serialization.Serializer;
 
-final class ObjectAdapter implements SerializationAdapter<Object>
+/**
+ * The last resort {@link SerializationAdapter} when all else fails. Writes the
+ * supplied {@link Object} with {@link Serializer#writeObject(Object)}. This
+ * adapter is used internally within this library but should not be used by
+ * clients of the library, hence it's {@link Deprecated}.
+ */
+public final class ObjectAdapter implements SerializationAdapter<Object>
 {
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.SerializationAdapter#write(java.lang.Object, se.hitta.serialization.Serializer)
+     */
     @Override
-    public void write(final Object target, final RootContext serializer) throws IOException
+    public void write(final Object target, final Serializer serializer) throws IOException
     {
         if(target != null)
         {

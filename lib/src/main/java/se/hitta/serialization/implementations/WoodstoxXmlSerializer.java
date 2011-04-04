@@ -16,6 +16,8 @@
 package se.hitta.serialization.implementations;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.Iterator;
 
@@ -24,17 +26,22 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import se.hitta.serialization.AdapterMapper;
-import se.hitta.serialization.context.CollectionContext;
-import se.hitta.serialization.context.ContainerContext;
-import se.hitta.serialization.context.RootContext;
+import se.hitta.serialization.Serializer;
 
 import com.ctc.wstx.api.WstxOutputProperties;
 import com.natpryce.maybe.Maybe;
 
+/**
+ *
+ */
 public final class WoodstoxXmlSerializer extends AbstractSerializer
 {
+    /*
+     * Had only XMLStreamException been a subclass of IOException...
+     */
+
     private final static XMLOutputFactory factory;
-    final XMLStreamWriter generator;
+    private final XMLStreamWriter generator;
 
     static
     {
@@ -42,6 +49,23 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
         factory.setProperty(WstxOutputProperties.P_OUTPUT_ESCAPE_CR, true);
     }
 
+    /**
+     * 
+     * @param stream
+     * @param mapper
+     * @throws IOException
+     */
+    public WoodstoxXmlSerializer(final OutputStream stream, final AdapterMapper mapper) throws IOException
+    {
+        this(new OutputStreamWriter(stream), mapper);
+    }
+
+    /**
+     * 
+     * @param writer
+     * @param mapper
+     * @throws IOException
+     */
     public WoodstoxXmlSerializer(final Writer writer, final AdapterMapper mapper) throws IOException
     {
         super(writer, mapper);
@@ -55,8 +79,12 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
         }
     }
 
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#start()
+     */
     @Override
-    public RootContext start() throws IOException
+    public Serializer start() throws IOException
     {
         try
         {
@@ -66,10 +94,13 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
         {
             throw new IOException(e.getMessage(), e);
         }
-
         return this;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#finish()
+     */
     @Override
     public void finish() throws IOException
     {
@@ -82,11 +113,14 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
         {
             throw new IOException(e.getMessage(), e);
         }
-
     }
 
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#startContainer(java.lang.String)
+     */
     @Override
-    public ContainerContext startContainer(final String name) throws IOException
+    public Serializer startContainer(final String name) throws IOException
     {
         try
         {
@@ -99,8 +133,12 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
         return this;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#endContainer()
+     */
     @Override
-    public RootContext endContainer() throws IOException
+    public Serializer endContainer() throws IOException
     {
         try
         {
@@ -113,91 +151,86 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
         return this;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#eachPrimitive(java.lang.String, java.lang.Iterable)
+     */
     @Override
-    public CollectionContext beneath(final String container) throws IOException
+    public Serializer eachPrimitive(final String container, final Iterable<?> elements) throws IOException
     {
-        return new CollectionContext()
-        {
-            private boolean initialize = true;
-
-            void init() throws IOException
-            {
-                if(this.initialize)
-                {
-                    try
-                    {
-                        WoodstoxXmlSerializer.this.generator.writeStartElement(container);
-                    }
-                    catch(final XMLStreamException e)
-                    {
-                        throw new IOException(e.getMessage(), e);
-                    }
-                    this.initialize = false;
-                }
-            }
-
-            @Override
-            public RootContext eachPrimitive(final Iterable<?> elements) throws IOException
-            {
-                return eachPrimitives(elements.iterator());
-            }
-
-            @Override
-            public RootContext eachPrimitives(final Iterator<?> elements) throws IOException
-            {
-                if(elements.hasNext())
-                {
-                    init();
-                    try
-                    {
-                        while(elements.hasNext())
-                        {
-                            WoodstoxXmlSerializer.this.generator.writeStartElement("value");
-                            writeWithAdapter(elements.next());
-                            WoodstoxXmlSerializer.this.generator.writeEndElement();
-                        }
-                        WoodstoxXmlSerializer.this.generator.writeEndElement();
-                    }
-                    catch(final XMLStreamException e)
-                    {
-                        throw new IOException(e.getMessage(), e);
-                    }
-                }
-                return WoodstoxXmlSerializer.this;
-            }
-
-            @Override
-            public RootContext eachComplex(final Iterable<?> elements) throws IOException
-            {
-                return eachComplex(elements.iterator());
-            }
-
-            @Override
-            public RootContext eachComplex(final Iterator<?> elements) throws IOException
-            {
-                if(elements.hasNext())
-                {
-                    init();
-                    while(elements.hasNext())
-                    {
-                        writeWithAdapter(elements.next());
-                    }
-                    try
-                    {
-                        WoodstoxXmlSerializer.this.generator.writeEndElement();
-                    }
-                    catch(final XMLStreamException e)
-                    {
-                        throw new IOException(e.getMessage(), e);
-                    }
-                }
-                return WoodstoxXmlSerializer.this;
-            }
-        };
+        return eachPrimitives(container, elements.iterator());
     }
 
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#eachPrimitives(java.lang.String, java.util.Iterator)
+     */
     @Override
-    public RootContext writeObject(final Object target) throws IOException
+    public Serializer eachPrimitives(final String container, final Iterator<?> elements) throws IOException
+    {
+        if(elements.hasNext())
+        {
+            try
+            {
+                this.generator.writeStartElement(container);
+                while(elements.hasNext())
+                {
+                    this.generator.writeStartElement("value");
+                    writeWithAdapter(elements.next());
+                    this.generator.writeEndElement();
+                }
+                this.generator.writeEndElement();
+            }
+            catch(final XMLStreamException e)
+            {
+                throw new IOException(e.getMessage(), e);
+            }
+        }
+        return this;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#eachComplex(java.lang.String, java.lang.Iterable)
+     */
+    @Override
+    public Serializer eachComplex(final String container, final Iterable<?> elements) throws IOException
+    {
+        return eachComplex(container, elements.iterator());
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#eachComplex(java.lang.String, java.util.Iterator)
+     */
+    @Override
+    public Serializer eachComplex(final String container, final Iterator<?> elements) throws IOException
+    {
+        if(elements.hasNext())
+        {
+            try
+            {
+                this.generator.writeStartElement(container);
+                while(elements.hasNext())
+                {
+                    writeWithAdapter(elements.next());
+                }
+                this.generator.writeEndElement();
+            }
+            catch(final XMLStreamException e)
+            {
+                throw new IOException(e.getMessage(), e);
+            }
+        }
+        return this;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#writeObject(java.lang.Object)
+     */
+    @Override
+    public Serializer writeObject(final Object target) throws IOException
     {
         try
         {
@@ -210,55 +243,87 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
         return this;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#writeNameValue(java.lang.String, java.lang.CharSequence)
+     */
     @Override
-    public ContainerContext writeNameValue(final String name, final CharSequence value) throws IOException
+    public Serializer writeNameValue(final String name, final CharSequence value) throws IOException
     {
         return writeAttribute(name, value);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#writeNameValue(java.lang.String, java.lang.Boolean)
+     */
     @Override
-    public ContainerContext writeNameValue(final String name, final Boolean value) throws IOException
+    public Serializer writeNameValue(final String name, final Boolean value) throws IOException
     {
         return writeAttribute(name, value);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#writeNameValue(java.lang.String, java.lang.Short)
+     */
     @Override
-    public ContainerContext writeNameValue(final String name, final Short value) throws IOException
+    public Serializer writeNameValue(final String name, final Short value) throws IOException
     {
         return writeAttribute(name, value);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#writeNameValue(java.lang.String, java.lang.Integer)
+     */
     @Override
-    public ContainerContext writeNameValue(final String name, final Integer value) throws IOException
+    public Serializer writeNameValue(final String name, final Integer value) throws IOException
     {
         return writeAttribute(name, value);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#writeNameValue(java.lang.String, java.lang.Long)
+     */
     @Override
-    public ContainerContext writeNameValue(final String name, final Long value) throws IOException
+    public Serializer writeNameValue(final String name, final Long value) throws IOException
     {
         return writeAttribute(name, value);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#writeNameValue(java.lang.String, java.lang.Float)
+     */
     @Override
-    public ContainerContext writeNameValue(final String name, final Float value) throws IOException
+    public Serializer writeNameValue(final String name, final Float value) throws IOException
     {
         return writeAttribute(name, value);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#writeNameValue(java.lang.String, java.lang.Double)
+     */
     @Override
-    public ContainerContext writeNameValue(final String name, final Double value) throws IOException
+    public Serializer writeNameValue(final String name, final Double value) throws IOException
     {
         return writeAttribute(name, value);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.Serializer#writeNameValue(java.lang.String, com.natpryce.maybe.Maybe)
+     */
     @Override
-    public ContainerContext writeNameValue(final String name, final Maybe<?> value) throws IOException
+    public Serializer writeNameValue(final String name, final Maybe<?> value) throws IOException
     {
         return writeAttribute(name, value);
     }
 
-    public ContainerContext writeAttribute(final String name, final Maybe<?> value) throws IOException
+    private Serializer writeAttribute(final String name, final Maybe<?> value) throws IOException
     {
         if(value.isKnown())
         {
@@ -267,7 +332,7 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
         return this;
     }
 
-    public ContainerContext writeAttribute(final String name, final Object value) throws IOException
+    private Serializer writeAttribute(final String name, final Object value) throws IOException
     {
         if(value != null)
         {

@@ -19,12 +19,17 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import se.hitta.serialization.SerializationAdapter;
-import se.hitta.serialization.context.RootContext;
+import se.hitta.serialization.Serializer;
 
+/**
+ * {@link SerializationAdapter} that writes the supplied {@link Iterator} by
+ * iterating over it and delegating the serialization of the individual elements
+ * to {@link Serializer#writeWithAdapter(Object)}
+ */
 final class IteratorAdapter implements SerializationAdapter<Iterator<?>>
 {
     @Override
-    public void write(final Iterator<?> target, final RootContext serializer) throws IOException
+    public void write(final Iterator<?> target, final Serializer serializer) throws IOException
     {
         while(target.hasNext())
         {

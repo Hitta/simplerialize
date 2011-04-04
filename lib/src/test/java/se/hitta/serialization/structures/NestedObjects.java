@@ -5,17 +5,16 @@ import java.util.Arrays;
 
 import se.hitta.serialization.AbstractSerializationTest;
 import se.hitta.serialization.SerializationCapable;
-import se.hitta.serialization.context.ContainerContext;
-import se.hitta.serialization.context.RootContext;
+import se.hitta.serialization.Serializer;
 
 public final class NestedObjects extends AbstractSerializationTest
 {
     @Override
-    public void write(final RootContext serializer) throws IOException
+    public void write(final Serializer serializer) throws IOException
     {
-        final ContainerContext container = serializer.startContainer("container");
+        serializer.startContainer("container");
         serializer.writeWithAdapter(new First());
-        container.endContainer();
+        serializer.endContainer();
     }
 
     static final class First implements SerializationCapable
@@ -23,22 +22,22 @@ public final class NestedObjects extends AbstractSerializationTest
         private final Second second = new Second();
 
         @Override
-        public void write(final RootContext serializer) throws IOException
+        public void write(final Serializer serializer) throws IOException
         {
-            final ContainerContext container = serializer.startContainer("first");
+            serializer.startContainer("first");
             serializer.writeWithAdapter(this.second);
-            container.endContainer();
+            serializer.endContainer();
         }
     }
 
     static final class Second implements SerializationCapable
     {
         @Override
-        public void write(final RootContext serializer) throws IOException
+        public void write(final Serializer serializer) throws IOException
         {
-            final ContainerContext container = serializer.startContainer("second");
-            serializer.beneath("third").eachComplex(Arrays.asList(new Third(), new Third()));
-            container.endContainer();
+            serializer.startContainer("second");
+            serializer.eachComplex("third", Arrays.asList(new Third(), new Third()));
+            serializer.endContainer();
         }
     }
 
@@ -47,7 +46,7 @@ public final class NestedObjects extends AbstractSerializationTest
         private static int i = 0;
 
         @Override
-        public void write(final RootContext serializer) throws IOException
+        public void write(final Serializer serializer) throws IOException
         {
             serializer.writeNameValue("item" + (i++), "value");
         }

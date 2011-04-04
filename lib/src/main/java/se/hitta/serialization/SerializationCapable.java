@@ -18,7 +18,6 @@ package se.hitta.serialization;
 import java.io.IOException;
 
 import se.hitta.serialization.adapters.DefaultAdapterMapper;
-import se.hitta.serialization.context.RootContext;
 
 /**
  * Interface for classes that wish to be their own {@link SerializationAdapter}. When the {@link DefaultAdapterMapper} encounters
@@ -28,10 +27,10 @@ import se.hitta.serialization.context.RootContext;
 public interface SerializationCapable
 {
     /**
-     * Write thyself using the provided {@link RootContext}.
+     * Write thyself using the provided {@link Serializer}.
      * 
      * @param serializer
      * @throws Exception
      */
-    public void write(RootContext context) throws IOException;
+    public void write(Serializer serializer) throws IOException;
 }

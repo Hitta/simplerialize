@@ -18,12 +18,23 @@ package se.hitta.serialization.adapters;
 import java.io.IOException;
 
 import se.hitta.serialization.SerializationAdapter;
-import se.hitta.serialization.context.RootContext;
+import se.hitta.serialization.Serializer;
 
-final class IterableAdapter implements SerializationAdapter<Iterable<?>>
+/**
+ * {@link SerializationAdapter} that writes the supplied {@link Iterable} by
+ * invoking {@link Serializer#writeWithAdapter(Object)} on
+ * {@link Iterable#iterator()}. Thus in the "vanilla setup" when using
+ * {@link DefaultAdapterMapper} this will effectively delegate the actual
+ * serialization to {@link IteratorAdapter}
+ */
+public final class IterableAdapter implements SerializationAdapter<Iterable<?>>
 {
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.serialization.SerializationAdapter#write(java.lang.Object, se.hitta.serialization.Serializer)
+     */
     @Override
-    public void write(final Iterable<?> target, final RootContext serializer) throws IOException
+    public void write(final Iterable<?> target, final Serializer serializer) throws IOException
     {
         serializer.writeWithAdapter(target.iterator());
     }
