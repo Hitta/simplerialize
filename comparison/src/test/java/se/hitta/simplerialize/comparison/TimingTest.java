@@ -9,6 +9,7 @@ import se.hitta.simplerialize.comparison.jaxb.JaxbTest;
 import se.hitta.simplerialize.comparison.serialization.SerializeWithEmbeddedAdapterTest;
 import se.hitta.simplerialize.comparison.serialization.SerializeWithStandaloneAdapterTest;
 import se.hitta.simplerialize.comparison.simple.SimpleTest;
+import se.hitta.simplerialize.comparison.xstream.XStreamTest;
 
 /**
  * Time serialization to a no-op {@link Writer}
@@ -25,6 +26,7 @@ public class TimingTest
         report(new XmlDelegate(new SerializeWithEmbeddedAdapterTest()));
         report(new XmlDelegate(new SerializeWithStandaloneAdapterTest()));
         report(new XmlDelegate(new SimpleTest()));
+        report(new XmlDelegate(new XStreamTest()));
         System.err.println("= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =");
     }
 
@@ -36,6 +38,7 @@ public class TimingTest
         report(new JsonDelegate(new JaxbTest()));
         report(new JsonDelegate(new SerializeWithEmbeddedAdapterTest()));
         report(new JsonDelegate(new SerializeWithStandaloneAdapterTest()));
+        report(new JsonDelegate(new XStreamTest()));
         System.err.println("= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =");
     }
 

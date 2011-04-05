@@ -9,6 +9,7 @@ import se.hitta.simplerialize.comparison.jaxb.JaxbTest;
 import se.hitta.simplerialize.comparison.serialization.SerializeWithEmbeddedAdapterTest;
 import se.hitta.simplerialize.comparison.serialization.SerializeWithStandaloneAdapterTest;
 import se.hitta.simplerialize.comparison.simple.SimpleTest;
+import se.hitta.simplerialize.comparison.xstream.XStreamTest;
 
 /**
  * Performs serialization to a {@link Writer} that only counts the amount of bytes written.
@@ -24,6 +25,7 @@ public class SizeTest
         measure(new Delegate(new SerializeWithEmbeddedAdapterTest()));
         measure(new Delegate(new SerializeWithStandaloneAdapterTest()));
         measure(new Delegate(new SimpleTest()));
+        measure(new Delegate(new XStreamTest()));
         System.err.println("= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =");
     }
 
