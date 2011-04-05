@@ -53,6 +53,14 @@
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.natpryce.maybe</groupId>
+            <artifactId>com.natpryce.maybe</artifactId>
+            <version>1.0.1</version>
+            <type>jar</type>
+            <scope>system</scope>
+            <systemPath>${basedir}/../dependencies/com.natpryce.maybe-1.0.1.jar</systemPath>
+        </dependency>
         <!-- TEST -->
         <dependency>
             <groupId>junit</groupId>
@@ -92,14 +100,6 @@
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
-                </configuration>
-            </plugin>
-          <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.3.1</version>
-                <configuration>
-                    <finalName>${project.groupId}-${project.artifactId}-${project.version}</finalName>
                 </configuration>
             </plugin>
             <plugin>
