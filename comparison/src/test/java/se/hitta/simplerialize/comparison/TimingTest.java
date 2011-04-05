@@ -1,8 +1,8 @@
 package se.hitta.simplerialize.comparison;
 
 import java.io.Writer;
+import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.lang.time.StopWatch;
 import org.junit.Test;
 
 import se.hitta.simplerialize.comparison.jaxb.JaxbTest;
@@ -44,11 +44,10 @@ public class TimingTest
         // Warm up with one third of the to be timed iterations
         iterate(iterations / 3, delegate);
         // Perform and report
-        final StopWatch timer = new StopWatch();
-        timer.start();
+        final long start = System.nanoTime();
         iterate(iterations, delegate);
-        timer.stop();
-        System.err.println(timer.getTime() + "ms\t" + delegate);
+        final long stop = System.nanoTime();
+        System.err.println(TimeUnit.NANOSECONDS.toMillis(stop - start) + "ms\t" + delegate);
     }
 
     public void iterate(final int iterations, final Delegate d) throws Exception
