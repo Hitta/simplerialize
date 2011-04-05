@@ -25,8 +25,6 @@ import se.hitta.simplerialize.adapters.NullAdapter;
  */
 public interface AdapterMapper
 {
-
-    /**
     /**
      * Register a given {@link SerializationAdapter} as the adapter to use for
      * the provided type(es)
