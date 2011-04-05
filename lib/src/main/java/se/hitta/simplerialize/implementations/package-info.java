@@ -1,5 +1,5 @@
 /**
- * This package contains concrete {@link se.hitta.serialization.Serializer} implementations that either produce JSON or XML.
+ * This package contains concrete {@link se.hitta.simplerialize.Serializer} implementations that either produce JSON or XML.
  * <br/>
  * <pre>
  * Copyright 2011 Hittapunktse AB (http://www.hitta.se/)

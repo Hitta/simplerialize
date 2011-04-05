@@ -36,7 +36,7 @@ abstract class AbstractSerializer implements Serializer
 
     /*
      * (non-Javadoc)
-     * @see se.hitta.serialization.Serializer#writeWithAdapter(com.natpryce.maybe.Maybe)
+     * @see se.hitta.simplerialize.Serializer#writeWithAdapter(com.natpryce.maybe.Maybe)
      */
     @Override
     public final Serializer writeWithAdapter(final Maybe<?> target) throws IOException
@@ -50,7 +50,7 @@ abstract class AbstractSerializer implements Serializer
 
     /*
      * (non-Javadoc)
-     * @see se.hitta.serialization.Serializer#writeWithAdapter(java.lang.Object)
+     * @see se.hitta.simplerialize.Serializer#writeWithAdapter(java.lang.Object)
      */
     @Override
     @SuppressWarnings("unchecked")
@@ -62,7 +62,7 @@ abstract class AbstractSerializer implements Serializer
 
     /*
      * (non-Javadoc)
-     * @see se.hitta.serialization.Serializer#writeWithAdapter(java.lang.Class, java.lang.Object)
+     * @see se.hitta.simplerialize.Serializer#writeWithAdapter(java.lang.Class, java.lang.Object)
      */
     @Override
     public final <T> Serializer writeWithAdapter(final Class<T> adapterClass, final T target) throws IOException
@@ -73,7 +73,7 @@ abstract class AbstractSerializer implements Serializer
 
     /*
      * (non-Javadoc)
-     * @see se.hitta.serialization.Serializer#printTo(java.lang.Appendable)
+     * @see se.hitta.simplerialize.Serializer#printTo(java.lang.Appendable)
      */
     @Override
     public final void printTo(final Appendable target) throws IOException

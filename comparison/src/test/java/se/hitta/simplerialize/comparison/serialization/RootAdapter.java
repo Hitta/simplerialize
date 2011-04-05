@@ -2,8 +2,8 @@ package se.hitta.simplerialize.comparison.serialization;
 
 import java.io.IOException;
 
-import se.hitta.serialization.SerializationAdapter;
-import se.hitta.serialization.Serializer;
+import se.hitta.simplerialize.SerializationAdapter;
+import se.hitta.simplerialize.Serializer;
 
 public final class RootAdapter implements SerializationAdapter<SampleObject>
 {

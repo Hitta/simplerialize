@@ -4,11 +4,11 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
-import se.hitta.serialization.AdapterMapper;
-import se.hitta.serialization.Serializer;
-import se.hitta.serialization.implementations.JacksonJsonSerializer;
-import se.hitta.serialization.implementations.WoodstoxXmlSerializer;
+import se.hitta.simplerialize.AdapterMapper;
+import se.hitta.simplerialize.Serializer;
 import se.hitta.simplerialize.comparison.AbstractTest;
+import se.hitta.simplerialize.implementations.JacksonJsonSerializer;
+import se.hitta.simplerialize.implementations.WoodstoxXmlSerializer;
 
 public abstract class AbstractSerializationTest extends AbstractTest
 {
@@ -27,15 +27,13 @@ public abstract class AbstractSerializationTest extends AbstractTest
     public void serializeXmlTo(final Writer writer) throws Exception
     {
         final Serializer serializer = new WoodstoxXmlSerializer(writer, getMapper());
-        serializer.start().writeWithAdapter(createRoot());
-        serializer.finish();
+        serializer.start().writeWithAdapter(createRoot()).close();
     }
 
     @Override
     public void serializeJsonTo(final Writer writer) throws Exception
     {
         final Serializer serializer = new JacksonJsonSerializer(writer, getMapper());
-        serializer.start().writeWithAdapter(createRoot());
-        serializer.finish();
+        serializer.start().writeWithAdapter(createRoot()).close();
     }
 }

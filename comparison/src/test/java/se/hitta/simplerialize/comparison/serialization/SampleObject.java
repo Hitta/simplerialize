@@ -3,8 +3,8 @@ package se.hitta.simplerialize.comparison.serialization;
 import java.io.IOException;
 import java.util.Map;
 
-import se.hitta.serialization.SerializationCapable;
-import se.hitta.serialization.Serializer;
+import se.hitta.simplerialize.SerializationCapable;
+import se.hitta.simplerialize.Serializer;
 
 public final class SampleObject implements SerializationCapable
 {

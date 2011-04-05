@@ -62,7 +62,7 @@ public final class JacksonJsonSerializer extends AbstractSerializer
 
     /*
      * (non-Javadoc)
-     * @see se.hitta.serialization.Serializer#start()
+     * @see se.hitta.simplerialize.Serializer#start()
      */
     @Override
     public Serializer start() throws IOException
@@ -93,7 +93,7 @@ public final class JacksonJsonSerializer extends AbstractSerializer
 
     /*
      * (non-Javadoc)
-     * @see se.hitta.serialization.Serializer#startContainer(java.lang.String)
+     * @see se.hitta.simplerialize.Serializer#startContainer(java.lang.String)
      */
     @Override
     public Serializer startContainer(final String name) throws IOException
@@ -104,7 +104,7 @@ public final class JacksonJsonSerializer extends AbstractSerializer
 
     /*
      * (non-Javadoc)
-     * @see se.hitta.serialization.Serializer#endContainer()
+     * @see se.hitta.simplerialize.Serializer#endContainer()
      */
     @Override
     public Serializer endContainer() throws IOException
@@ -115,7 +115,7 @@ public final class JacksonJsonSerializer extends AbstractSerializer
 
     /*
      * (non-Javadoc)
-     * @see se.hitta.serialization.Serializer#eachComplex(java.lang.String, java.lang.Iterable)
+     * @see se.hitta.simplerialize.Serializer#eachComplex(java.lang.String, java.lang.Iterable)
      */
     @Override
     public Serializer eachComplex(final String container, final Iterable<?> elements) throws IOException
@@ -125,7 +125,7 @@ public final class JacksonJsonSerializer extends AbstractSerializer
 
     /*
      * (non-Javadoc)
-     * @see se.hitta.serialization.Serializer#eachComplex(java.lang.String, java.util.Iterator)
+     * @see se.hitta.simplerialize.Serializer#eachComplex(java.lang.String, java.util.Iterator)
      */
     @Override
     public Serializer eachComplex(final String container, final Iterator<?> elements) throws IOException
@@ -146,7 +146,7 @@ public final class JacksonJsonSerializer extends AbstractSerializer
 
     /*
      * (non-Javadoc)
-     * @see se.hitta.serialization.Serializer#eachPrimitive(java.lang.String, java.lang.Iterable)
+     * @see se.hitta.simplerialize.Serializer#eachPrimitive(java.lang.String, java.lang.Iterable)
      */
     @Override
     public Serializer eachPrimitive(final String container, final Iterable<?> elements) throws IOException
@@ -156,7 +156,7 @@ public final class JacksonJsonSerializer extends AbstractSerializer
 
     /*
      * (non-Javadoc)
-     * @see se.hitta.serialization.Serializer#eachPrimitives(java.lang.String, java.util.Iterator)
+     * @see se.hitta.simplerialize.Serializer#eachPrimitives(java.lang.String, java.util.Iterator)
      */
     @Override
     public Serializer eachPrimitives(final String container, final Iterator<?> elements) throws IOException
@@ -175,7 +175,7 @@ public final class JacksonJsonSerializer extends AbstractSerializer
 
     /*
      * (non-Javadoc)
-     * @see se.hitta.serialization.Serializer#writeObject(java.lang.Object)
+     * @see se.hitta.simplerialize.Serializer#writeObject(java.lang.Object)
      */
     @Override
     public Serializer writeObject(final Object target) throws IOException
@@ -186,7 +186,7 @@ public final class JacksonJsonSerializer extends AbstractSerializer
 
     /*
      * (non-Javadoc)
-     * @see se.hitta.serialization.Serializer#writeNameValue(java.lang.String, java.lang.Boolean)
+     * @see se.hitta.simplerialize.Serializer#writeNameValue(java.lang.String, java.lang.Boolean)
      */
     @Override
     public Serializer writeNameValue(final String name, final Boolean value) throws IOException
@@ -197,7 +197,7 @@ public final class JacksonJsonSerializer extends AbstractSerializer
 
     /*
      * (non-Javadoc)
-     * @see se.hitta.serialization.Serializer#writeNameValue(java.lang.String, java.lang.CharSequence)
+     * @see se.hitta.simplerialize.Serializer#writeNameValue(java.lang.String, java.lang.CharSequence)
      */
     @Override
     public Serializer writeNameValue(final String name, final CharSequence value) throws IOException
@@ -208,7 +208,7 @@ public final class JacksonJsonSerializer extends AbstractSerializer
 
     /*
      * (non-Javadoc)
-     * @see se.hitta.serialization.Serializer#writeNameValue(java.lang.String, java.lang.Long)
+     * @see se.hitta.simplerialize.Serializer#writeNameValue(java.lang.String, java.lang.Long)
      */
     @Override
     public Serializer writeNameValue(final String name, final Long value) throws IOException
@@ -219,7 +219,7 @@ public final class JacksonJsonSerializer extends AbstractSerializer
 
     /*
      * (non-Javadoc)
-     * @see se.hitta.serialization.Serializer#writeNameValue(java.lang.String, java.lang.Double)
+     * @see se.hitta.simplerialize.Serializer#writeNameValue(java.lang.String, java.lang.Double)
      */
     @Override
     public Serializer writeNameValue(final String name, final Double value) throws IOException
@@ -230,7 +230,7 @@ public final class JacksonJsonSerializer extends AbstractSerializer
 
     /*
      * (non-Javadoc)
-     * @see se.hitta.serialization.Serializer#writeNameValue(java.lang.String, java.lang.Short)
+     * @see se.hitta.simplerialize.Serializer#writeNameValue(java.lang.String, java.lang.Short)
      */
     @Override
     public Serializer writeNameValue(final String name, final Short value) throws IOException
@@ -241,7 +241,7 @@ public final class JacksonJsonSerializer extends AbstractSerializer
 
     /*
      * (non-Javadoc)
-     * @see se.hitta.serialization.Serializer#writeNameValue(java.lang.String, java.lang.Integer)
+     * @see se.hitta.simplerialize.Serializer#writeNameValue(java.lang.String, java.lang.Integer)
      */
     @Override
     public Serializer writeNameValue(final String name, final Integer value) throws IOException
@@ -252,7 +252,7 @@ public final class JacksonJsonSerializer extends AbstractSerializer
 
     /*
      * (non-Javadoc)
-     * @see se.hitta.serialization.Serializer#writeNameValue(java.lang.String, java.lang.Float)
+     * @see se.hitta.simplerialize.Serializer#writeNameValue(java.lang.String, java.lang.Float)
      */
     @Override
     public Serializer writeNameValue(final String name, final Float value) throws IOException
@@ -263,7 +263,7 @@ public final class JacksonJsonSerializer extends AbstractSerializer
 
     /*
      * (non-Javadoc)
-     * @see se.hitta.serialization.Serializer#writeNameValue(java.lang.String, com.natpryce.maybe.Maybe)
+     * @see se.hitta.simplerialize.Serializer#writeNameValue(java.lang.String, com.natpryce.maybe.Maybe)
      */
     @Override
     public Serializer writeNameValue(final String name, final Maybe<?> value) throws IOException

@@ -36,7 +36,7 @@ public final class NullAdapter implements SerializationAdapter<Object>
 
     /*
      * (non-Javadoc)
-     * @see se.hitta.serialization.SerializationAdapter#write(java.lang.Object, se.hitta.serialization.Serializer)
+     * @see se.hitta.simplerialize.SerializationAdapter#write(java.lang.Object, se.hitta.simplerialize.Serializer)
      */
     @Override
     public void write(final Object target, final Serializer serializer) throws IOException

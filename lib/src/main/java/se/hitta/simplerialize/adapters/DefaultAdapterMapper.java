@@ -84,7 +84,7 @@ public final class DefaultAdapterMapper implements AdapterMapper
 
     /*
      * (non-Javadoc)
-     * @see se.hitta.serialization.adapter.AdapterMapper#register(se.hitta.serialization.adapter.SerializationAdapter, java.lang.Class<?>[])
+     * @see se.hitta.simplerialize.adapter.AdapterMapper#register(se.hitta.simplerialize.adapter.SerializationAdapter, java.lang.Class<?>[])
      */
     @Override
     public AdapterMapper register(final SerializationAdapter<?> adapter, final Class<?>... classes)
@@ -98,7 +98,7 @@ public final class DefaultAdapterMapper implements AdapterMapper
 
     /*
      * (non-Javadoc)
-     * @see se.hitta.serialization.AdapterMapper#skip(java.lang.Class)
+     * @see se.hitta.simplerialize.AdapterMapper#skip(java.lang.Class)
      */
     @Override
     public <T> AdapterMapper skip(final Class<T> clazz)
@@ -108,7 +108,7 @@ public final class DefaultAdapterMapper implements AdapterMapper
 
     /*
      * (non-Javadoc)
-     * @see se.hitta.serialization.adapter.AdapterMapper#resolveAdapter(java.lang.Class)
+     * @see se.hitta.simplerialize.adapter.AdapterMapper#resolveAdapter(java.lang.Class)
      */
     @Override
     public <T> SerializationAdapter<T> resolveAdapter(final Class<T> clazz)

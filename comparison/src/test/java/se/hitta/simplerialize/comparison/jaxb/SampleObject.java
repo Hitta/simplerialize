@@ -7,8 +7,8 @@ import java.util.Map;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import se.hitta.serialization.SerializationCapable;
-import se.hitta.serialization.Serializer;
+import se.hitta.simplerialize.SerializationCapable;
+import se.hitta.simplerialize.Serializer;
 
 @XmlRootElement(name = "root")
 public final class SampleObject implements SerializationCapable

@@ -19,10 +19,10 @@
  * </pre>
  * The root abstractions in this library are:<br/>
  * 
- * @see se.hitta.serialization.Serializer
- * @see se.hitta.serialization.AdapterMapper
- * @see se.hitta.serialization.SerializationAdapter
- * @see se.hitta.serialization.SerializationCapable
+ * @see se.hitta.simplerialize.Serializer
+ * @see se.hitta.simplerialize.AdapterMapper
+ * @see se.hitta.simplerialize.SerializationAdapter
+ * @see se.hitta.simplerialize.SerializationCapable
  * @see se.hitta.simplerialize.implementations
  * @see se.hitta.simplerialize.implementations.JacksonJsonSerializer
  * @see se.hitta.simplerialize.implementations.WoodstoxXmlSerializer

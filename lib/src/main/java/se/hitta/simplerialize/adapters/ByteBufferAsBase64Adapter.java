@@ -32,7 +32,7 @@ public final class ByteBufferAsBase64Adapter implements SerializationAdapter<Byt
 
     /*
      * (non-Javadoc)
-     * @see se.hitta.serialization.SerializationAdapter#write(java.lang.Object, se.hitta.serialization.Serializer)
+     * @see se.hitta.simplerialize.SerializationAdapter#write(java.lang.Object, se.hitta.simplerialize.Serializer)
      */
     @SuppressWarnings("deprecation")
     @Override
