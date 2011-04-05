@@ -2,6 +2,7 @@ package se.hitta.simplerialize.comparison.simplerialize;
 
 import se.hitta.simplerialize.AdapterMapper;
 import se.hitta.simplerialize.adapters.DefaultAdapterMapper;
+import se.hitta.simplerialize.comparison.SampleObject;
 
 public final class SerializeWithStandaloneAdapterTest extends AbstractSerializationTest
 {

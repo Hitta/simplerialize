@@ -7,6 +7,7 @@ import java.util.Map;
 import se.hitta.simplerialize.AdapterMapper;
 import se.hitta.simplerialize.Serializer;
 import se.hitta.simplerialize.comparison.AbstractTest;
+import se.hitta.simplerialize.comparison.SampleObject;
 import se.hitta.simplerialize.implementations.JacksonJsonSerializer;
 import se.hitta.simplerialize.implementations.WoodstoxXmlSerializer;
 

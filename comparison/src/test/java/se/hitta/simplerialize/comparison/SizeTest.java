@@ -16,7 +16,6 @@ import se.hitta.simplerialize.comparison.xstream.XStreamTest;
  */
 public class SizeTest
 {
-
     @Test
     public void size() throws Exception
     {

@@ -44,9 +44,9 @@ public class TimingTest
 
     public void report(final Delegate delegate) throws Exception
     {
-        // Warm up with one third of the to be timed iterations
+        // Warm up with one third of the to-be timed iterations
         iterate(iterations / 3, delegate);
-        // Perform and report
+        // Perform and measure
         final long start = System.nanoTime();
         iterate(iterations, delegate);
         final long stop = System.nanoTime();

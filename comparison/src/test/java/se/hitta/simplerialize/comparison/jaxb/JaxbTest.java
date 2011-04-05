@@ -12,6 +12,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.xc.JaxbAnnotationIntrospector;
 
 import se.hitta.simplerialize.comparison.AbstractTest;
+import se.hitta.simplerialize.comparison.SampleObject;
 
 public final class JaxbTest extends AbstractTest
 {

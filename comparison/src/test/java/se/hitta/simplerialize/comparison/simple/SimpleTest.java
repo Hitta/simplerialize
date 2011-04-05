@@ -8,6 +8,7 @@ import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
 import se.hitta.simplerialize.comparison.AbstractTest;
+import se.hitta.simplerialize.comparison.SampleObject;
 
 public final class SimpleTest extends AbstractTest
 {

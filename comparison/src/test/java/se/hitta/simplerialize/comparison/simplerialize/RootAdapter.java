@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import se.hitta.simplerialize.SerializationAdapter;
 import se.hitta.simplerialize.Serializer;
+import se.hitta.simplerialize.comparison.SampleObject;
 
 public final class RootAdapter implements SerializationAdapter<SampleObject>
 {
