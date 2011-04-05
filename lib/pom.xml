@@ -9,6 +9,16 @@
         <artifactId>simplerialize-pom</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
+    <dependencies>
+        <dependency>
+            <groupId>com.natpryce.maybe</groupId>
+            <artifactId>com.natpryce.maybe</artifactId>
+            <version>1.0.1</version>
+            <type>jar</type>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/com.natpryce.maybe-1.0.1.jar</systemPath>
+        </dependency>
+    </dependencies>
     <build>
         <plugins>
             <plugin>
