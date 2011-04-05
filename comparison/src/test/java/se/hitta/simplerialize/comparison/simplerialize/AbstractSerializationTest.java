@@ -1,4 +1,4 @@
-package se.hitta.simplerialize.comparison.serialization;
+package se.hitta.simplerialize.comparison.simplerialize;
 
 import java.io.Writer;
 import java.util.HashMap;

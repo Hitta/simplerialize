@@ -1,4 +1,4 @@
-package se.hitta.simplerialize.comparison.serialization;
+package se.hitta.simplerialize.comparison.simplerialize;
 
 import java.io.IOException;
 import java.util.Map;

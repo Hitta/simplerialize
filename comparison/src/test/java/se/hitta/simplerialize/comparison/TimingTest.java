@@ -6,9 +6,9 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Test;
 
 import se.hitta.simplerialize.comparison.jaxb.JaxbTest;
-import se.hitta.simplerialize.comparison.serialization.SerializeWithEmbeddedAdapterTest;
-import se.hitta.simplerialize.comparison.serialization.SerializeWithStandaloneAdapterTest;
 import se.hitta.simplerialize.comparison.simple.SimpleTest;
+import se.hitta.simplerialize.comparison.simplerialize.SerializeWithEmbeddedAdapterTest;
+import se.hitta.simplerialize.comparison.simplerialize.SerializeWithStandaloneAdapterTest;
 import se.hitta.simplerialize.comparison.xstream.XStreamTest;
 
 /**
