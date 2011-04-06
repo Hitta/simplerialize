@@ -1,0 +1,11 @@
+{
+	"MapStringString":
+	{
+		"map":
+		[
+			{"yin":"yang"},
+			{"foo":"bar"},
+			{"x":"y"}
+		]
+	}
+}
