@@ -1,54 +1,27 @@
 package se.hitta.simplerialize;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.Collection;
 
 import org.junit.Test;
 
-import se.hitta.simplerialize.AdapterMapper;
-import se.hitta.simplerialize.SerializationAdapter;
-import se.hitta.simplerialize.Serializer;
-import se.hitta.simplerialize.adapters.DefaultAdapterMapper;
-import se.hitta.simplerialize.implementations.JacksonJsonSerializer;
-import se.hitta.simplerialize.implementations.WoodstoxXmlSerializer;
-
 import com.natpryce.maybe.Maybe;
 
+/**
+ * This was one of the first proof of concept tests written to simply see if
+ * the serialization worked (ie didn't throw any exceptions).
+ */
 public final class TheUglyButAlmightAdHocTest
 {
     @Test
     public void comeAtMeBro() throws Exception
     {
-        final StringWriter writer = new StringWriter();
-        final AdapterMapper mapper = new DefaultAdapterMapper();
-        mapper.register(new TargetAdapter(), Target.class);
-        mapper.register(new NestedTargetAdapter(), NestedTarget.class);
-        serializeJson(writer, mapper);
-        writer.write('\n');
-        serializeXml(writer, mapper);
-        System.err.println(writer.toString());
+        final Serializer serializer = Util.createCompositeSerializer();
+        serializer.start().writeWithAdapter(new Target()).flush();
     }
 
-    private void serializeXml(final StringWriter writer, final AdapterMapper mapper) throws Exception
-    {
-        final Serializer serializer = new WoodstoxXmlSerializer(writer, mapper);
-        serializer.start();
-        final SerializationAdapter<Target> adapter = mapper.resolveAdapter(Target.class);
-        adapter.write(new Target(), serializer);
-        serializer.flush();
-    }
-
-    private void serializeJson(final StringWriter writer, final AdapterMapper mapper) throws Exception
-    {
-        final Serializer serializer = new JacksonJsonSerializer(writer, mapper);
-        serializer.start();
-        mapper.resolveAdapter(Target.class).write(new Target(), serializer);
-        serializer.flush();
-    }
-
-    public static class Target
+    public static class Target implements SerializationCapable
     {
         String str = "string";
         String nullStr = null;
@@ -59,34 +32,34 @@ public final class TheUglyButAlmightAdHocTest
         Collection<Integer> integerList = Arrays.asList(1, 2, 3);
         NestedTarget nested = new NestedTarget();
         Iterable<NestedTarget> multiple_nested = Arrays.asList(new NestedTarget(), new NestedTarget());
-    }
 
-    public static class NestedTarget
-    {
-        String str = "hepp";
-        Collection<Integer> ints = Arrays.asList(1, 2, 3);
-    }
-
-    public static final class TargetAdapter implements SerializationAdapter<Target>
-    {
         @Override
-        public void write(final Target target, final Serializer serializer) throws IOException
+        public void write(final Serializer serializer) throws IOException
         {
             serializer.startContainer("yeah");
-            serializer.writeNameValue("def", Maybe.definitely("howdy"));
-            serializer.writeNameValue("unk", Maybe.unknown());
-            serializer.writeNameValue("str", target.str);
-            serializer.writeNameValue("bool", target.bool);
-            serializer.startContainer("nested").writeWithAdapter(target.nested).endContainer();
-            serializer.eachComplex("repeating", target.multiple_nested);
+            {
+                serializer.writeNameValue("def", Maybe.definitely("howdy"));
+                serializer.writeNameValue("unk", Maybe.unknown());
+                serializer.writeNameValue("str", this.str);
+                serializer.writeNameValue("bool", this.bool);
+                serializer.startContainer("nested");
+                {
+                    serializer.writeWithAdapter(this.nested);
+                }
+                serializer.endContainer();
+                serializer.eachComplex("repeating", this.multiple_nested);
+            }
             serializer.endContainer();
         }
     }
 
-    public static final class NestedTargetAdapter implements SerializationAdapter<NestedTarget>
+    public static class NestedTarget implements SerializationCapable
     {
+        String str = "hepp";
+        Collection<Integer> ints = Arrays.asList(1, 2, 3);
+
         @Override
-        public void write(final NestedTarget target, final Serializer serializer) throws IOException
+        public void write(final Serializer serializer) throws IOException
         {
             serializer.startContainer("nested");
             serializer.writeNameValue("nestedTarget", "foo");

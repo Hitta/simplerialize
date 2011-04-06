@@ -7,21 +7,13 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import se.hitta.simplerialize.AdapterMapper;
-import se.hitta.simplerialize.SerializationCapable;
-import se.hitta.simplerialize.Serializer;
-import se.hitta.simplerialize.adapters.DefaultAdapterMapper;
-import se.hitta.simplerialize.implementations.CompositeSerializer;
-import se.hitta.simplerialize.implementations.JacksonJsonSerializer;
-import se.hitta.simplerialize.implementations.WoodstoxXmlSerializer;
-
 public final class ApiDemo
 {
     @Test
     @SuppressWarnings("unchecked")
-    public void apiDemo() throws Exception
+    public void nestedObjects() throws Exception
     {
-        final Serializer serializer = configure();
+        final Serializer serializer = Util.createCompositeSerializer();
         serializer.start();
         serializer.startContainer("root");
         {
@@ -39,24 +31,20 @@ public final class ApiDemo
         }
         serializer.endContainer();
         serializer.close();
-    }
-
-    private Serializer configure() throws Exception
-    {
-        final AdapterMapper mapper = new DefaultAdapterMapper();
-        final JacksonJsonSerializer json = new JacksonJsonSerializer(System.err, mapper);
-        final WoodstoxXmlSerializer xml = new WoodstoxXmlSerializer(System.out, mapper);
-        return CompositeSerializer.wrap(json, xml);
+        System.err.println(getClass().getSimpleName() + ": nested objects");
+        serializer.printTo(System.err);
     }
 
     @Test
-    public void mapDemo() throws Exception
+    public void mapEntries() throws Exception
     {
         final Map<String, Object> m = new HashMap<String, Object>();
         m.put("a", 1);
         m.put("x", false);
-        final Serializer serializer = configure();
+        final Serializer serializer = Util.createCompositeSerializer();
         serializer.start().eachComplex("entry", m.entrySet()).flush();
+        System.err.println(getClass().getSimpleName() + ": map entries");
+        serializer.printTo(System.err);
     }
 
     final class Stuff implements SerializationCapable

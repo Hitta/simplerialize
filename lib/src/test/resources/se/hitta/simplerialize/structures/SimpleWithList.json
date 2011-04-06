@@ -12,8 +12,8 @@
 		{
 			"list":
 			[
-				{"item0":"value"},
-				{"item1":"value"}
+                {"item0":{"name":"value"}},
+                {"item1":{"name":"value"}}
 			]
 		}
 	}

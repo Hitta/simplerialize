@@ -3,7 +3,6 @@ package se.hitta.simplerialize.basics;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
-import java.util.List;
 
 import se.hitta.simplerialize.AbstractSerializationTest;
 import se.hitta.simplerialize.Serializer;
@@ -14,7 +13,7 @@ public final class PrimitiveAdapters
     {
         public Booleans()
         {
-            super(Arrays.asList(true, false));
+            super(true, false);
         }
     }
 
@@ -22,7 +21,7 @@ public final class PrimitiveAdapters
     {
         public Integers()
         {
-            super(Arrays.asList(1, -1, 0));
+            super(1, -1, 0);
         }
     }
 
@@ -30,7 +29,7 @@ public final class PrimitiveAdapters
     {
         public Floats()
         {
-            super(Arrays.asList(1.23f, -12.3f, 0f));
+            super(1.23f, -12.3f, 0f);
         }
     }
 
@@ -38,23 +37,33 @@ public final class PrimitiveAdapters
     {
         public Doubles()
         {
-            super(Arrays.asList(1.23d, -12.3d, 0d));
+            super(1.23d, -12.3d, 0d);
+        }
+    }
+
+    public static class Shorts extends PrimitivesTest
+    {
+        public Shorts()
+        {
+            super((short)1, (short)-12, (short)0);
         }
     }
 
     public static class ByteBuffers extends PrimitivesTest
     {
+        private static final String SWEDISH_FOR_SHRIMP_SANDWICH = "Räksmörgås";
+
         public ByteBuffers()
         {
-            super(Arrays.asList(ByteBuffer.wrap("123".getBytes()), ByteBuffer.wrap("Räksmörgås".getBytes())));
+            super(ByteBuffer.wrap("123".getBytes()), ByteBuffer.wrap(SWEDISH_FOR_SHRIMP_SANDWICH.getBytes()));
         }
     }
 
     static class PrimitivesTest extends AbstractSerializationTest
     {
-        private final List<?> values;
+        private final Object[] values;
 
-        public PrimitivesTest(final List<?> values)
+        public PrimitivesTest(final Object... values)
         {
             this.values = values;
         }
@@ -62,7 +71,7 @@ public final class PrimitiveAdapters
         @Override
         public void write(final Serializer serializer) throws IOException
         {
-            serializer.eachPrimitive("root", this.values);
+            serializer.eachPrimitive("root", Arrays.asList(this.values));
         }
     }
 }

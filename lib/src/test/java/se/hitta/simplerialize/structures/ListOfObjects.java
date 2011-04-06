@@ -13,18 +13,29 @@ public final class ListOfObjects extends AbstractSerializationTest
     public void write(final Serializer serializer) throws IOException
     {
         serializer.startContainer("container");
-        serializer.eachComplex("list", Arrays.asList(new Item(), new Item()));
+        {
+            serializer.eachComplex("list", Arrays.asList(new Item(0), new Item(1)));
+        }
         serializer.endContainer();
     }
 
-    int i = 0;
-
     final class Item implements SerializationCapable
     {
+        private final int number;
+
+        public Item(final int number)
+        {
+            this.number = number;
+        }
+
         @Override
         public void write(final Serializer serializer) throws IOException
         {
-            serializer.writeNameValue("item" + ListOfObjects.this.i++, "value");
+            serializer.startContainer("item" + this.number);
+            {
+                serializer.writeNameValue("name", "value");
+            }
+            serializer.endContainer();
         }
     }
 }

@@ -36,19 +36,24 @@ public final class NestedObjects extends AbstractSerializationTest
         public void write(final Serializer serializer) throws IOException
         {
             serializer.startContainer("second");
-            serializer.eachComplex("third", Arrays.asList(new Third(), new Third()));
+            serializer.eachComplex("third", Arrays.asList(new Third(0), new Third(1)));
             serializer.endContainer();
         }
     }
 
     static final class Third implements SerializationCapable
     {
-        private static int i = 0;
+        private final int number;
+
+        public Third(final int number)
+        {
+            this.number = number;
+        }
 
         @Override
         public void write(final Serializer serializer) throws IOException
         {
-            serializer.writeNameValue("item" + (i++), "value");
+            serializer.writeNameValue("item" + this.number, "value");
         }
     }
 }

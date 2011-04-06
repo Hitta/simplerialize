@@ -4,6 +4,9 @@
         <element with="attribute" />
     </Simple>
     <container>
-        <list item0="value" item1="value" />
+        <list>
+            <item0 name="value" />
+            <item1 name="value" />
+        </list>
     </container>
 </SimpleWithList>

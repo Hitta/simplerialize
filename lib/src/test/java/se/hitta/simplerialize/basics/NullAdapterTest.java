@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import se.hitta.simplerialize.AbstractSerializationTest;
 import se.hitta.simplerialize.AdapterMapper;
-import se.hitta.simplerialize.SerializationAdapter;
 import se.hitta.simplerialize.Serializer;
 import se.hitta.simplerialize.adapters.DefaultAdapterMapper;
 
@@ -20,14 +19,5 @@ public final class NullAdapterTest extends AbstractSerializationTest
     public void write(final Serializer context) throws IOException
     {
         context.startContainer("root").writeWithAdapter("foo").endContainer();
-    }
-
-    static final class CharSequenceAdapter implements SerializationAdapter<CharSequence>
-    {
-        @Override
-        public void write(final CharSequence target, final Serializer context) throws IOException
-        {
-            context.writeNameValue("value", target);
-        }
     }
 }
