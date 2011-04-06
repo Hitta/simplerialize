@@ -11,8 +11,9 @@ This is an opinionated library with a narrow use case. Please treat it as such.
 
 #### Beware
 This library may...
-* _fail horribly_ for your particular case
+* fail horribly for your particular case
 * provide you with an inconsistent model depending on context and usage
+
 In other words, _don't trust it_ until you've made it prove itself for _your specific_ use case - write tests.
 
 #### Exeptions:
