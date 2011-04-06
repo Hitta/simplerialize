@@ -9,10 +9,9 @@ This is an opinionated library with a narrow use case. Please treat it as such.
 * Good performant streaming serialization (thanks to [Jackson](http://jackson.codehaus.org/) and [Woodstox](http://woodstox.codehaus.org/))
 * Non-customizable output
 
-#### Beware
-This library may:
-* fail horribly for your particular case
-* provide you with an inconsistent model depending on context and usage
+#### Beware that this library may
+* ...fail horribly for your particular case
+* ...provide you with an inconsistent model depending on context and usage
 
 In other words, _don't trust it_ until you've made it prove itself for _your specific_ use case - write tests.
 
