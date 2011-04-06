@@ -21,7 +21,7 @@ Everything throws IOException which either means you screwed up your serializati
 #### Dependencies
 * SLF4J: We depend on [SLF4J](http://www.slf4j.org/) so that you can plug in whatever logging you see fit
 * [Jackson](http://jackson.codehaus.org/) and [Woodstox](http://woodstox.codehaus.org/) for the actual serialization
-* [Maybe](https://github.com/npryce/maybe-java) we use Nat Pryce's Maybe type quite extensively and thus this library provides API methods that accepts maybes. Currently there's no Maven distribution of this library so we simply bundled the jar, for now
+* [Maybe](https://github.com/npryce/maybe-java) we use [Nat Pryce's](http://www.natpryce.com/) Maybe type quite extensively and thus this library provides API methods that accepts maybes. Currently there's no Maven distribution of this library so we simply bundled the jar, for now
 
 ### Background and rationale
 
