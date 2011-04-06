@@ -10,7 +10,7 @@ This is an opinionated library with a narrow use case. Please treat it as such.
 * Non-customizable output
 
 #### Beware
-This library may...
+This library may:
 * fail horribly for your particular case
 * provide you with an inconsistent model depending on context and usage
 
