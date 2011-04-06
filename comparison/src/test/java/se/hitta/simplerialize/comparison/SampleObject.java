@@ -42,7 +42,7 @@ public final class SampleObject implements SerializationCapable
         this.attributes = new HashMap<String, String>();
     }
 
-    // Simplerializer: inline adapter approach
+    // Simplerialize: inline adapter approach
     @Override
     public void write(final Serializer serializer) throws IOException
     {
