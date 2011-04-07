@@ -1,3 +1,4 @@
+
 ### About
 This is an opinionated library with a narrow use case. Please treat it as such.
 
@@ -14,6 +15,62 @@ This is an opinionated library with a narrow use case. Please treat it as such.
 * ...provide you with an inconsistent model depending on context and usage
 
 In other words, _don't trust it_ until you've made it prove itself for _your specific_ use case - write tests.
+
+### Example
+
+#### The following...
+        Serializer serializer = (json) ? new JacksonJsonSerializer(...) : new WoodstoxXmlSerializer(...)
+        serializer.start();
+        serializer.startContainer("root");
+        {
+            serializer.eachComplex("objects", Collections.singletonMap("foo", "bar").entrySet());
+            serializer.eachPrimitive("primitives", Arrays.asList("1", 1, true));
+            serializer.startContainer("a");
+            {
+                serializer.startContainer("b");
+                {
+                    serializer.writeNameValue("name", "value");
+                }
+                serializer.endContainer();
+            }
+            serializer.endContainer();
+        }
+        serializer.endContainer();
+        serializer.close();
+
+### ...will result in this...
+JSON:
+
+        {
+            "root":
+            {
+                "objects":
+                [
+                    {"foo":"bar"}
+                ],
+                "primitives": [ "1", 1, true ],
+                "a":
+                {
+                    "b": { "name":"value" }
+                }
+            }
+        }
+
+XML:
+
+        <?xml version='1.0' encoding='UTF-8'?>
+        <root>
+            <objects foo="bar" />
+            <primitives>
+                <value>1</value>
+                <value>1</value>
+                <value>true</value>
+            </primitives>
+            <a>
+                <b name="value" />
+            </a>
+        </root>
+
 
 #### Exeptions:
 Everything throws IOException which either means you screwed up your serialization causing invalid XML or JSON or the underlying serialization library encountered an error when writing to the underlying writer.
