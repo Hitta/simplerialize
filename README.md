@@ -1,4 +1,3 @@
-
 ### About
 This is an opinionated library with a narrow use case. Please treat it as such.
 
@@ -38,8 +37,7 @@ In other words, _don't trust it_ until you've made it prove itself for _your spe
         serializer.endContainer();
         serializer.close();
 
-### ...will result in this...
-JSON:
+#### ...will result in this JSON...
 
         {
             "root":
@@ -56,7 +54,7 @@ JSON:
             }
         }
 
-XML:
+#### ...this XML...
 
         <?xml version='1.0' encoding='UTF-8'?>
         <root>
@@ -71,6 +69,19 @@ XML:
             </a>
         </root>
 
+#### ...or if you're a fan of chaining the above code could also be written as...
+
+        serializer.start()
+        .startContainer("root")
+            .eachComplex("objects", Collections.singletonMap("foo", "bar").entrySet())
+            .eachPrimitive("primitives", Arrays.asList("1", 1, true))
+            .startContainer("a")
+                .startContainer("b")
+                    .writeNameValue("name", "value")
+                .endContainer()
+            .endContainer()
+        .endContainer()
+        .close();
 
 #### Exeptions:
 Everything throws IOException which either means you screwed up your serialization causing invalid XML or JSON or the underlying serialization library encountered an error when writing to the underlying writer.
