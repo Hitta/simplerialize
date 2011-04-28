@@ -41,14 +41,6 @@ public final class PrimitiveAdapters
         }
     }
 
-    public static class Shorts extends PrimitivesTest
-    {
-        public Shorts()
-        {
-            super((short)1, (short)-12, (short)0);
-        }
-    }
-
     public static class ByteBuffers extends PrimitivesTest
     {
         private static final String SWEDISH_FOR_SHRIMP_SANDWICH = "Räksmörgås";

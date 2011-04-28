@@ -227,12 +227,12 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
         {
             try
             {
-                this.generator.writeStartElement(container);
                 while(elements.hasNext())
                 {
+                	this.generator.writeStartElement(container);
                     writeWithAdapter(elements.next());
+                    this.generator.writeEndElement();
                 }
-                this.generator.writeEndElement();
             }
             catch(final XMLStreamException e)
             {
