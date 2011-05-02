@@ -58,8 +58,7 @@
             <artifactId>com.natpryce.maybe</artifactId>
             <version>1.0.1</version>
             <type>jar</type>
-            <scope>system</scope>
-            <systemPath>${basedir}/../dependencies/com.natpryce.maybe-1.0.1.jar</systemPath>
+            <scope>compile</scope>
         </dependency>
         <!-- TEST -->
         <dependency>
