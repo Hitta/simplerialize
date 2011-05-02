@@ -1,4 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <MapStringString>
-    <map yin="yang" foo="bar" x="y" />
+    <entry yin="yang" />
+    <entry foo="bar" />
+    <entry  x="y" />
 </MapStringString>

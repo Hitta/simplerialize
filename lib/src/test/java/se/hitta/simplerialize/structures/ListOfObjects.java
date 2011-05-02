@@ -14,7 +14,7 @@ public final class ListOfObjects extends AbstractSerializationTest
     {
         serializer.startContainer("container");
         {
-            serializer.eachComplex("list", Arrays.asList(new Item(0), new Item(1)));
+            serializer.eachComplex("item", Arrays.asList(new Item(0), new Item(1)));
         }
         serializer.endContainer();
     }
@@ -31,11 +31,7 @@ public final class ListOfObjects extends AbstractSerializationTest
         @Override
         public void write(final Serializer serializer) throws IOException
         {
-            serializer.startContainer("item" + this.number);
-            {
-                serializer.writeNameValue("name", "value");
-            }
-            serializer.endContainer();
+        	serializer.writeNameValue("name", "value" + this.number);
         }
     }
 }

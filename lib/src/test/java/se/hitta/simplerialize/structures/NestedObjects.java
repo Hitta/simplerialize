@@ -53,7 +53,7 @@ public final class NestedObjects extends AbstractSerializationTest
         @Override
         public void write(final Serializer serializer) throws IOException
         {
-            serializer.writeNameValue("item" + this.number, "value");
+            serializer.writeNameValue("item", "value" + this.number);
         }
     }
 }

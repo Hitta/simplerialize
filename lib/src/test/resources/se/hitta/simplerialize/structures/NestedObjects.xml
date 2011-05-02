@@ -2,7 +2,8 @@
 <container>
     <first>
         <second>
-            <third item0="value" item1="value" />
+            <third item="value0" />
+            <third item="value1" />
         </second>
     </first>
 </container>

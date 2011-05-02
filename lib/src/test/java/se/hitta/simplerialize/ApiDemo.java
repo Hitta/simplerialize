@@ -42,7 +42,7 @@ public final class ApiDemo
         m.put("a", 1);
         m.put("x", false);
         final Serializer serializer = Util.createCompositeSerializer();
-        serializer.start().eachComplex("entry", m.entrySet()).flush();
+        serializer.start().startContainer("root").eachComplex("entry", m.entrySet()).endContainer().flush();
         System.err.println(getClass().getSimpleName() + ": map entries");
         serializer.printTo(System.err);
     }

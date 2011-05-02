@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <container>
-    <list>
-        <item0 name="value" />
-        <item1 name="value" />
-    </list>
+	<item name="value0" />
+	<item name="value1" />
 </container>

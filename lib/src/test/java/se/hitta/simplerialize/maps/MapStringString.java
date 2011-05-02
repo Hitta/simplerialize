@@ -23,7 +23,7 @@ public final class MapStringString extends AbstractSerializationTest
     public void write(final Serializer serializer) throws IOException
     {
         serializer.startContainer(getClass().getSimpleName());
-        serializer.eachComplex("map", map.entrySet());
+        serializer.eachComplex("entry", map.entrySet());
         serializer.endContainer();
     }
 }

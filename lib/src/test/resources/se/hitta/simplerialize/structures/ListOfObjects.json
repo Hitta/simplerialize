@@ -1,10 +1,10 @@
 {
     "container":
     {
-        "list":
+        "item":
         [
-            {"item0":{"name":"value"}},
-            {"item1":{"name":"value"}}
+            {"name":"value0"},
+            {"name":"value1"}
         ]
     }
 }
