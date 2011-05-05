@@ -1,16 +1,14 @@
 package se.hitta.simplerialize;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertSame;
 
 import java.io.IOException;
 
 import org.junit.Test;
 
-import se.hitta.simplerialize.AdapterMapper;
-import se.hitta.simplerialize.SerializationAdapter;
-import se.hitta.simplerialize.Serializer;
 import se.hitta.simplerialize.adapters.DefaultAdapterMapper;
 import se.hitta.simplerialize.adapters.NullAdapter;
+import se.hitta.simplerialize.adapters.SerializationCapableAdapter;
 
 public class AdapterMapperTest
 {
@@ -55,6 +53,12 @@ public class AdapterMapperTest
         assertSame(this.dummyAdapterInstance, mapper.resolveAdapter(Subclass.class));
     }
 
+    @Test
+    public void resolvesSerializationCapabelOnSuperclass()
+    {
+        assertSame(SerializationCapableAdapter.instance, new DefaultAdapterMapper().resolveAdapter(ImplicitCapable.class));
+    }
+
     public void skippedClassReturnesNullAdapter()
     {
         assertSame(NullAdapter.instance, new DefaultAdapterMapper().skip(Subclass.class).resolveAdapter(Subclass.class));
@@ -77,4 +81,16 @@ public class AdapterMapperTest
         public void write(Object target, Serializer serializer) throws IOException
         {}
     };
+
+    public abstract class Capable implements SerializationCapable
+    {
+        @Override
+        public final void write(Serializer serializer) throws IOException
+        {
+            System.err.println("yeah");
+        }
+    }
+    
+    public final class ImplicitCapable extends Capable
+    {}
 }
