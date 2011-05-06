@@ -3,7 +3,7 @@
     <groupId>se.hitta</groupId>
     <artifactId>simplerialize-pom</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
     <organization>
         <name>Hitta.se - Hittapunktse AB</name>
         <url>http://www.hitta.se/</url>
@@ -115,14 +115,10 @@
             </plugin>
         </plugins>
     </build>
-    <distributionManagement>
+    <repositories>
         <repository>
-            <id>hitta-repos</id>
-            <url>http://maven.hitta.local/nexus/content/repositories/releases</url>
+            <id>Hitta.se Repository</id>
+            <url>http://maven.hitta.local</url>
         </repository>
-        <snapshotRepository>
-            <id>hitta-repos</id>
-            <url>http://maven.hitta.local/nexus/content/repositories/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
+    </repositories>
 </project>
