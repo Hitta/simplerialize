@@ -115,10 +115,14 @@
             </plugin>
         </plugins>
     </build>
-    <repositories>
+    <distributionManagement>
         <repository>
-            <id>Hitta.se Repository</id>
-            <url>http://maven.hitta.local</url>
+            <id>hitta-repos</id>
+            <url>http://maven.hitta.local/nexus/content/repositories/releases</url>
         </repository>
-    </repositories>
+        <snapshotRepository>
+            <id>hitta-repos</id>
+            <url>http://maven.hitta.local/nexus/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>
