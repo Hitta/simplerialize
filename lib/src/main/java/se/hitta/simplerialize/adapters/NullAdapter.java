@@ -22,7 +22,7 @@ import se.hitta.simplerialize.Serializer;
 
 /**
  * {@link SerializationAdapter} singleton for skipped classes. It's a
- * {@code null} implementation in the sense that is won't generate any output.
+ * {@code null} implementation in the sense that it won't generate any output.
  */
 public final class NullAdapter implements SerializationAdapter<Object>
 {
