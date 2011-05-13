@@ -198,9 +198,17 @@ public interface Serializer extends Flushable, Closeable
      */
     Serializer writeNameValue(String name, Boolean value) throws IOException;
 
+    
     /**
-     * Write a {@link String} name value pair with a {@link Short} value.
-     * 
+     * Write a {@link String} name value pair with a {@link Number} value. Supported sublasses are: <br>
+     * <ul>
+     * <li>{@link Short}</li>
+     * <li>{@link Integer}</li>
+     * <li>{@link Long}</li>
+     * <li>{@link Float}</li>
+     * <li>{@link Double}</li>
+     * </ul>
+     * @param <T>
      * @param name
      * @param value
      * @return this {@link Serializer} instance to allow call chaining
@@ -209,61 +217,9 @@ public interface Serializer extends Flushable, Closeable
      * occurs when writing to the underlying {@link OutputStream} or
      * {@link Writer}.
      */
-    Serializer writeNameValue(String name, Short value) throws IOException;
-
-    /**
-     * Write a {@link String} name value pair with a {@link Integer} value.
-     * 
-     * @param name
-     * @param value
-     * @return this {@link Serializer} instance to allow call chaining
-     * @throws IOException if there's either a format problem (ie your usage of
-     * the library produced illegal XML or JSON) or if an {@link IOException}
-     * occurs when writing to the underlying {@link OutputStream} or
-     * {@link Writer}.
-     */
-    Serializer writeNameValue(String name, Integer value) throws IOException;
-
-    /**
-     * Write a {@link String} name value pair with a {@link Long} value.
-     * 
-     * @param name
-     * @param value
-     * @return this {@link Serializer} instance to allow call chaining
-     * @throws IOException if there's either a format problem (ie your usage of
-     * the library produced illegal XML or JSON) or if an {@link IOException}
-     * occurs when writing to the underlying {@link OutputStream} or
-     * {@link Writer}.
-     */
-    Serializer writeNameValue(String name, Long value) throws IOException;
-
-    /**
-     * Write a {@link String} name value pair with a {@link Float} value.
-     * 
-     * @param name
-     * @param value
-     * @return this {@link Serializer} instance to allow call chaining
-     * @throws IOException if there's either a format problem (ie your usage of
-     * the library produced illegal XML or JSON) or if an {@link IOException}
-     * occurs when writing to the underlying {@link OutputStream} or
-     * {@link Writer}.
-     */
-    Serializer writeNameValue(String name, Float value) throws IOException;
-
-    /**
-     * Write a {@link String} name value pair with a {@link Double} value.
-     * 
-     * @param name
-     * @param value
-     * @return this {@link Serializer} instance to allow call chaining
-     * @throws IOException if there's either a format problem (ie your usage of
-     * the library produced illegal XML or JSON) or if an {@link IOException}
-     * occurs when writing to the underlying {@link OutputStream} or
-     * {@link Writer}.
-     */
-    Serializer writeNameValue(String name, Double value) throws IOException;
-
-    /**
+    <T extends Number>Serializer writeNameValue(final String name, final T value) throws IOException;
+    
+     /**
      * If the supplied {@link Maybe} is known, write a {@link String} name and
      * the value of the {@link Maybe}. Otherwise, do nothing.
      *

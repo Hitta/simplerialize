@@ -16,6 +16,25 @@ public final class NameValue
         }
     }
 
+    public static final class StringBoolean extends NameValueCase
+    {
+        @Override
+        public void writeNameValue(final Serializer context) throws IOException
+        {
+            context.writeNameValue("foo", true);
+        }
+    }
+    
+	public static final class StringShort extends NameValueCase
+    {
+        @Override
+        public void writeNameValue(final Serializer context) throws IOException
+        {
+        	Short s = 7;
+            context.writeNameValue("foo", s);
+        }
+    }
+	
     public static final class StringInteger extends NameValueCase
     {
         @Override
@@ -25,15 +44,15 @@ public final class NameValue
         }
     }
 
-    public static final class StringBoolean extends NameValueCase
+    public static final class StringLong extends NameValueCase
     {
         @Override
         public void writeNameValue(final Serializer context) throws IOException
         {
-            context.writeNameValue("foo", true);
+            context.writeNameValue("foo", 234234L);
         }
     }
-
+    
     public static final class StringFloat extends NameValueCase
     {
         @Override

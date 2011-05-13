@@ -280,55 +280,14 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
         return writeAttribute(name, value);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see se.hitta.simplerialize.Serializer#writeNameValue(java.lang.String, java.lang.Short)
+    /* (non-Javadoc)
+     * @see se.hitta.simplerialize.Serializer#writeNumberValue(java.lang.String, java.lang.Number)
      */
     @Override
-    public Serializer writeNameValue(final String name, final Short value) throws IOException
-    {
-        return writeAttribute(name, value);
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see se.hitta.simplerialize.Serializer#writeNameValue(java.lang.String, java.lang.Integer)
-     */
-    @Override
-    public Serializer writeNameValue(final String name, final Integer value) throws IOException
-    {
-        return writeAttribute(name, value);
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see se.hitta.simplerialize.Serializer#writeNameValue(java.lang.String, java.lang.Long)
-     */
-    @Override
-    public Serializer writeNameValue(final String name, final Long value) throws IOException
-    {
-        return writeAttribute(name, value);
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see se.hitta.simplerialize.Serializer#writeNameValue(java.lang.String, java.lang.Float)
-     */
-    @Override
-    public Serializer writeNameValue(final String name, final Float value) throws IOException
-    {
-        return writeAttribute(name, value);
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see se.hitta.simplerialize.Serializer#writeNameValue(java.lang.String, java.lang.Double)
-     */
-    @Override
-    public Serializer writeNameValue(final String name, final Double value) throws IOException
-    {
-        return writeAttribute(name, value);
-    }
+	public <T extends Number> Serializer writeNameValue(String name, T value) throws IOException
+	{
+    	return writeAttribute(name, value);
+	}
 
     /*
      * (non-Javadoc)
@@ -342,7 +301,7 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
 
     private Serializer writeAttribute(final String name, final Maybe<?> value) throws IOException
     {
-        if(value.isKnown())
+        if(value != null && value.isKnown())
         {
             writeAttribute(name, value.value());
         }
