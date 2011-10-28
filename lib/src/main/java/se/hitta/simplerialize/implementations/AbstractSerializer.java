@@ -21,7 +21,7 @@ import java.io.Writer;
 import se.hitta.simplerialize.AdapterMapper;
 import se.hitta.simplerialize.Serializer;
 
-import com.natpryce.maybe.Maybe;
+import com.google.common.base.Optional;
 
 abstract class AbstractSerializer implements Serializer
 {
@@ -36,14 +36,14 @@ abstract class AbstractSerializer implements Serializer
 
     /*
      * (non-Javadoc)
-     * @see se.hitta.simplerialize.Serializer#writeWithAdapter(com.natpryce.maybe.Maybe)
+     * @see se.hitta.simplerialize.Serializer#writeWithAdapter(com.google.common.base.Optional)
      */
     @Override
-    public final Serializer writeWithAdapter(final Maybe<?> target) throws IOException
+    public final Serializer writeWithAdapter(final Optional<?> target) throws IOException
     {
-        if(target != null && target.isKnown())
+        if(target != null && target.isPresent())
         {
-            writeWithAdapter(target.value());
+            writeWithAdapter(target.get());
         }
         return this;
     }

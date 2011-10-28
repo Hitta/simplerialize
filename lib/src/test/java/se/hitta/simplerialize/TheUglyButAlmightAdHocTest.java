@@ -6,13 +6,13 @@ import java.util.Collection;
 
 import org.junit.Test;
 
-import com.natpryce.maybe.Maybe;
+import com.google.common.base.Optional;
 
 /**
  * This was one of the first proof of concept tests written to simply see if
  * the serialization worked (ie didn't throw any exceptions).
  */
-public final class TheUglyButAlmightAdHocTest
+public class TheUglyButAlmightAdHocTest
 {
     @Test
     public void comeAtMeBro() throws Exception
@@ -38,8 +38,8 @@ public final class TheUglyButAlmightAdHocTest
         {
             serializer.startContainer("yeah");
             {
-                serializer.writeNameValue("def", Maybe.definitely("howdy"));
-                serializer.writeNameValue("unk", Maybe.unknown());
+                serializer.writeNameValue("def", Optional.of("howdY"));
+                serializer.writeNameValue("unk", Optional.absent());
                 serializer.writeNameValue("str", this.str);
                 serializer.writeNameValue("bool", this.bool);
                 serializer.startContainer("nested");

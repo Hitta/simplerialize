@@ -29,7 +29,7 @@ import se.hitta.simplerialize.AdapterMapper;
 import se.hitta.simplerialize.Serializer;
 
 import com.ctc.wstx.api.WstxOutputProperties;
-import com.natpryce.maybe.Maybe;
+import com.google.common.base.Optional;
 
 /**
  *
@@ -229,7 +229,7 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
             {
                 while(elements.hasNext())
                 {
-                	this.generator.writeStartElement(container);
+                    this.generator.writeStartElement(container);
                     writeWithAdapter(elements.next());
                     this.generator.writeEndElement();
                 }
@@ -247,6 +247,7 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
      * @see se.hitta.simplerialize.Serializer#writeObject(java.lang.Object)
      */
     @Override
+    @Deprecated
     public Serializer writeObject(final Object target) throws IOException
     {
         try
@@ -284,26 +285,26 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
      * @see se.hitta.simplerialize.Serializer#writeNumberValue(java.lang.String, java.lang.Number)
      */
     @Override
-	public <T extends Number> Serializer writeNameValue(String name, T value) throws IOException
-	{
-    	return writeAttribute(name, value);
-	}
-
-    /*
-     * (non-Javadoc)
-     * @see se.hitta.simplerialize.Serializer#writeNameValue(java.lang.String, com.natpryce.maybe.Maybe)
-     */
-    @Override
-    public Serializer writeNameValue(final String name, final Maybe<?> value) throws IOException
+    public <T extends Number> Serializer writeNameValue(String name, T value) throws IOException
     {
         return writeAttribute(name, value);
     }
 
-    private Serializer writeAttribute(final String name, final Maybe<?> value) throws IOException
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.simplerialize.Serializer#writeNameValue(java.lang.String, com.google.common.base.Optional)
+     */
+    @Override
+    public Serializer writeNameValue(final String name, final Optional<?> value) throws IOException
     {
-        if(value != null && value.isKnown())
+        return writeAttribute(name, value);
+    }
+
+    private Serializer writeAttribute(final String name, final Optional<?> value) throws IOException
+    {
+        if(value != null && value.isPresent())
         {
-            writeAttribute(name, value.value());
+            writeAttribute(name, value.get());
         }
         return this;
     }
