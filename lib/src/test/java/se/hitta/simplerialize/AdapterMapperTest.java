@@ -65,13 +65,13 @@ public class AdapterMapperTest
     }
 
     public class ClassWithInterface implements Interface
-    {};
+    {}
 
     public class Subclass extends ClassWithInterface
-    {};
+    {}
 
     public interface Interface
-    {};
+    {}
 
     private final SerializationAdapter<Object> dummyAdapterInstance = new DummyAdapter();
 
@@ -80,7 +80,7 @@ public class AdapterMapperTest
         @Override
         public void write(Object target, Serializer serializer) throws IOException
         {}
-    };
+    }
 
     public abstract class Capable implements SerializationCapable
     {
