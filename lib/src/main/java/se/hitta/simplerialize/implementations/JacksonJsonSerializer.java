@@ -23,6 +23,7 @@ import java.util.Iterator;
 
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerator;
+import org.codehaus.jackson.JsonGenerator.Feature;
 
 import se.hitta.simplerialize.AdapterMapper;
 import se.hitta.simplerialize.Serializer;
@@ -30,7 +31,7 @@ import se.hitta.simplerialize.Serializer;
 import com.google.common.base.Optional;
 
 /**
- *
+ * The calling application has to separately close the underlying {@link OutputStream} and {@link Writer} instances used to create the serializer.
  */
 public final class JacksonJsonSerializer extends AbstractSerializer
 {
@@ -58,6 +59,7 @@ public final class JacksonJsonSerializer extends AbstractSerializer
     {
         super(writer, mapper);
         this.generator = factory.createJsonGenerator(writer);
+        this.generator.disable(Feature.AUTO_CLOSE_TARGET);
     }
 
     /*
