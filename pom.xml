@@ -28,7 +28,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <jackson.version>1.9.2</jackson.version>
+        <jackson.version>1.9.11</jackson.version>
         <slf4j.version>1.6.3</slf4j.version>
     </properties>
     <dependencies>
@@ -42,7 +42,7 @@
         <dependency>
             <groupId>org.codehaus.woodstox</groupId>
             <artifactId>woodstox-core-asl</artifactId>
-            <version>4.1.2</version>
+            <version>4.1.4</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
