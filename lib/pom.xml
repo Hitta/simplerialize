@@ -6,7 +6,7 @@
     <version>0.0.5-SNAPSHOT</version>
     <parent>
         <groupId>se.hitta</groupId>
-        <artifactId>simplerialize-pom</artifactId>
+        <artifactId>simplerialize</artifactId>
         <version>0.0.5-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>

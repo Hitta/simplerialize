@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>se.hitta</groupId>
-    <artifactId>simplerialize-pom</artifactId>
+    <artifactId>simplerialize</artifactId>
     <packaging>pom</packaging>
     <version>0.0.5-SNAPSHOT</version>
     <organization>
@@ -21,14 +21,14 @@
         <module>comparison</module>
     </modules>
     <scm>
-        <connection>scm:git:git://github.com/Hitta/simplerialize.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/Hitta/simplerialize.git</developerConnection>
+        <developerConnection>scm:git:ssh://git@github.com/Hitta/${project.artifactId}.git</developerConnection>
         <url>https://github.com/Hitta/simplerialize</url>
     </scm>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <jackson.version>1.9.11</jackson.version>
+        <woodstox.version>4.1.4</woodstox.version>
         <slf4j.version>1.6.3</slf4j.version>
     </properties>
     <dependencies>
@@ -42,7 +42,7 @@
         <dependency>
             <groupId>org.codehaus.woodstox</groupId>
             <artifactId>woodstox-core-asl</artifactId>
-            <version>4.1.4</version>
+            <version>${woodstox.version}</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
