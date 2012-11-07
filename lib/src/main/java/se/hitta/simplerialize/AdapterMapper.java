@@ -15,6 +15,8 @@
  */
 package se.hitta.simplerialize;
 
+import org.codehaus.jackson.type.TypeReference;
+
 import se.hitta.simplerialize.adapters.NullAdapter;
 
 /**
@@ -34,8 +36,19 @@ public interface AdapterMapper
      * @return The instance of the {@link AdapterMapper} to allow method
      * chaining
      */
+    
     public AdapterMapper register(final SerializationAdapter<?> adapter, final Class<?>... clazz);
-
+    /**
+     * Register a given {@link SerializationAdapter} as the adapter to use for
+     * the provided {@link TypeReference}(es)
+     * 
+     * @param adapter The adapter to register
+     * @param typeReference The {@link TypeReference}(es) to register the adapter with
+     * @return The instance of the {@link AdapterMapper} to allow method
+     * chaining
+     */
+    
+    public AdapterMapper register(final SerializationAdapter<?> adapter, final TypeReference<?>... typeReference);
     /**
      * This method is responsible for finding an adapter. It usually boils down
      * to:
@@ -54,7 +67,16 @@ public interface AdapterMapper
      * type
      */
     public <T> SerializationAdapter<T> resolveAdapter(final Class<T> clazz);
-
+    
+    /**
+     * This method is responsible for finding an adapter for a registered {@link TypeReference}.
+     * 
+     * @param typeReference the {@link TypeReference} to provide an adapter for
+     * @return the adapter that should be used to serialize instances of the
+     * type
+     */
+    public <T> SerializationAdapter<T> resolveAdapter(final TypeReference<T> typeReference);
+    
     /**
      * Register the provided {@link Class} to be skipped if encountered during
      * serialization. Skipped meaning no output will be produced. This is

@@ -122,9 +122,18 @@ public final class JacksonJsonSerializer extends AbstractSerializer
     @Override
     public Serializer eachComplex(final String container, final Iterable<?> elements) throws IOException
     {
-        return eachComplex(container, elements.iterator());
+        return eachComplex(container, elements.iterator(), false);
     }
-
+    
+    /* (non-Javadoc)
+     * @see se.hitta.simplerialize.Serializer#eachComplex(java.lang.String, java.lang.Iterable, boolean)
+     */
+    @Override
+    public Serializer eachComplex(String container, Iterable<?> elements, boolean outputEmpty) throws IOException
+    {
+        return eachComplex(container, elements.iterator(), outputEmpty);
+    }
+    
     /*
      * (non-Javadoc)
      * @see se.hitta.simplerialize.Serializer#eachComplex(java.lang.String, java.util.Iterator)
@@ -132,7 +141,16 @@ public final class JacksonJsonSerializer extends AbstractSerializer
     @Override
     public Serializer eachComplex(final String container, final Iterator<?> elements) throws IOException
     {
-        if(elements.hasNext())
+        return eachComplex(container, elements, false);
+    }
+    
+    /* (non-Javadoc)
+     * @see se.hitta.simplerialize.Serializer#eachComplex(java.lang.String, java.util.Iterator, boolean)
+     */
+    @Override
+    public Serializer eachComplex(String container, Iterator<?> elements, boolean outputEmpty) throws IOException
+    {
+        if(elements.hasNext() || outputEmpty)
         {
             this.generator.writeArrayFieldStart(container);
             while(elements.hasNext())
