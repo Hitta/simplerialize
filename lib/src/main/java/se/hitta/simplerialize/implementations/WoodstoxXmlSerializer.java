@@ -205,7 +205,19 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
         }
         return this;
     }
+    
+    @Override
+    public Serializer eachComplex(String container, Iterable<?> elements, boolean outputEmpty) throws IOException
+    {
+        return eachComplex(container, elements.iterator());
+    }
 
+    @Override
+    public Serializer eachComplex(String container, Iterator<?> elements, boolean outputEmpty) throws IOException
+    {
+        return eachComplex(container, elements);
+    }
+    
     /*
      * (non-Javadoc)
      * @see se.hitta.simplerialize.Serializer#eachComplex(java.lang.String, java.lang.Iterable)

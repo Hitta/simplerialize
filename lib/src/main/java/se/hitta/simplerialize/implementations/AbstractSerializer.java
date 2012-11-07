@@ -18,6 +18,8 @@ package se.hitta.simplerialize.implementations;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.codehaus.jackson.type.TypeReference;
+
 import se.hitta.simplerialize.AdapterMapper;
 import se.hitta.simplerialize.Serializer;
 
@@ -59,7 +61,16 @@ abstract class AbstractSerializer implements Serializer
         writeWithAdapter((Class<T>)target.getClass(), target);
         return this;
     }
-
+    
+    /* (non-Javadoc)
+     * @see se.hitta.simplerialize.Serializer#writeWithAdapter(java.lang.Object, org.codehaus.jackson.type.TypeReference)
+     */
+    @Override
+    public <T> Serializer writeWithAdapter(T target, TypeReference<T> typeReference) throws IOException
+    {
+        this.mapper.resolveAdapter(typeReference).write(target, this);
+        return this;
+    }
     /*
      * (non-Javadoc)
      * @see se.hitta.simplerialize.Serializer#writeWithAdapter(java.lang.Class, java.lang.Object)

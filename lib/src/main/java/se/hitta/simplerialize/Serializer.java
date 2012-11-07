@@ -22,6 +22,10 @@ import java.io.OutputStream;
 import java.io.Writer;
 import java.util.Iterator;
 
+import org.codehaus.jackson.type.TypeReference;
+
+import se.hitta.simplerialize.implementations.JacksonJsonSerializer;
+
 import com.google.common.base.Optional;
 
 /**
@@ -93,7 +97,22 @@ public interface Serializer extends Flushable, Closeable
      * {@link Writer}.
      */
     Serializer eachComplex(String container, Iterable<?> elements) throws IOException;
-
+    
+    /**
+     * Write each object of the supplied {@link Iterable} with their respective
+     * {@link SerializationAdapter}.
+     * 
+     * @param container Name of the container for the elements
+     * @param elements The {@link Iterable} whose elements to write
+     * @param outputEmpty Generates an array (empty) even when there are no elements. Only eligible for {@link JacksonJsonSerializer}
+     * @return this {@link Serializer} instance to allow call chaining
+     * @throws IOException if there's either a format problem (ie your usage of
+     * the library produced illegal XML or JSON) or if an {@link IOException}
+     * occurs when writing to the underlying {@link OutputStream} or
+     * {@link Writer}.
+     */
+    Serializer eachComplex(String container, Iterable<?> elements, boolean outputEmpty) throws IOException;
+    
     /**
      * Write each element of the supplied {@link Iterator}.
      * 
@@ -107,6 +126,21 @@ public interface Serializer extends Flushable, Closeable
      */
     Serializer eachComplex(String container, Iterator<?> elements) throws IOException;
 
+    /**
+     * Write each object of the supplied {@link Iterable} with their respective
+     * {@link SerializationAdapter}.
+     * 
+     * @param container Name of the container for the elements
+     * @param elements The {@link Iterable} whose elements to write
+     * @param outputEmpty Generates an array (empty) even when there are no elements. Only eligible for {@link JacksonJsonSerializer}
+     * @return this {@link Serializer} instance to allow call chaining
+     * @throws IOException if there's either a format problem (ie your usage of
+     * the library produced illegal XML or JSON) or if an {@link IOException}
+     * occurs when writing to the underlying {@link OutputStream} or
+     * {@link Writer}.
+     */
+    Serializer eachComplex(String container, Iterator<?> elements, boolean outputEmpty) throws IOException;
+    
     /**
      * Start a container. For XML, usually an element. For JSON, usually an
      * object.
@@ -155,7 +189,21 @@ public interface Serializer extends Flushable, Closeable
      * {@link Writer}.
      */
     <T> Serializer writeWithAdapter(final T target) throws IOException;
-
+    
+    /**
+     * Write the supplied target object using the adapter found by this
+     * {@link Serializer}'s underlying {@link AdapterMapper}.
+     * 
+     * @param target The object to serialize
+     * @param typeToken The {@link TypeReference} that the adapter is registered for.
+     * @return this {@link Serializer} instance to allow call chaining
+     * @throws IOException if there's either a format problem (ie your usage of
+     * the library produced illegal XML or JSON) or if an {@link IOException}
+     * occurs when writing to the underlying {@link OutputStream} or
+     * {@link Writer}.
+     */
+    <T> Serializer writeWithAdapter(final T target, final TypeReference<T> typeReference) throws IOException;
+    
     /**
      * Write the supplied target object using the adapter found for the supplied
      * {@link Class}.
