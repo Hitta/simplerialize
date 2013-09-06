@@ -15,6 +15,9 @@
  */
 package se.hitta.simplerialize.adapters;
 
+import com.google.common.collect.ImmutableCollection;
+import com.google.common.collect.ImmutableList;
+
 import java.io.IOException;
 import java.util.Collection;
 
@@ -26,11 +29,11 @@ import se.hitta.simplerialize.Serializer;
  * own {@link se.hitta.simplerialize.SerializationAdapter}.
  */
 public class SerializationCapableCollection<T> implements SerializationCapable {
-    private final Collection<T> collection;
-    private final String typeName;
+    public final ImmutableCollection<T> collection;
+    public final String typeName;
 
     public SerializationCapableCollection(final Collection<T> collection, final String typeName) {
-        this.collection = collection;
+        this.collection = ImmutableList.<T>builder().addAll(collection).build();
         this.typeName = typeName;
     }
 
