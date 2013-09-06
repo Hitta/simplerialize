@@ -3,7 +3,7 @@
     <groupId>se.hitta</groupId>
     <artifactId>simplerialize</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.8</version>
+    <version>0.0.9-SNAPSHOT</version>
     <organization>
         <name>Hitta.se - Hittapunktse AB</name>
         <url>http://www.hitta.se/</url>
