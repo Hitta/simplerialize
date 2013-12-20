@@ -144,9 +144,9 @@ public final class DefaultAdapterMapper implements AdapterMapper
             throw new IllegalStateException("No adapter found for " + clazz);
         }
 
-        if(log.isDebugEnabled())
+        if(log.isTraceEnabled())
         {
-            log.debug("Found adapter " + adapter + " for " + clazz);
+            log.trace("Found adapter " + adapter + " for " + clazz);
         }
         return adapter;
     }
@@ -164,9 +164,9 @@ public final class DefaultAdapterMapper implements AdapterMapper
     {
         for(final Class<?> clazz : classes)
         {
-            if(log.isDebugEnabled())
+            if(log.isTraceEnabled())
             {
-                log.debug("Trying to find adapter for " + clazz);
+                log.trace("Trying to find adapter for " + clazz);
             }
             if(clazz != null)
             {
@@ -190,9 +190,9 @@ public final class DefaultAdapterMapper implements AdapterMapper
              * So we register a bridge adapter to map between the
              * SerializationCapable and SerializationAdapter interfaces.
              */
-            if(log.isDebugEnabled())
+            if(log.isTraceEnabled())
             {
-                log.debug("Registering adapter bridge for " + clazz);
+                log.trace("Registering adapter bridge for " + clazz);
             }
             this.mappings.put(clazz, SerializationCapableAdapter.instance);
             return SerializationCapableAdapter.instance;
@@ -208,9 +208,9 @@ public final class DefaultAdapterMapper implements AdapterMapper
             }
             if(adapter != null)
             {
-                if(log.isDebugEnabled())
+                if(log.isTraceEnabled())
                 {
-                    log.debug("Registering " + adapter + " for " + clazz);
+                    log.trace("Registering " + adapter + " for " + clazz);
                 }
                 this.mappings.put(clazz, adapter);
             }
