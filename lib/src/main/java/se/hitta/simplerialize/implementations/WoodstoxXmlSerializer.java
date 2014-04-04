@@ -336,4 +336,40 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
         }
         return this;
     }
+
+    @Override
+    public Serializer eachPrimitiveDeep(String container, Iterable<?> elements) throws IOException {
+        return eachPrimitiveDeep(container, elements.iterator());
+    }
+
+    @Override
+    public Serializer eachPrimitiveDeep(String container, Iterator<?> elements) throws IOException {
+        if(elements.hasNext())
+        {
+            try
+            {
+                this.generator.writeStartElement(container);
+                while(elements.hasNext())
+                {
+                    final Object next = elements.next();
+                    if (next instanceof Iterable)
+                    {
+                        eachPrimitiveDeep("values", (Iterable) next);
+                    }
+                    else
+                    {
+                        this.generator.writeStartElement("value");
+                        writeWithAdapter(next);
+                        this.generator.writeEndElement();
+                    }
+                }
+                this.generator.writeEndElement();
+            }
+            catch(final XMLStreamException e)
+            {
+                throw new IOException(e.getMessage(), e);
+            }
+        }
+        return this;
+    }
 }

@@ -307,4 +307,30 @@ public interface Serializer extends Flushable, Closeable
      */
     @Deprecated
     Serializer writeObject(Object target) throws IOException;
+
+    /**
+     * Write each primitive returned from the supplied {@link Iterable}. Handles nested {@link Iterable}.
+     *
+     * @param container Name of the container for the elements
+     * @param elements The {@link Iterable} whose elements to write
+     * @return this {@link Serializer} instance to allow call chaining
+     * @throws IOException if there's either a format problem (ie your usage of
+     * the library produced illegal XML or JSON) or if an {@link IOException}
+     * occurs when writing to the underlying {@link OutputStream} or
+     * {@link Writer}.
+     */
+    Serializer eachPrimitiveDeep(final String container, final Iterable<?> elements) throws IOException;
+
+    /**
+     * Write each primitive returned from the supplied {@link Iterator}. Handles nested {@link Iterator} or {@link Iterable}.
+     *
+     * @param container Name of the container for the elements
+     * @param elements The {@link Iterable} whose elements to write
+     * @return this {@link Serializer} instance to allow call chaining
+     * @throws IOException if there's either a format problem (ie your usage of
+     * the library produced illegal XML or JSON) or if an {@link IOException}
+     * occurs when writing to the underlying {@link OutputStream} or
+     * {@link Writer}.
+     */
+    Serializer eachPrimitiveDeep(final String container, final Iterator<?> elements) throws IOException;
 }

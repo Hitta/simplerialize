@@ -73,6 +73,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>de.grundid.opendatalab</groupId>
+            <artifactId>geojson-jackson</artifactId>
+            <version>1.1</version>
+        </dependency>
         <!-- TEST -->
         <dependency>
             <groupId>junit</groupId>
