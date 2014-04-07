@@ -39,7 +39,7 @@ public final class JacksonJsonSerializer extends AbstractSerializer
     private final JsonGenerator generator;
 
     /**
-     * 
+     *
      * @param stream
      * @param mapper
      * @throws IOException
@@ -50,7 +50,7 @@ public final class JacksonJsonSerializer extends AbstractSerializer
     }
 
     /**
-     * 
+     *
      * @param writer
      * @param mapper
      * @throws IOException
@@ -124,7 +124,7 @@ public final class JacksonJsonSerializer extends AbstractSerializer
     {
         return eachComplex(container, elements.iterator(), false);
     }
-    
+
     /* (non-Javadoc)
      * @see se.hitta.simplerialize.Serializer#eachComplex(java.lang.String, java.lang.Iterable, boolean)
      */
@@ -133,7 +133,7 @@ public final class JacksonJsonSerializer extends AbstractSerializer
     {
         return eachComplex(container, elements.iterator(), outputEmpty);
     }
-    
+
     /*
      * (non-Javadoc)
      * @see se.hitta.simplerialize.Serializer#eachComplex(java.lang.String, java.util.Iterator)
@@ -143,7 +143,7 @@ public final class JacksonJsonSerializer extends AbstractSerializer
     {
         return eachComplex(container, elements, false);
     }
-    
+
     /* (non-Javadoc)
      * @see se.hitta.simplerialize.Serializer#eachComplex(java.lang.String, java.util.Iterator, boolean)
      */
@@ -276,4 +276,85 @@ public final class JacksonJsonSerializer extends AbstractSerializer
         }
         return this;
     }
+
+    @Override
+    public Serializer eachNestedPrimitive(String container, Iterable<?> elements) throws IOException {
+        return eachNestedPrimitive(container, elements.iterator());
+    }
+
+    @Override
+    public Serializer eachNestedPrimitive(String container, Iterator<?> elements) throws IOException {
+        if(elements.hasNext()) {
+            this.generator.writeArrayFieldStart(container);
+            while(elements.hasNext()) {
+                final Object next = elements.next();
+                if (next instanceof Iterable)
+                    innerPrimitiveArray(((Iterable<?>) next).iterator());
+                else
+                    writeWithAdapter(next);
+            }
+            this.generator.writeEndArray();
+        }
+        return this;
+    }
+
+    protected Serializer innerPrimitiveArray(final Iterator<?> elements) throws IOException {
+        if(elements.hasNext()) {
+            this.generator.writeStartArray();
+            while(elements.hasNext())
+            {
+                final Object next = elements.next();
+                if (next instanceof Iterable)
+                    innerPrimitiveArray(((Iterable<?>) next).iterator());
+                else
+                    writeWithAdapter(next);
+            }
+            this.generator.writeEndArray();
+        }
+        return this;
+    }
+
+    @Override
+    public Serializer eachNestedComplex(String container, Iterable<?> elements) throws IOException {
+        return eachNestedComplex(container, elements.iterator());
+    }
+
+    @Override
+    public Serializer eachNestedComplex(String container, Iterator<?> elements) throws IOException {
+        if(elements.hasNext()) {
+            this.generator.writeArrayFieldStart(container);
+            while(elements.hasNext()) {
+                final Object next = elements.next();
+                if (next instanceof Iterable)
+                    innerComplexArray(((Iterable<?>) next).iterator());
+                else {
+                    this.generator.writeStartObject();
+                    writeWithAdapter(next);
+                    this.generator.writeEndObject();
+                }
+            }
+            this.generator.writeEndArray();
+        }
+        return this;
+    }
+
+    protected Serializer innerComplexArray(final Iterator<?> elements) throws IOException {
+        if(elements.hasNext()) {
+            this.generator.writeStartArray();
+            while(elements.hasNext())
+            {
+                final Object next = elements.next();
+                if (next instanceof Iterable)
+                    innerComplexArray(((Iterable<?>) next).iterator());
+                else {
+                    this.generator.writeStartObject();
+                    writeWithAdapter(next);
+                    this.generator.writeEndObject();
+                }
+            }
+            this.generator.writeEndArray();
+        }
+        return this;
+    }
+
 }

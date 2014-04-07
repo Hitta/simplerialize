@@ -307,4 +307,57 @@ public interface Serializer extends Flushable, Closeable
      */
     @Deprecated
     Serializer writeObject(Object target) throws IOException;
+
+    /**
+     * Write each primitive returned from the supplied {@link Iterable} and further nested {@link Iterable}.
+     *
+     * @param container Name of the container for the elements
+     * @param elements The {@link Iterable} whose elements to write
+     * @return this {@link Serializer} instance to allow call chaining
+     * @throws IOException if there's either a format problem (ie your usage of
+     * the library produced illegal XML or JSON) or if an {@link IOException}
+     * occurs when writing to the underlying {@link OutputStream} or
+     * {@link Writer}.
+     */
+    Serializer eachNestedPrimitive(final String container, final Iterable<?> elements) throws IOException;
+
+    /**
+     * Write each primitive returned from the supplied {@link Iterable} and nested {@link java.util.Iterator} or {@link Iterable} .
+     *
+     * @param container Name of the container for the elements
+     * @param elements The {@link Iterable} whose elements to write
+     * @return this {@link Serializer} instance to allow call chaining
+     * @throws IOException if there's either a format problem (ie your usage of
+     * the library produced illegal XML or JSON) or if an {@link IOException}
+     * occurs when writing to the underlying {@link OutputStream} or
+     * {@link Writer}.
+     */
+    Serializer eachNestedPrimitive(final String container, final Iterator<?> elements) throws IOException;
+
+    /**
+     * Write each complex object returned from the supplied {@link Iterable} and further nested {@link Iterable}.
+     *
+     * @param container Name of the container for the elements
+     * @param elements The {@link Iterable} whose elements to write
+     * @return this {@link Serializer} instance to allow call chaining
+     * @throws IOException if there's either a format problem (ie your usage of
+     * the library produced illegal XML or JSON) or if an {@link IOException}
+     * occurs when writing to the underlying {@link OutputStream} or
+     * {@link Writer}.
+     */
+    Serializer eachNestedComplex(String container, Iterable<?> elements) throws IOException;
+
+    /**
+     * Write each complex object returned from the supplied {@link java.util.Iterator} and further nested {@link java.util.Iterator}.
+     *
+     * @param container Name of the container for the elements
+     * @param elements The {@link Iterable} whose elements to write
+     * @return this {@link Serializer} instance to allow call chaining
+     * @throws IOException if there's either a format problem (ie your usage of
+     * the library produced illegal XML or JSON) or if an {@link IOException}
+     * occurs when writing to the underlying {@link OutputStream} or
+     * {@link Writer}.
+     */
+    Serializer eachNestedComplex(String container, Iterator<?> elements) throws IOException;
+
 }
