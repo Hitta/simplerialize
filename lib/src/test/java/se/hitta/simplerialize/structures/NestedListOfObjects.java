@@ -7,7 +7,7 @@ import se.hitta.simplerialize.Serializer;
 
 import java.io.IOException;
 
-public final class NestedListOfComplexObjects extends AbstractSerializationTest {
+public final class NestedListOfObjects extends AbstractSerializationTest {
     @Override
     public void write(final Serializer serializer) throws IOException {
 
