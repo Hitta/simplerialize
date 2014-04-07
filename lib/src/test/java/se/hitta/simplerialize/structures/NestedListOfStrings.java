@@ -6,7 +6,7 @@ import se.hitta.simplerialize.Serializer;
 
 import java.io.IOException;
 
-public final class ListOfLists extends AbstractSerializationTest {
+public final class NestedListOfStrings extends AbstractSerializationTest {
     @Override
     public void write(final Serializer serializer) throws IOException {
 
@@ -20,8 +20,9 @@ public final class ListOfLists extends AbstractSerializationTest {
                                 )
                         )
                 );
-
-        serializer.eachPrimitiveDeep("container", iterable);
+        serializer.startContainer("container");
+        serializer.eachNestedPrimitive("item", iterable);
+        serializer.endContainer();
     }
 
 }

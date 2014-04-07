@@ -338,12 +338,12 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
     }
 
     @Override
-    public Serializer eachPrimitiveDeep(String container, Iterable<?> elements) throws IOException {
-        return eachPrimitiveDeep(container, elements.iterator());
+    public Serializer eachNestedPrimitive(String container, Iterable<?> elements) throws IOException {
+        return eachNestedPrimitive(container, elements.iterator());
     }
 
     @Override
-    public Serializer eachPrimitiveDeep(String container, Iterator<?> elements) throws IOException {
+    public Serializer eachNestedPrimitive(String container, Iterator<?> elements) throws IOException {
         if(elements.hasNext())
         {
             try
@@ -354,7 +354,7 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
                     final Object next = elements.next();
                     if (next instanceof Iterable)
                     {
-                        eachPrimitiveDeep("values", (Iterable) next);
+                        eachNestedPrimitive("values", (Iterable) next);
                     }
                     else
                     {
@@ -364,6 +364,43 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
                     }
                 }
                 this.generator.writeEndElement();
+            }
+            catch(final XMLStreamException e)
+            {
+                throw new IOException(e.getMessage(), e);
+            }
+        }
+        return this;
+    }
+
+    @Override
+    public Serializer eachNestedComplex(String container, Iterable<?> elements) throws IOException {
+        return eachNestedComplex(container, elements.iterator());
+    }
+
+    @Override
+    public Serializer eachNestedComplex(String container, Iterator<?> elements) throws IOException {
+        if(elements.hasNext())
+        {
+            try
+            {
+                while(elements.hasNext())
+                {
+                    final Object next = elements.next();
+                    if (next instanceof Iterable)
+                    {
+                        this.generator.writeStartElement("values");
+                        eachNestedComplex(container, (Iterable) next);
+                        this.generator.writeEndElement();
+                    }
+                    else
+                    {
+                        this.generator.writeStartElement(container);
+                        writeWithAdapter(next);
+                        this.generator.writeEndElement();
+                    }
+                }
+
             }
             catch(final XMLStreamException e)
             {
