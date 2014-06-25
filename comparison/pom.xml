@@ -3,18 +3,18 @@
     <groupId>se.hitta</groupId>
     <artifactId>simplerialize-comparison</artifactId>
     <packaging>jar</packaging>
-    <version>0.0.12-SNAPSHOT</version>
+    <version>0.0.12</version>
     <parent>
         <groupId>se.hitta</groupId>
         <artifactId>simplerialize</artifactId>
-        <version>0.0.12-SNAPSHOT</version>
+        <version>0.0.12</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <dependencies>
         <dependency>
             <groupId>se.hitta</groupId>
             <artifactId>simplerialize-lib</artifactId>
-            <version>0.0.12-SNAPSHOT</version>
+            <version>0.0.12</version>
             <type>jar</type>
             <scope>test</scope>
         </dependency>
