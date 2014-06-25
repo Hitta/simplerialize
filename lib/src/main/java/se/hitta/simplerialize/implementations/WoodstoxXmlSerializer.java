@@ -312,6 +312,19 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
         return writeAttribute(name, value);
     }
 
+    @Override
+    public Serializer writeNullValue(String name) throws IOException {
+        try
+        {
+            this.generator.writeEmptyElement(name);
+        }
+        catch(final XMLStreamException e)
+        {
+            throw new IOException(e.getMessage(), e);
+        }
+        return this;
+    }
+
     private Serializer writeAttribute(final String name, final Optional<?> value) throws IOException
     {
         if(value != null && value.isPresent())

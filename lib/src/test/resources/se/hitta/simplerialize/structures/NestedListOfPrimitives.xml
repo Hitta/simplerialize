@@ -1,16 +1,18 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <container>
-    <values>
+    <items>
         <values>
             <values>
                 <values>
-                    <value>foo</value>
-                    <value>bar</value>
-                    <value>A</value>
-                    <value>B</value>
-                    <value>C</value>
+                    <values>
+                        <value>foo</value>
+                        <value>bar</value>
+                        <value>A</value>
+                        <value>B</value>
+                        <value>C</value>
+                    </values>
                 </values>
             </values>
         </values>
-    </values>
+    </items>
 </container>

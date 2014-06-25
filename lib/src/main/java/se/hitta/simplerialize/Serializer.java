@@ -281,6 +281,18 @@ public interface Serializer extends Flushable, Closeable
      */
     Serializer writeNameValue(String name, Optional<?> value) throws IOException;
 
+     /**
+     * Write a {@link String} name and null value.
+     *
+     * @param name
+     * @return this {@link Serializer} instance to allow call chaining
+     * @throws IOException if there's either a format problem (ie your usage of
+     * the library produced illegal XML or JSON) or if an {@link IOException}
+     * occurs when writing to the underlying {@link OutputStream} or
+     * {@link Writer}.
+     */
+    Serializer writeNullValue(String name) throws IOException;
+
     /**
      * Print the output of this {@link Serializer} to the supplied
      * {@link Appendable}. This a debugging tool and <strong>will not

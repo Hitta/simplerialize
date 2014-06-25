@@ -278,6 +278,12 @@ public final class JacksonJsonSerializer extends AbstractSerializer
     }
 
     @Override
+    public Serializer writeNullValue(String name) throws IOException {
+        this.generator.writeNullField(name);
+        return this;
+    }
+
+    @Override
     public Serializer eachNestedPrimitive(String container, Iterable<?> elements) throws IOException {
         return eachNestedPrimitive(container, elements.iterator());
     }

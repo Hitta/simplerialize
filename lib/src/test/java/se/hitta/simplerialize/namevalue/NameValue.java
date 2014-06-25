@@ -70,6 +70,15 @@ public final class NameValue
             context.writeNameValue("foo", 12.34d);
         }
     }
+
+    public static final class StringNull extends NameValueCase
+    {
+        @Override
+        public void writeNameValue(final Serializer context) throws IOException
+        {
+            context.writeNullValue("foo");
+        }
+    }
     
     static abstract class NameValueCase extends AbstractSerializationTest
     {
