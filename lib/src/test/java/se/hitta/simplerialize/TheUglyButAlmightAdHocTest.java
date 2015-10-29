@@ -6,8 +6,6 @@ import java.util.Collection;
 
 import org.junit.Test;
 
-import com.google.common.base.Optional;
-
 /**
  * This was one of the first proof of concept tests written to simply see if
  * the serialization worked (ie didn't throw any exceptions).
@@ -38,8 +36,9 @@ public class TheUglyButAlmightAdHocTest
         {
             serializer.startContainer("yeah");
             {
-                serializer.writeNameValue("def", Optional.of("howdY"));
-                serializer.writeNameValue("unk", Optional.absent());
+                serializer.writeNameValue("guava_optional", com.google.common.base.Optional.of("guava_optional"));
+                serializer.writeNameValue("unknown", com.google.common.base.Optional.absent());
+                serializer.writeNameValue("java8_optional", java.util.Optional.of("java8_optional"));
                 serializer.writeNameValue("str", this.str);
                 serializer.writeNameValue("bool", this.bool);
                 serializer.startContainer("nested");

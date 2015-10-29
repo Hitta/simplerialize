@@ -267,7 +267,22 @@ public final class JacksonJsonSerializer extends AbstractSerializer
      * @see se.hitta.simplerialize.Serializer#writeNameValue(java.lang.String, com.google.common.base.Optional)
      */
     @Override
-    public Serializer writeNameValue(final String name, final Optional<?> value) throws IOException
+    public Serializer writeNameValue(final String name, final com.google.common.base.Optional<?> value) throws IOException
+    {
+        if(value != null && value.isPresent() && value.get() != null)
+        {
+            this.generator.writeFieldName(name);
+            writeWithAdapter(value.get());
+        }
+        return this;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.simplerialize.Serializer#writeNameValue(java.lang.String, java.util.Optional)
+     */
+    @Override
+    public Serializer writeNameValue(final String name, final java.util.Optional<?> value) throws IOException
     {
         if(value != null && value.isPresent() && value.get() != null)
         {

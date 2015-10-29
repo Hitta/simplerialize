@@ -26,7 +26,6 @@ import org.codehaus.jackson.type.TypeReference;
 
 import se.hitta.simplerialize.implementations.JacksonJsonSerializer;
 
-import com.google.common.base.Optional;
 
 /**
  * The interface for all concrete {@link Serializer} implementations.
@@ -165,17 +164,30 @@ public interface Serializer extends Flushable, Closeable
     Serializer endContainer() throws IOException;
 
     /**
-     * If the supplied {@link Optional} is known write it using an adapter
+     * If the supplied {@link com.google.common.base.Optional} is known write it using an adapter
      * otherwise do nothing.
      * 
-     * @param target The {@link Optional} whose elements to serialize
+     * @param target The {@link com.google.common.base.Optional} whose elements to serialize
      * @return this {@link Serializer} instance to allow call chaining
      * @throws IOException if there's either a format problem (ie your usage of
      * the library produced illegal XML or JSON) or if an {@link IOException}
      * occurs when writing to the underlying {@link OutputStream} or
      * {@link Writer}.
      */
-    Serializer writeWithAdapter(Optional<?> target) throws IOException;
+    Serializer writeWithAdapter(com.google.common.base.Optional<?> target) throws IOException;
+
+    /**
+     * If the supplied {@link java.util.Optional} is known write it using an adapter
+     * otherwise do nothing.
+     *
+     * @param target The {@link java.util.Optional} whose elements to serialize
+     * @return this {@link Serializer} instance to allow call chaining
+     * @throws IOException if there's either a format problem (ie your usage of
+     * the library produced illegal XML or JSON) or if an {@link IOException}
+     * occurs when writing to the underlying {@link OutputStream} or
+     * {@link Writer}.
+     */
+    Serializer writeWithAdapter(java.util.Optional<?> target) throws IOException;
 
     /**
      * Write the supplied target object using the adapter found by this
@@ -268,8 +280,8 @@ public interface Serializer extends Flushable, Closeable
     <T extends Number>Serializer writeNameValue(final String name, final T value) throws IOException;
     
      /**
-     * If the supplied {@link Optional} is known, write a {@link String} name and
-     * the value of the {@link Optional}. Otherwise, do nothing.
+     * If the supplied {@link com.google.common.base.Optional} is known, write a {@link String} name and
+     * the value of the {@link com.google.common.base.Optional}. Otherwise, do nothing.
      *
      * @param name
      * @param value
@@ -279,7 +291,21 @@ public interface Serializer extends Flushable, Closeable
      * occurs when writing to the underlying {@link OutputStream} or
      * {@link Writer}.
      */
-    Serializer writeNameValue(String name, Optional<?> value) throws IOException;
+    Serializer writeNameValue(String name, com.google.common.base.Optional<?> value) throws IOException;
+
+     /**
+     * If the supplied {@link java.util.Optional} is known, write a {@link String} name and
+     * the value of the {@link java.util.Optional}. Otherwise, do nothing.
+     *
+     * @param name
+     * @param value
+     * @return this {@link Serializer} instance to allow call chaining
+     * @throws IOException if there's either a format problem (ie your usage of
+     * the library produced illegal XML or JSON) or if an {@link IOException}
+     * occurs when writing to the underlying {@link OutputStream} or
+     * {@link Writer}.
+     */
+    Serializer writeNameValue(String name, java.util.Optional<?> value) throws IOException;
 
      /**
      * Write a {@link String} name and null value.

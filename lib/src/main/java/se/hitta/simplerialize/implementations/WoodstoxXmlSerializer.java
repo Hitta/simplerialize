@@ -29,7 +29,6 @@ import se.hitta.simplerialize.AdapterMapper;
 import se.hitta.simplerialize.Serializer;
 
 import com.ctc.wstx.api.WstxOutputProperties;
-import com.google.common.base.Optional;
 
 /**
  *
@@ -307,7 +306,17 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
      * @see se.hitta.simplerialize.Serializer#writeNameValue(java.lang.String, com.google.common.base.Optional)
      */
     @Override
-    public Serializer writeNameValue(final String name, final Optional<?> value) throws IOException
+    public Serializer writeNameValue(final String name, final com.google.common.base.Optional<?> value) throws IOException
+    {
+        return writeAttribute(name, value);
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.simplerialize.Serializer#writeNameValue(java.lang.String, com.google.common.base.Optional)
+     */
+    @Override
+    public Serializer writeNameValue(final String name, final java.util.Optional<?> value) throws IOException
     {
         return writeAttribute(name, value);
     }
@@ -325,7 +334,16 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
         return this;
     }
 
-    private Serializer writeAttribute(final String name, final Optional<?> value) throws IOException
+    private Serializer writeAttribute(final String name, final com.google.common.base.Optional<?> value) throws IOException
+    {
+        if(value != null && value.isPresent())
+        {
+            writeAttribute(name, value.get());
+        }
+        return this;
+    }
+
+    private Serializer writeAttribute(final String name, final java.util.Optional<?> value) throws IOException
     {
         if(value != null && value.isPresent())
         {

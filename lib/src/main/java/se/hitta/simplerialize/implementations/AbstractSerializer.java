@@ -23,8 +23,6 @@ import org.codehaus.jackson.type.TypeReference;
 import se.hitta.simplerialize.AdapterMapper;
 import se.hitta.simplerialize.Serializer;
 
-import com.google.common.base.Optional;
-
 abstract class AbstractSerializer implements Serializer
 {
     private final AdapterMapper mapper;
@@ -41,7 +39,21 @@ abstract class AbstractSerializer implements Serializer
      * @see se.hitta.simplerialize.Serializer#writeWithAdapter(com.google.common.base.Optional)
      */
     @Override
-    public final Serializer writeWithAdapter(final Optional<?> target) throws IOException
+    public final Serializer writeWithAdapter(final com.google.common.base.Optional<?> target) throws IOException
+    {
+        if(target != null && target.isPresent())
+        {
+            writeWithAdapter(target.get());
+        }
+        return this;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.simplerialize.Serializer#writeWithAdapter(java.util.Optional)
+     */
+    @Override
+    public final Serializer writeWithAdapter(final java.util.Optional<?> target) throws IOException
     {
         if(target != null && target.isPresent())
         {
