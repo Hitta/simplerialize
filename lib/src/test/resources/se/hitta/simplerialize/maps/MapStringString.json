@@ -3,9 +3,9 @@
 	{
 		"entry":
 		[
-			{"yin":"yang"},
 			{"foo":"bar"},
-			{"x":"y"}
+			{"x":"y"},
+			{"yin":"yang"}
 		]
 	}
 }

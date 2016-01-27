@@ -21,10 +21,9 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.Iterator;
 
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonGenerator;
-import org.codehaus.jackson.JsonGenerator.Feature;
-
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import se.hitta.simplerialize.AdapterMapper;
 import se.hitta.simplerialize.Serializer;
 
@@ -58,8 +57,8 @@ public final class JacksonJsonSerializer extends AbstractSerializer
     public JacksonJsonSerializer(final Writer writer, final AdapterMapper mapper) throws IOException
     {
         super(writer, mapper);
-        this.generator = factory.createJsonGenerator(writer);
-        this.generator.disable(Feature.AUTO_CLOSE_TARGET);
+        this.generator = factory.createGenerator(writer);
+        this.generator.disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET);
     }
 
     /*

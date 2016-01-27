@@ -22,7 +22,7 @@ import java.io.OutputStream;
 import java.io.Writer;
 import java.util.Iterator;
 
-import org.codehaus.jackson.type.TypeReference;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 import se.hitta.simplerialize.implementations.JacksonJsonSerializer;
 

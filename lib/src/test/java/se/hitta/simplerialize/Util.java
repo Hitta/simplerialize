@@ -8,9 +8,9 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.custommonkey.xmlunit.Diff;
 import org.xml.sax.SAXException;
 

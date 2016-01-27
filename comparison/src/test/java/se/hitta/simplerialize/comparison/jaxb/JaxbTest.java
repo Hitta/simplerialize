@@ -7,10 +7,10 @@ import java.util.Map;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 
-import org.codehaus.jackson.map.AnnotationIntrospector;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.xc.JaxbAnnotationIntrospector;
-
+import com.fasterxml.jackson.databind.AnnotationIntrospector;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
 import se.hitta.simplerialize.comparison.AbstractTest;
 import se.hitta.simplerialize.comparison.SampleObject;
 
@@ -40,8 +40,8 @@ public final class JaxbTest extends AbstractTest
     public void serializeJsonTo(final Writer writer) throws Exception
     {
         final ObjectMapper mapper = new ObjectMapper();
-        final AnnotationIntrospector introspector = new JaxbAnnotationIntrospector();
-        mapper.getSerializationConfig().setAnnotationIntrospector(introspector);
+        final AnnotationIntrospector introspector = new JaxbAnnotationIntrospector(TypeFactory.defaultInstance());
+        mapper.setAnnotationIntrospector(introspector);
         mapper.writeValue(writer, createRoot());
     }
 }
