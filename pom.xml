@@ -3,7 +3,7 @@
     <groupId>se.hitta</groupId>
     <artifactId>simplerialize</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.16</version>
+    <version>0.0.17-SNAPSHOT</version>
     <organization>
         <name>Hitta.se - Hittapunktse AB</name>
         <url>http://www.hitta.se/</url>
@@ -23,7 +23,7 @@
     <scm>
         <developerConnection>scm:git:ssh://git@github.com/Hitta/${project.artifactId}.git</developerConnection>
         <url>https://github.com/Hitta/simplerialize</url>
-      <tag>simplerialize-0.0.16</tag>
+      <tag>HEAD</tag>
   </scm>
     <!-- parent only needed when releasing to hitta.se's repo. Please remove if used outside of hitta.se -->
     <parent>
