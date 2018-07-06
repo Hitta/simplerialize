@@ -139,7 +139,37 @@ public interface Serializer extends Flushable, Closeable
      * {@link Writer}.
      */
     Serializer eachComplex(String container, Iterator<?> elements, boolean outputEmpty) throws IOException;
-    
+
+    /**
+     * Write each object of the supplied {@link Iterable} with the supplied
+     * {@link SerializationAdapter}.
+     * 
+     * @param container Name of the container for the elements
+     * @param elements The {@link Iterable} whose elements to write
+     * @param adapter The {@link SerializationAdapter} to use 
+     * @return this {@link Serializer} instance to allow call chaining
+     * @throws IOException if there's either a format problem (ie your usage of
+     * the library produced illegal XML or JSON) or if an {@link IOException}
+     * occurs when writing to the underlying {@link OutputStream} or
+     * {@link Writer}.
+     */
+    Serializer eachComplex(String container, Iterable<?> elements, SerializationAdapter adapter) throws IOException;
+
+    /**
+     * Write each object of the supplied {@link Iterator} with the supplied
+     * {@link SerializationAdapter}.
+     * 
+     * @param container Name of the container for the elements
+     * @param elements The {@link Iterator} whose elements to write
+     * @param adapter The {@link SerializationAdapter} to use 
+     * @return this {@link Serializer} instance to allow call chaining
+     * @throws IOException if there's either a format problem (ie your usage of
+     * the library produced illegal XML or JSON) or if an {@link IOException}
+     * occurs when writing to the underlying {@link OutputStream} or
+     * {@link Writer}.
+     */
+    Serializer eachComplex(String container, Iterator<?> elements, SerializationAdapter adapter) throws IOException;
+
     /**
      * Start a container. For XML, usually an element. For JSON, usually an
      * object.

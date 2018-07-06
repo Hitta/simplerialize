@@ -10,7 +10,6 @@ import org.junit.Test;
 public final class ApiDemo
 {
     @Test
-    @SuppressWarnings("unchecked")
     public void nestedObjects() throws Exception
     {
         final Serializer serializer = Util.createCompositeSerializer();

@@ -26,6 +26,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import se.hitta.simplerialize.AdapterMapper;
+import se.hitta.simplerialize.SerializationAdapter;
 import se.hitta.simplerialize.Serializer;
 
 import com.ctc.wstx.api.WstxOutputProperties;
@@ -242,6 +243,42 @@ public final class WoodstoxXmlSerializer extends AbstractSerializer
                 {
                     this.generator.writeStartElement(container);
                     writeWithAdapter(elements.next());
+                    this.generator.writeEndElement();
+                }
+            }
+            catch(final XMLStreamException e)
+            {
+                throw new IOException(e.getMessage(), e);
+            }
+        }
+        return this;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.simplerialize.Serializer#eachComplex(java.lang.String, java.lang.Iterable, se.hitta.simplerialize.SerializationAdapter)
+     */
+    @Override
+    public Serializer eachComplex(String container, Iterable<?> elements, SerializationAdapter adapter) throws IOException
+    {
+        return eachComplex(container, elements.iterator(), adapter);
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.simplerialize.Serializer#eachComplex(java.lang.String, java.util.Iterator, se.hitta.simplerialize.SerializationAdapter)
+     */
+    @Override
+    public Serializer eachComplex(String container, Iterator<?> elements, SerializationAdapter adapter) throws IOException
+    {
+        if(elements.hasNext())
+        {
+            try
+            {
+                while(elements.hasNext())
+                {
+                    this.generator.writeStartElement(container);
+                    adapter.write(elements.next(), this);
                     this.generator.writeEndElement();
                 }
             }

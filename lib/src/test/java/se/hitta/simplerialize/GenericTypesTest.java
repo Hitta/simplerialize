@@ -35,7 +35,7 @@ public class GenericTypesTest
 
         mapper.register(new StringCollectionAdapter(), new TypeReference<Collection<String>>(){});
 
-        SerializationAdapter<Collection<Double>> adapter = mapper.resolveAdapter(new TypeReference<Collection<Double>>(){});
+        mapper.resolveAdapter(new TypeReference<Collection<Double>>(){});
     }
 
     @Test
