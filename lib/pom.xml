@@ -3,11 +3,11 @@
     <groupId>se.hitta</groupId>
     <artifactId>simplerialize-lib</artifactId>
     <packaging>jar</packaging>
-    <version>0.0.16-SNAPSHOT</version>
+    <version>0.0.16</version>
     <parent>
         <groupId>se.hitta</groupId>
         <artifactId>simplerialize</artifactId>
-        <version>0.0.16-SNAPSHOT</version>
+        <version>0.0.16</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 </project>
