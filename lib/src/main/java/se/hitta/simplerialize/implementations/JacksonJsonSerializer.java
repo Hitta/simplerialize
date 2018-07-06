@@ -25,6 +25,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 
 import se.hitta.simplerialize.AdapterMapper;
+import se.hitta.simplerialize.SerializationAdapter;
 import se.hitta.simplerialize.Serializer;
 
 /**
@@ -154,6 +155,37 @@ public final class JacksonJsonSerializer extends AbstractSerializer
             {
                 this.generator.writeStartObject();
                 writeWithAdapter(elements.next());
+                this.generator.writeEndObject();
+            }
+            this.generator.writeEndArray();
+        }
+        return this;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.simplerialize.Serializer#eachComplex(java.lang.String, java.lang.Iterable, se.hitta.simplerialize.SerializationAdapter)
+     */
+    @Override
+    public Serializer eachComplex(String container, Iterable<?> elements, SerializationAdapter adapter) throws IOException
+    {
+        return eachComplex(container, elements.iterator(), adapter);
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see se.hitta.simplerialize.Serializer#eachComplex(java.lang.String, java.util.Iterator, se.hitta.simplerialize.SerializationAdapter)
+     */
+    @Override
+    public Serializer eachComplex(String container, Iterator<?> elements, SerializationAdapter adapter) throws IOException
+    {
+        if(elements.hasNext())
+        {
+            this.generator.writeArrayFieldStart(container);
+            while(elements.hasNext())
+            {
+                this.generator.writeStartObject();
+                adapter.write(elements.next(), this);
                 this.generator.writeEndObject();
             }
             this.generator.writeEndArray();
